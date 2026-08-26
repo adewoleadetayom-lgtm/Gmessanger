@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>G Messenger</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f8ff;
+  color: #102a43;
+}
+
+header {
+  background: #087cff;
+  color: white;
+  padding: 18px;
+  text-align: center;
+}
+
+.logo {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.subtitle {
+  font-size: 13px;
+  opacity: .9;
+}
+
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+.welcome {
+  text-align: center;
+  margin: 30px 0;
+}
+
+.welcome h1 {
+  color: #087cff;
+}
+
+.card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+}
+
+button {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 14px;
+  background: #087cff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.plan {
+  border: 2px solid #e1eaff;
+}
+
+.plan h3 {
+  margin-top: 0;
+  color: #087cff;
+}
+
+.price {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.features {
+  line-height: 1.8;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">G Messenger</div>
+  <div class="subtitle">Connect. Chat. Share.</div>
+</header>
+
+<div class="container">
+
+  <div class="welcome">
+    <h1>Welcome to G Messenger</h1>
+    <p>A new blue-and-white messaging experience.</p>
+  </div>
+
+  <div class="card">
+    <h2>💬 Messaging</h2>
+    <div class="features">
+      ✓ Private chats<br>
+      ✓ Group chats<br>
+      ✓ Photos and videos<br>
+      ✓ Voice messages<br>
+      ✓ Documents and files
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>🤖 Gemma AI</h2>
+    <p>Your own AI assistant inside G Messenger.</p>
+    <button onclick="alert('Gemma AI will be added in the next stage.')">
+      Open Gemma AI
+    </button>
+  </div>
+
+  <div class="card plan">
+    <h3>🆓 Free Plan</h3>
+    <div class="price">₦0</div>
+    <p>1 hour per day</p>
+  </div>
+
+  <div class="card plan">
+    <h3>💙 2-Week Plan</h3>
+    <div class="price">₦500</div>
+    <p>14 days · 5 hours per day</p>
+  </div>
+
+  <div class="card plan">
+    <h3>⭐ Monthly Plus</h3>
+    <div class="price">₦1,000</div>
+    <p>30 days · 10 hours per day</p>
+  </div>
+
+</div>
+
+</body>
+</html>

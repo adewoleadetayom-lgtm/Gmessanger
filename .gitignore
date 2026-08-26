@@ -1,0 +1,12 @@
+node_modules/
+android/.gradle/
+android/build/
+android/app/build/
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.txt
+.env
+.env.*
