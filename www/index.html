@@ -3,143 +3,567 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087cff">
 <title>G Messenger</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f8ff;
-  color: #102a43;
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f8ff;
+  color:#102a43;
 }
 
-header {
-  background: #087cff;
-  color: white;
-  padding: 18px;
-  text-align: center;
+button,input{
+  font:inherit;
 }
 
-.logo {
-  font-size: 28px;
-  font-weight: bold;
+.screen{
+  min-height:100vh;
+  display:none;
 }
 
-.subtitle {
-  font-size: 13px;
-  opacity: .9;
+.screen.active{
+  display:flex;
 }
 
-.container {
-  max-width: 500px;
-  margin: auto;
-  padding: 20px;
+.login-screen{
+  align-items:center;
+  justify-content:center;
+  padding:24px;
 }
 
-.welcome {
-  text-align: center;
-  margin: 30px 0;
+.login-card{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border-radius:24px;
+  padding:30px 24px;
+  box-shadow:0 10px 35px rgba(0,0,0,.10);
+  text-align:center;
 }
 
-.welcome h1 {
-  color: #087cff;
+.logo{
+  width:76px;
+  height:76px;
+  border-radius:22px;
+  background:#087cff;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin:0 auto 18px;
+  font-size:32px;
+  font-weight:bold;
 }
 
-.card {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+h1{
+  margin:8px 0;
+  color:#087cff;
 }
 
-button {
-  width: 100%;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  background: #087cff;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+.subtitle{
+  color:#607d98;
+  line-height:1.5;
 }
 
-.plan {
-  border: 2px solid #e1eaff;
+.field{
+  text-align:left;
+  margin:18px 0;
 }
 
-.plan h3 {
-  margin-top: 0;
-  color: #087cff;
+.field label{
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:7px;
 }
 
-.price {
-  font-size: 24px;
-  font-weight: bold;
+.field input{
+  width:100%;
+  border:1px solid #c9d7e8;
+  border-radius:13px;
+  padding:14px;
+  outline:none;
 }
 
-.features {
-  line-height: 1.8;
+.field input:focus{
+  border-color:#087cff;
+  box-shadow:0 0 0 3px rgba(8,124,255,.10);
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:13px;
+  padding:14px;
+  background:#087cff;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.secondary{
+  width:100%;
+  border:1px solid #c9d7e8;
+  border-radius:13px;
+  padding:13px;
+  background:white;
+  color:#087cff;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.small{
+  font-size:12px;
+  color:#78909c;
+  margin-top:15px;
+}
+
+.error{
+  color:#d32f2f;
+  font-size:13px;
+  margin-top:10px;
+  display:none;
+}
+
+.app{
+  flex-direction:column;
+}
+
+.app-header{
+  background:#087cff;
+  color:white;
+  padding:17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.app-title{
+  font-size:23px;
+  font-weight:bold;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.icon-btn{
+  border:0;
+  background:rgba(255,255,255,.16);
+  color:white;
+  border-radius:50%;
+  width:42px;
+  height:42px;
+  font-size:19px;
+}
+
+.search{
+  padding:10px 14px;
+  background:#087cff;
+}
+
+.search input{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:12px 15px;
+  outline:none;
+}
+
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:white;
+  border-bottom:1px solid #e3ebf5;
+}
+
+.tab{
+  padding:13px 4px;
+  text-align:center;
+  color:#607d98;
+  font-weight:bold;
+  font-size:13px;
+}
+
+.tab.active{
+  color:#087cff;
+  border-bottom:3px solid #087cff;
+}
+
+.chat-list{
+  flex:1;
+  background:#f5f8ff;
+}
+
+.chat{
+  display:flex;
+  align-items:center;
+  padding:15px;
+  background:white;
+  border-bottom:1px solid #edf2f7;
+}
+
+.avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#dcecff;
+  color:#087cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  margin-right:13px;
+}
+
+.chat-info{
+  flex:1;
+}
+
+.chat-name{
+  font-weight:bold;
+}
+
+.chat-preview{
+  color:#78909c;
+  font-size:13px;
+  margin-top:5px;
+}
+
+.time{
+  color:#78909c;
+  font-size:11px;
+}
+
+.bottom-nav{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:white;
+  border-top:1px solid #dfe8f2;
+}
+
+.bottom-nav button{
+  border:0;
+  background:white;
+  padding:12px 3px;
+  color:#607d98;
+}
+
+.bottom-nav button.active{
+  color:#087cff;
+  font-weight:bold;
+}
+
+.fab{
+  position:fixed;
+  right:20px;
+  bottom:75px;
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:50%;
+  background:#087cff;
+  color:white;
+  font-size:27px;
+  box-shadow:0 7px 20px rgba(8,124,255,.30);
+}
+
+.gemma{
+  position:fixed;
+  left:18px;
+  bottom:75px;
+  width:52px;
+  height:52px;
+  border:0;
+  border-radius:50%;
+  background:#102a43;
+  color:white;
+  font-size:21px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">G Messenger</div>
-  <div class="subtitle">Connect. Chat. Share.</div>
-</header>
+<!-- LOGIN -->
+<section id="loginScreen" class="screen login-screen active">
+  <div class="login-card">
 
-<div class="container">
+    <div class="logo">G</div>
 
-  <div class="welcome">
-    <h1>Welcome to G Messenger</h1>
-    <p>A new blue-and-white messaging experience.</p>
-  </div>
+    <h1>G Messenger</h1>
 
-  <div class="card">
-    <h2>💬 Messaging</h2>
-    <div class="features">
-      ✓ Private chats<br>
-      ✓ Group chats<br>
-      ✓ Photos and videos<br>
-      ✓ Voice messages<br>
-      ✓ Documents and files
+    <p class="subtitle">
+      Private messaging, calls and sharing — built for G Messenger.
+    </p>
+
+    <div class="field">
+      <label>Phone number</label>
+      <input id="phone" type="tel" placeholder="+234 800 000 0000">
     </div>
-  </div>
 
-  <div class="card">
-    <h2>🤖 Gemma AI</h2>
-    <p>Your own AI assistant inside G Messenger.</p>
-    <button onclick="alert('Gemma AI will be added in the next stage.')">
-      Open Gemma AI
+    <button class="primary" onclick="sendCode()">
+      Continue
     </button>
+
+    <div id="loginError" class="error">
+      Please enter a valid phone number.
+    </div>
+
+    <p class="small">
+      By continuing, you agree to the G Messenger Terms and Privacy Policy.
+    </p>
+
+  </div>
+</section>
+
+<!-- VERIFICATION -->
+<section id="verificationScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">G</div>
+
+    <h1>Verify your number</h1>
+
+    <p class="subtitle">
+      Enter the verification code sent to your phone.
+    </p>
+
+    <div class="field">
+      <label>Verification code</label>
+      <input id="verificationCode"
+             type="text"
+             inputmode="numeric"
+             maxlength="6"
+             placeholder="6-digit code">
+    </div>
+
+    <button class="primary" onclick="verifyCode()">
+      Verify
+    </button>
+
+    <button class="secondary" onclick="showScreen('loginScreen')">
+      Change number
+    </button>
+
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profileScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">G</div>
+
+    <h1>Create your profile</h1>
+
+    <p class="subtitle">
+      Choose the name people will see on G Messenger.
+    </p>
+
+    <div class="field">
+      <label>Your name</label>
+      <input id="profileName" type="text" placeholder="Your name">
+    </div>
+
+    <div class="field">
+      <label>Username</label>
+      <input id="username" type="text" placeholder="@username">
+    </div>
+
+    <button class="primary" onclick="createProfile()">
+      Continue
+    </button>
+
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="securityScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">🔐</div>
+
+    <h1>Protect your account</h1>
+
+    <p class="subtitle">
+      Set up Two-Step Verification for stronger account security.
+    </p>
+
+    <div class="field">
+      <label>Security PIN</label>
+      <input id="securityPin"
+             type="password"
+             inputmode="numeric"
+             maxlength="6"
+             placeholder="Create a 6-digit PIN">
+    </div>
+
+    <div class="field">
+      <label>Recovery email (optional)</label>
+      <input id="recoveryEmail"
+             type="email"
+             placeholder="you@example.com">
+    </div>
+
+    <button class="primary" onclick="finishSetup()">
+      Finish setup
+    </button>
+
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<section id="appScreen" class="screen app">
+
+  <header class="app-header">
+    <div class="app-title">G Messenger</div>
+
+    <div class="header-actions">
+      <button class="icon-btn" onclick="alert('Camera coming next')">📷</button>
+      <button class="icon-btn" onclick="alert('Search coming next')">🔍</button>
+      <button class="icon-btn" onclick="alert('Settings coming next')">⋮</button>
+    </div>
+  </header>
+
+  <div class="search">
+    <input type="search" placeholder="Search G Messenger">
   </div>
 
-  <div class="card plan">
-    <h3>🆓 Free Plan</h3>
-    <div class="price">₦0</div>
-    <p>1 hour per day</p>
-  </div>
+  <nav class="tabs">
+    <div class="tab active">Chats</div>
+    <div class="tab">Updates</div>
+    <div class="tab">Communities</div>
+    <div class="tab">Calls</div>
+  </nav>
 
-  <div class="card plan">
-    <h3>💙 2-Week Plan</h3>
-    <div class="price">₦500</div>
-    <p>14 days · 5 hours per day</p>
-  </div>
+  <main class="chat-list">
 
-  <div class="card plan">
-    <h3>⭐ Monthly Plus</h3>
-    <div class="price">₦1,000</div>
-    <p>30 days · 10 hours per day</p>
-  </div>
+    <div class="chat">
+      <div class="avatar">G</div>
+      <div class="chat-info">
+        <div class="chat-name">G Messenger</div>
+        <div class="chat-preview">Welcome to G Messenger 💙</div>
+      </div>
+      <div class="time">Now</div>
+    </div>
 
-</div>
+    <div class="chat">
+      <div class="avatar">A</div>
+      <div class="chat-info">
+        <div class="chat-name">Example Contact</div>
+        <div class="chat-preview">Your conversations will appear here.</div>
+      </div>
+      <div class="time">--</div>
+    </div>
+
+  </main>
+
+  <button class="gemma" onclick="openGemma()">🤖</button>
+  <button class="fab" onclick="newChat()">＋</button>
+
+  <nav class="bottom-nav">
+    <button class="active">💬<br>Chats</button>
+    <button>📢<br>Updates</button>
+    <button>👥<br>Communities</button>
+    <button>📞<br>Calls</button>
+  </nav>
+
+</section>
+
+<script>
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove('active');
+  });
+
+  document.getElementById(id).classList.add('active');
+}
+
+function sendCode(){
+  const phone=document.getElementById('phone').value.trim();
+  const error=document.getElementById('loginError');
+
+  if(phone.length < 7){
+    error.style.display='block';
+    return;
+  }
+
+  error.style.display='none';
+
+  /*
+    DEMO ONLY:
+    Real SMS verification will be connected to a secure
+    authentication backend later.
+  */
+
+  showScreen('verificationScreen');
+}
+
+function verifyCode(){
+  const code=document.getElementById('verificationCode').value.trim();
+
+  if(code.length !== 6){
+    alert('Enter the 6-digit verification code.');
+    return;
+  }
+
+  showScreen('profileScreen');
+}
+
+function createProfile(){
+  const name=document.getElementById('profileName').value.trim();
+  const username=document.getElementById('username').value.trim();
+
+  if(name.length < 2){
+    alert('Please enter your name.');
+    return;
+  }
+
+  if(username.length < 3){
+    alert('Please choose a username.');
+    return;
+  }
+
+  showScreen('securityScreen');
+}
+
+function finishSetup(){
+  const pin=document.getElementById('securityPin').value.trim();
+
+  if(!/^[0-9]{6}$/.test(pin)){
+    alert('Create a 6-digit security PIN.');
+    return;
+  }
+
+  localStorage.setItem('gmessengerSetup','complete');
+
+  showScreen('appScreen');
+}
+
+function newChat(){
+  alert('New chat system will be connected to the real messaging backend next.');
+}
+
+function openGemma(){
+  alert('Gemma AI will be connected in the AI stage.');
+}
+
+window.addEventListener('load',()=>{
+  /*
+    For now we always show the login screen during development.
+    Persistent trusted-device authentication will be implemented
+    with the secure backend.
+  */
+});
+</script>
 
 </body>
 </html>
