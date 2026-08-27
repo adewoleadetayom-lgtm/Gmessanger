@@ -311,6 +311,438 @@ app.post('/api/auth/logout', authRequired, (req, res) => {
   });
 });
 
+
+/* ============================================================
+   G MESSENGER — REAL MESSAGING API
+   Lightweight, data-efficient, original implementation
+   ============================================================ */
+
+const CONVERSATIONS_FILE = path.join(DATA_DIR, 'conversations.json');
+const MESSAGES_FILE = path.join(DATA_DIR, 'messages.json');
+
+function readJsonFile(file, fallback) {
+  try {
+    if (!fs.existsSync(file)) {
+      fs.writeFileSync(file, JSON.stringify(fallback, null, 2));
+      return fallback;
+    }
+    return JSON.parse(fs.readFileSync(file, 'utf8'));
+  } catch {
+    return fallback;
+  }
+}
+
+function writeJsonFile(file, value) {
+  fs.writeFileSync(file, JSON.stringify(value, null, 2));
+}
+
+if (!fs.existsSync(CONVERSATIONS_FILE)) {
+  writeJsonFile(CONVERSATIONS_FILE, []);
+}
+
+if (!fs.existsSync(MESSAGES_FILE)) {
+  writeJsonFile(MESSAGES_FILE, []);
+}
+
+function readConversations() {
+  return readJsonFile(CONVERSATIONS_FILE, []);
+}
+
+function writeConversations(value) {
+  writeJsonFile(CONVERSATIONS_FILE, value);
+}
+
+function readMessages() {
+  return readJsonFile(MESSAGES_FILE, []);
+}
+
+function writeMessages(value) {
+  writeJsonFile(MESSAGES_FILE, value);
+}
+
+function nextId(items) {
+  return items.length
+    ? Math.max(...items.map(x => Number(x.id) || 0)) + 1
+    : 1;
+}
+
+function cleanUser(user) {
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    phone: user.phone,
+    name: user.name,
+    username: user.username,
+    created_at: user.created_at
+  };
+}
+
+/*
+  Real registered-user search.
+  Only real accounts are returned.
+*/
+app.get('/api/users/search', authRequired, (req, res) => {
+  const q = String(req.query.q || '').trim().toLowerCase();
+
+  if (q.length < 2) {
+    return res.json({ ok: true, users: [] });
+  }
+
+  const users = readUsers()
+    .filter(user => Number(user.id) !== Number(req.user.id))
+    .filter(user => {
+      const name = String(user.name || '').toLowerCase();
+      const username = String(user.username || '').toLowerCase();
+      const phone = String(user.phone || '').toLowerCase();
+
+      return (
+        name.includes(q) ||
+        username.includes(q) ||
+        phone.includes(q)
+      );
+    })
+    .slice(0, 20)
+    .map(cleanUser);
+
+  res.json({ ok: true, users });
+});
+
+/*
+  Get/create a private conversation.
+*/
+app.post('/api/conversations', authRequired, (req, res) => {
+  const otherUserId = Number(req.body.userId);
+
+  if (!Number.isInteger(otherUserId)) {
+    return res.status(400).json({
+      error: 'A valid userId is required'
+    });
+  }
+
+  if (otherUserId === Number(req.user.id)) {
+    return res.status(400).json({
+      error: 'You cannot start a conversation with yourself'
+    });
+  }
+
+  const other = findUserById(otherUserId);
+
+  if (!other) {
+    return res.status(404).json({
+      error: 'User not found'
+    });
+  }
+
+  const conversations = readConversations();
+
+  let conversation = conversations.find(c =>
+    c.type === 'private' &&
+    (
+      Number(c.user1) === Number(req.user.id) &&
+      Number(c.user2) === otherUserId
+    ) ||
+    (
+      Number(c.user1) === otherUserId &&
+      Number(c.user2) === Number(req.user.id)
+    )
+  );
+
+  if (!conversation) {
+    conversation = {
+      id: nextId(conversations),
+      type: 'private',
+      user1: Number(req.user.id),
+      user2: otherUserId,
+      created_at: new Date().toISOString()
+    };
+
+    conversations.push(conversation);
+    writeConversations(conversations);
+  }
+
+  res.json({
+    ok: true,
+    conversation: {
+      id: conversation.id,
+      type: conversation.type,
+      user: cleanUser(other)
+    }
+  });
+});
+
+/*
+  List conversations for the authenticated user.
+  Only lightweight metadata is returned.
+*/
+app.get('/api/conversations', authRequired, (req, res) => {
+  const myId = Number(req.user.id);
+  const conversations = readConversations();
+  const users = readUsers();
+  const messages = readMessages();
+
+  const result = conversations
+    .filter(c =>
+      Number(c.user1) === myId ||
+      Number(c.user2) === myId
+    )
+    .map(c => {
+      const otherId =
+        Number(c.user1) === myId
+          ? Number(c.user2)
+          : Number(c.user1);
+
+      const other = users.find(u => Number(u.id) === otherId);
+
+      const lastMessages = messages
+        .filter(m => Number(m.conversation_id) === Number(c.id))
+        .sort((a, b) =>
+          new Date(a.created_at) - new Date(b.created_at)
+        );
+
+      const last = lastMessages[lastMessages.length - 1];
+
+      return {
+        id: c.id,
+        type: c.type,
+        user: cleanUser(other),
+        lastMessage: last
+          ? {
+              id: last.id,
+              text: last.text,
+              sender_id: last.sender_id,
+              created_at: last.created_at
+            }
+          : null
+      };
+    });
+
+  res.json({
+    ok: true,
+    conversations: result
+  });
+});
+
+/*
+  Get messages for one conversation.
+  Pagination keeps mobile-data usage extremely low.
+*/
+app.get('/api/conversations/:id/messages', authRequired, (req, res) => {
+  const conversationId = Number(req.params.id);
+  const myId = Number(req.user.id);
+  const conversations = readConversations();
+
+  const conversation = conversations.find(c =>
+    Number(c.id) === conversationId &&
+    (
+      Number(c.user1) === myId ||
+      Number(c.user2) === myId
+    )
+  );
+
+  if (!conversation) {
+    return res.status(404).json({
+      error: 'Conversation not found'
+    });
+  }
+
+  const limit = Math.min(
+    Math.max(Number(req.query.limit) || 50, 1),
+    100
+  );
+
+  const messages = readMessages()
+    .filter(m => Number(m.conversation_id) === conversationId)
+    .sort((a, b) =>
+      new Date(a.created_at) - new Date(b.created_at)
+    );
+
+  res.json({
+    ok: true,
+    messages: messages.slice(-limit)
+  });
+});
+
+/*
+  Send a real text message.
+*/
+app.post('/api/conversations/:id/messages', authRequired, (req, res) => {
+  const conversationId = Number(req.params.id);
+  const text = String(req.body.text || '').trim();
+  const myId = Number(req.user.id);
+
+  if (!text) {
+    return res.status(400).json({
+      error: 'Message cannot be empty'
+    });
+  }
+
+  if (text.length > 10000) {
+    return res.status(400).json({
+      error: 'Message is too long'
+    });
+  }
+
+  const conversations = readConversations();
+
+  const conversation = conversations.find(c =>
+    Number(c.id) === conversationId &&
+    (
+      Number(c.user1) === myId ||
+      Number(c.user2) === myId
+    )
+  );
+
+  if (!conversation) {
+    return res.status(404).json({
+      error: 'Conversation not found'
+    });
+  }
+
+  const messages = readMessages();
+
+  const message = {
+    id: nextId(messages),
+    conversation_id: conversationId,
+    sender_id: myId,
+    text,
+    status: 'sent',
+    created_at: new Date().toISOString()
+  };
+
+  messages.push(message);
+  writeMessages(messages);
+
+  res.status(201).json({
+    ok: true,
+    message
+  });
+});
+
+/*
+  Mark messages as read.
+*/
+app.post('/api/conversations/:id/read', authRequired, (req, res) => {
+  const conversationId = Number(req.params.id);
+  const myId = Number(req.user.id);
+
+  const conversations = readConversations();
+
+  const conversation = conversations.find(c =>
+    Number(c.id) === conversationId &&
+    (
+      Number(c.user1) === myId ||
+      Number(c.user2) === myId
+    )
+  );
+
+  if (!conversation) {
+    return res.status(404).json({
+      error: 'Conversation not found'
+    });
+  }
+
+  const messages = readMessages();
+  let changed = false;
+
+  for (const message of messages) {
+    if (
+      Number(message.conversation_id) === conversationId &&
+      Number(message.sender_id) !== myId &&
+      message.status !== 'read'
+    ) {
+      message.status = 'read';
+      changed = true;
+    }
+  }
+
+  if (changed) {
+    writeMessages(messages);
+  }
+
+  res.json({ ok: true });
+});
+
+/*
+  G Messenger plans.
+  Data efficiency is deliberately independent of plan level.
+  Paid plans receive stronger optimization, not heavier data usage.
+*/
+app.get('/api/plans', (req, res) => {
+  res.json({
+    ok: true,
+    plans: [
+      {
+        id: 'free',
+        name: 'Free',
+        price: 0,
+        currency: 'NGN',
+        period: 'month',
+        dataMode: 'very-low'
+      },
+      {
+        id: 'plus_14',
+        name: '2-Week Plus',
+        price: 500,
+        currency: 'NGN',
+        period: '14-days',
+        dataMode: 'extraordinary-low'
+      },
+      {
+        id: 'plus_monthly',
+        name: 'Monthly Plus',
+        price: 1000,
+        currency: 'NGN',
+        period: 'month',
+        dataMode: 'maximum-efficiency'
+      }
+    ]
+  });
+});
+
+/*
+  Lightweight account/data settings.
+*/
+app.get('/api/data-settings', authRequired, (req, res) => {
+  const user = findUserById(req.user.id);
+
+  res.json({
+    ok: true,
+    dataSaver: user?.data_saver !== false,
+    mediaAutoDownload: user?.media_auto_download || 'never',
+    backgroundSync: user?.background_sync || 'minimal',
+    compression: user?.compression || 'maximum'
+  });
+});
+
+app.post('/api/data-settings', authRequired, (req, res) => {
+  const allowedMedia = ['never', 'wifi', 'always'];
+
+  const dataSaver =
+    req.body.dataSaver !== false;
+
+  const mediaAutoDownload =
+    allowedMedia.includes(req.body.mediaAutoDownload)
+      ? req.body.mediaAutoDownload
+      : 'never';
+
+  updateUser(req.user.id, {
+    data_saver: dataSaver,
+    media_auto_download: mediaAutoDownload,
+    background_sync: 'minimal',
+    compression: 'maximum'
+  });
+
+  res.json({
+    ok: true,
+    dataSaver,
+    mediaAutoDownload,
+    backgroundSync: 'minimal',
+    compression: 'maximum'
+  });
+});
+
+
 app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'www', 'index.html'));
 });

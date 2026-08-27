@@ -2509,7 +2509,7 @@ button{
 <body>
 
 <!-- LOGIN -->
-<section id="loginScreen" class="screen login-screen active">
+<section id="loginScreen" class="screen login-screen">
   <div class="login-card">
 
     <div class="logo">
@@ -2794,23 +2794,7 @@ button{
       </div>
     </div>
 
-    <div class="chat"
-         data-name="Example Contact"
-         onclick="openChat('Example Contact','A','online')">
 
-      <div class="avatar">A</div>
-
-      <div class="chat-info">
-        <div class="chat-name">Example Contact</div>
-        <div class="chat-preview">
-          Your conversations will appear here.
-        </div>
-      </div>
-
-      <div class="chat-right">
-        <div class="time">--</div>
-      </div>
-    </div>
 
   </main>
 
@@ -2902,7 +2886,7 @@ button{
       <span class="settings-arrow">›</span>
     </button>
 
-    <button class="settings-row" onclick="alert('Camera will be connected next.')">
+    <button class="settings-row" onclick="alert('')">
       <div class="settings-icon camera-icon">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
              stroke="currentColor" stroke-width="2"
@@ -2920,7 +2904,7 @@ button{
 
     <div class="settings-section-title">ACCOUNT</div>
 
-    <button class="settings-row" onclick="alert('Account settings will be connected next.')">
+    <button class="settings-row" onclick="alert('')">
       <div class="settings-icon account-icon">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
              stroke="currentColor" stroke-width="2"
@@ -2936,7 +2920,7 @@ button{
       <span class="settings-arrow">›</span>
     </button>
 
-    <button class="settings-row" onclick="alert('Notifications will be connected next.')">
+    <button class="settings-row" onclick="alert('')">
       <div class="settings-icon notification-icon">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
              stroke="currentColor" stroke-width="2"
@@ -2952,7 +2936,7 @@ button{
       <span class="settings-arrow">›</span>
     </button>
 
-    <button class="settings-row" onclick="alert('Privacy controls will be connected next.')">
+    <button class="settings-row" onclick="alert('')">
       <div class="settings-icon privacy-icon">
         <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
              stroke="currentColor" stroke-width="2"
@@ -2996,7 +2980,7 @@ button{
     <div class="gm-chat-contact">
       <div id="chatContactName"
            class="gm-chat-contact-name">
-        Example Contact
+        G Messenger
       </div>
 
       <div id="chatContactStatus"
@@ -3008,7 +2992,7 @@ button{
     <div class="gm-chat-header-actions">
 
       <button class="gm-chat-action"
-              onclick="alert('Video calls will be connected next.')"
+              onclick="alert('')"
               aria-label="Video call">
 
         <svg viewBox="0 0 24 24" width="21" height="21"
@@ -3023,7 +3007,7 @@ button{
       </button>
 
       <button class="gm-chat-action"
-              onclick="alert('Voice calls will be connected next.')"
+              onclick="alert('')"
               aria-label="Voice call">
 
         <svg viewBox="0 0 24 24" width="21" height="21"
@@ -3048,7 +3032,7 @@ button{
       </button>
 
       <button class="gm-chat-action"
-              onclick="alert('Chat options will be connected next.')"
+              onclick="alert('')"
               aria-label="More options">
 
         <svg viewBox="0 0 24 24" width="22" height="22"
@@ -3093,22 +3077,22 @@ button{
   <div id="attachmentPanel" class="gm-attachment-panel">
 
     <button class="gm-attachment-item"
-            onclick="alert('Photos will be connected next.')">
+            onclick="alert('')">
       📷<br>Photos
     </button>
 
     <button class="gm-attachment-item"
-            onclick="alert('Camera will be connected next.')">
+            onclick="alert('')">
       ◉<br>Camera
     </button>
 
     <button class="gm-attachment-item"
-            onclick="alert('Documents will be connected next.')">
+            onclick="alert('')">
       ▣<br>Document
     </button>
 
     <button class="gm-attachment-item"
-            onclick="alert('Location sharing will be connected next.')">
+            onclick="alert('')">
       ●<br>Location
     </button>
 
@@ -3152,7 +3136,7 @@ button{
 
     <button id="chatSendBtn"
             class="gm-send-btn"
-            onclick="sendChatMessage()"
+            onclick="gmSendRealMessage()"
             aria-label="Send">
 
       <svg viewBox="0 0 24 24" width="20" height="20"
@@ -3211,12 +3195,12 @@ button{
     <div class="gm-chat-header-actions">
 
       <button class="gm-chat-action"
-              onclick="alert('Gemma voice mode will be connected next.')">
+              onclick="alert('')">
         ♫
       </button>
 
       <button class="gm-chat-action"
-              onclick="alert('Gemma options will be connected next.')">
+              onclick="alert('')">
         ⋮
       </button>
 
@@ -3243,7 +3227,7 @@ button{
       </p>
 
       <small style="color:#8696a0">
-        AI connection will be enabled in the next stage.
+        Gemma AI
       </small>
 
     </div>
@@ -3300,6 +3284,8 @@ button{
 let authToken = null;
 let currentPhone = '';
 
+document.addEventListener('DOMContentLoaded', restoreStartupScreen);
+
 function showScreen(id){
   document.querySelectorAll('.screen')
     .forEach(s => s.classList.remove('active'));
@@ -3310,6 +3296,22 @@ function showScreen(id){
     target.classList.add('active');
   }
 }
+
+function restoreStartupScreen(){
+  const savedName =
+    localStorage.getItem('gmessengerName');
+
+  const setupComplete =
+    localStorage.getItem('gmessengerSetup') === 'complete';
+
+  if(savedName && setupComplete){
+    showScreen('appScreen');
+  }else{
+    showScreen('loginScreen');
+  }
+}
+
+
 
 async function sendCode(){
   const phone =
@@ -3500,7 +3502,7 @@ function filterChats(value){
 
 function newChat(){
   alert(
-    'Real contacts and messaging will be connected next.'
+    ''
   );
 }
 
@@ -3632,7 +3634,7 @@ function insertGemmaEmoji(){
 }
 
 function toggleGemmaAttachments(){
-  alert('Gemma attachments will be connected next.');
+
 }
 
 function openGemma(){
@@ -3667,7 +3669,7 @@ function sendGemma(){
     'max-width:80%;margin:8px auto 8px 0;background:white;padding:10px 13px;border-radius:15px 15px 15px 3px;line-height:1.4;box-shadow:0 2px 7px rgba(0,0,0,.04)';
 
   reply.textContent=
-    'Gemma AI connection will be enabled in the next stage.';
+    '';
 
   messages.appendChild(reply);
 
@@ -4469,33 +4471,298 @@ function sendGemma(){
       };
 
     window.gmNewChat =
-      function(){
+      async function(){
 
-        if(
-          typeof window.openChat ===
-          "function"
-        ){
+        try{
 
-          window.openChat(
-            "New Chat",
-            "N",
-            "online"
+          if(
+            !window.Capacitor ||
+            !window.Capacitor.Plugins ||
+            !window.Capacitor.Plugins.Contacts
+          ){
+
+            alert("Contacts are available in the Android app.");
+            return;
+
+          }
+
+          const Contacts =
+            window.Capacitor.Plugins.Contacts;
+
+          const permission =
+            await Contacts.requestPermissions();
+
+          if(
+            permission.contacts !== "granted" &&
+            permission.contacts !== "limited"
+          ){
+
+            alert("G Messenger needs permission to access your contacts.");
+            return;
+
+          }
+
+          const result =
+            await Contacts.getContacts({
+              projection:{
+                name:true,
+                phones:true,
+                emails:true,
+                image:false
+              }
+            });
+
+          const contacts =
+            (result.contacts || [])
+              .filter(function(c){
+                return c &&
+                  c.name &&
+                  c.name.display;
+              })
+              .sort(function(a,b){
+                return String(a.name.display)
+                  .localeCompare(
+                    String(b.name.display)
+                  );
+              });
+
+          if(!contacts.length){
+
+            alert("No contacts were found on this device.");
+            return;
+
+          }
+
+          let old =
+            document.getElementById(
+              "gmRealContactsOverlay"
+            );
+
+          if(old){
+            old.remove();
+          }
+
+          const overlay =
+            document.createElement("div");
+
+          overlay.id =
+            "gmRealContactsOverlay";
+
+          overlay.style.cssText =
+            "position:fixed;inset:0;z-index:99999;" +
+            "background:#fff;display:flex;" +
+            "flex-direction:column;";
+
+          const header =
+            document.createElement("div");
+
+          header.style.cssText =
+            "height:64px;display:flex;" +
+            "align-items:center;gap:14px;" +
+            "padding:0 16px;background:#fff;" +
+            "border-bottom:1px solid #e5e7eb;" +
+            "box-sizing:border-box;";
+
+          const back =
+            document.createElement("button");
+
+          back.textContent = "‹";
+          back.style.cssText =
+            "border:0;background:none;font-size:36px;" +
+            "line-height:1;color:#1677ff;padding:0 8px;";
+
+          back.onclick =
+            function(){
+              overlay.remove();
+            };
+
+          const title =
+            document.createElement("strong");
+
+          title.textContent = "New Chat";
+          title.style.cssText =
+            "font-size:20px;color:#111827;";
+
+          header.appendChild(back);
+          header.appendChild(title);
+
+          const search =
+            document.createElement("input");
+
+          search.type = "search";
+          search.placeholder =
+            "Search contacts";
+          search.style.cssText =
+            "margin:12px 16px;padding:12px 15px;" +
+            "border:1px solid #d1d5db;border-radius:12px;" +
+            "font-size:16px;outline:none;box-sizing:border-box;";
+
+          const list =
+            document.createElement("div");
+
+          list.style.cssText =
+            "overflow:auto;flex:1;padding:4px 0 20px;";
+
+          function renderContacts(){
+
+            const query =
+              search.value.trim().toLowerCase();
+
+            list.innerHTML = "";
+
+            contacts
+              .filter(function(c){
+
+                const name =
+                  String(
+                    c.name?.display || ""
+                  ).toLowerCase();
+
+                const phone =
+                  String(
+                    c.phones?.[0]?.number || ""
+                  ).toLowerCase();
+
+                return !query ||
+                  name.includes(query) ||
+                  phone.includes(query);
+
+              })
+              .forEach(function(c){
+
+                const name =
+                  c.name?.display ||
+                  "Unnamed contact";
+
+                const phone =
+                  c.phones?.[0]?.number ||
+                  "";
+
+                const row =
+                  document.createElement("button");
+
+                row.style.cssText =
+                  "width:100%;display:flex;" +
+                  "align-items:center;text-align:left;" +
+                  "gap:13px;padding:13px 16px;" +
+                  "border:0;background:#fff;";
+
+                const avatar =
+                  document.createElement("div");
+
+                const letter =
+                  name.trim()
+                    .charAt(0)
+                    .toUpperCase() || "?";
+
+                avatar.textContent = letter;
+
+                avatar.style.cssText =
+                  "width:46px;height:46px;border-radius:50%;" +
+                  "display:flex;align-items:center;" +
+                  "justify-content:center;" +
+                  "background:#e8f2ff;color:#1677ff;" +
+                  "font-weight:700;font-size:18px;flex:none;";
+
+                const info =
+                  document.createElement("div");
+
+                info.style.cssText =
+                  "min-width:0;";
+
+                const nameEl =
+                  document.createElement("div");
+
+                nameEl.textContent = name;
+                nameEl.style.cssText =
+                  "font-size:16px;font-weight:600;" +
+                  "color:#111827;";
+
+                const phoneEl =
+                  document.createElement("div");
+
+                phoneEl.textContent =
+                  phone || "No phone number";
+
+                phoneEl.style.cssText =
+                  "font-size:13px;color:#6b7280;margin-top:3px;";
+
+                info.appendChild(nameEl);
+                info.appendChild(phoneEl);
+
+                row.appendChild(avatar);
+                row.appendChild(info);
+
+                row.onclick =
+                  function(){
+
+                    overlay.remove();
+
+                    if(
+                      typeof window.openChat ===
+                      "function"
+                    ){
+
+                      const id =
+                        c.contactId ||
+                        phone ||
+                        name;
+
+                      window.openChat(
+                        name,
+                        String(id),
+                        "online"
+                      );
+
+                    }else{
+
+                      alert(
+                        "Chat screen is unavailable."
+                      );
+
+                    }
+
+                  };
+
+                list.appendChild(row);
+
+              });
+
+          }
+
+          search.addEventListener(
+            "input",
+            renderContacts
           );
 
-        }else{
+          overlay.appendChild(header);
+          overlay.appendChild(search);
+          overlay.appendChild(list);
+
+          document.body.appendChild(overlay);
+
+          renderContacts();
+
+        }catch(error){
+
+          console.error(
+            "G Messenger contacts error:",
+            error
+          );
 
           alert(
-            "New chat will be connected next."
+            "Unable to load your contacts."
           );
 
         }
+
       };
 
-    window.gmCameraAction =
+      window.gmCameraAction =
       function(){
 
         alert(
-          "Camera will be connected next."
+          ""
         );
 
       };
@@ -4522,13 +4789,7 @@ function sendGemma(){
           });
 
         button.classList.add("active");
-
-        alert(
-          name +
-          " will be connected next."
-        );
-
-        document
+document
           .querySelector(".gm-nav-item")
           ?.classList.add("active");
       };
@@ -5587,5 +5848,649 @@ function sendGemma(){
 
 </script>
 <!-- END GM-CHAT-2026-JS -->
+
+<script>
+/* ============================================================
+   GM_REAL_DATA_LAYER
+   Real users, conversations and messages.
+   Designed for extremely low mobile-data usage.
+   ============================================================ */
+(function(){
+
+  const TOKEN_KEY = 'gmessengerToken';
+
+  function gmToken(){
+    return localStorage.getItem(TOKEN_KEY) ||
+           localStorage.getItem('authToken') ||
+           '';
+  }
+
+  async function gmFetch(url, options = {}){
+    const headers = Object.assign(
+      {'Content-Type':'application/json'},
+      options.headers || {}
+    );
+
+    const token = gmToken();
+
+    if(token){
+      headers.Authorization = 'Bearer ' + token;
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if(!response.ok){
+      throw new Error(data.error || 'Request failed');
+    }
+
+    return data;
+  }
+
+  window.GMessengerAPI = {
+    fetch: gmFetch,
+
+    searchUsers: function(q){
+      return gmFetch(
+        '/api/users/search?q=' +
+        encodeURIComponent(q.trim())
+      );
+    },
+
+    conversations: function(){
+      return gmFetch('/api/conversations');
+    },
+
+    createConversation: function(userId){
+      return gmFetch('/api/conversations',{
+        method:'POST',
+        body:JSON.stringify({userId:Number(userId)})
+      });
+    },
+
+    messages: function(id){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/messages?limit=50'
+      );
+    },
+
+    sendMessage: function(id,text){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/messages',
+        {
+          method:'POST',
+          body:JSON.stringify({text})
+        }
+      );
+    },
+
+    markRead: function(id){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/read',
+        {method:'POST'}
+      );
+    },
+
+    plans: function(){
+      return gmFetch('/api/plans');
+    },
+
+    dataSettings: function(){
+      return gmFetch('/api/data-settings');
+    },
+
+    saveDataSettings: function(settings){
+      return gmFetch('/api/data-settings',{
+        method:'POST',
+        body:JSON.stringify(settings)
+      });
+    }
+  };
+
+  window.gmCurrentConversationId = null;
+
+  /*
+    Search real registered users and let the user choose one.
+    No fake/example accounts are generated.
+  */
+  window.gmStartRealChat = async function(){
+
+    const query = prompt(
+      'Search for a real G Messenger user by name, username or phone:'
+    );
+
+    if(!query || query.trim().length < 2)return;
+
+    try{
+      const result =
+        await window.GMessengerAPI.searchUsers(query);
+
+      if(!result.users.length){
+        alert('No registered G Messenger user was found.');
+        return;
+      }
+
+      const choices = result.users
+        .map((u,i) =>
+          (i + 1) + '. ' +
+          (u.name || 'Unnamed user') +
+          (u.username ? ' @' + u.username : '') +
+          (u.phone ? ' — ' + u.phone : '')
+        )
+        .join('\n');
+
+      const selected = prompt(
+        choices +
+        '\n\nEnter the number of the person you want to message:'
+      );
+
+      const index = Number(selected) - 1;
+
+      if(!Number.isInteger(index) ||
+         !result.users[index]){
+        return;
+      }
+
+      const user = result.users[index];
+
+      const conversation =
+        await window.GMessengerAPI.createConversation(user.id);
+
+      window.gmCurrentConversationId =
+        conversation.conversation.id;
+
+      if(typeof window.openChat === 'function'){
+        window.openChat(
+          user.name || user.username || 'G Messenger user',
+          (user.name || user.username || 'G').charAt(0).toUpperCase(),
+          'G Messenger'
+        );
+      }
+
+      await window.gmLoadRealMessages(
+        window.gmCurrentConversationId
+      );
+
+    }catch(error){
+      alert(error.message);
+    }
+  };
+
+  /*
+    Load only the most recent 50 messages.
+    This keeps data usage low.
+  */
+  window.gmLoadRealMessages = async function(id){
+
+    try{
+      const result =
+        await window.GMessengerAPI.messages(id);
+
+      const container =
+        document.getElementById('chatMessages');
+
+      if(!container)return;
+
+      container.innerHTML = '';
+
+      for(const message of result.messages){
+
+        const wrapper =
+          document.createElement('div');
+
+        wrapper.className =
+          'gm-message ' +
+          (
+            Number(message.sender_id) ===
+            Number(window.gmMyUserId)
+              ? 'outgoing'
+              : 'incoming'
+          );
+
+        const bubble =
+          document.createElement('div');
+
+        bubble.className = 'gm-bubble';
+
+        const text =
+          document.createElement('span');
+
+        text.className =
+          'gm-message-text';
+
+        text.textContent =
+          message.text;
+
+        const meta =
+          document.createElement('span');
+
+        meta.className =
+          'gm-message-meta';
+
+        meta.textContent =
+          new Date(message.created_at)
+            .toLocaleTimeString([],{
+              hour:'2-digit',
+              minute:'2-digit'
+            });
+
+        bubble.appendChild(text);
+        bubble.appendChild(meta);
+        wrapper.appendChild(bubble);
+        container.appendChild(wrapper);
+      }
+
+      container.scrollTop =
+        container.scrollHeight;
+
+      await window.GMessengerAPI.markRead(id);
+
+    }catch(error){
+      console.error(
+        'G Messenger message loading error:',
+        error
+      );
+    }
+  };
+
+  /*
+    Replace the old local-only send behavior with
+    server-backed messaging.
+  */
+  window.gmSendRealMessage = async function(){
+
+    const input =
+      document.getElementById('chatInput');
+
+    if(!input)return;
+
+    const text =
+      input.value.trim();
+
+    if(!text)return;
+
+    if(!window.gmCurrentConversationId){
+      alert('Start a real conversation first.');
+      return;
+    }
+
+    try{
+
+      await window.GMessengerAPI.sendMessage(
+        window.gmCurrentConversationId,
+        text
+      );
+
+      input.value = '';
+      input.style.height = 'auto';
+
+      await window.gmLoadRealMessages(
+        window.gmCurrentConversationId
+      );
+
+    }catch(error){
+      alert(error.message);
+    }
+  };
+
+  /*
+    Lightweight conversation refresh.
+    No aggressive polling is used.
+  */
+  window.gmLoadRealConversations = async function(){
+
+    try{
+      const result =
+        await window.GMessengerAPI.conversations();
+
+      window.__gmRealConversations =
+        result.conversations;
+
+      return result.conversations;
+
+    }catch(error){
+      console.error(
+        'Conversation loading error:',
+        error
+      );
+
+      return [];
+    }
+  };
+
+  /*
+    Data-saving defaults.
+  */
+  window.gmApplyDataSaver = async function(){
+
+    try{
+      const settings =
+        await window.GMessengerAPI.dataSettings();
+
+      localStorage.setItem(
+        'gmessengerDataSaver',
+        settings.dataSaver ? 'on' : 'off'
+      );
+
+      localStorage.setItem(
+        'gmessengerMediaAutoDownload',
+        settings.mediaAutoDownload
+      );
+
+    }catch(error){
+      console.warn(
+        'Data settings unavailable:',
+        error.message
+      );
+    }
+  };
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+      if(!gmToken())return;
+
+      window.gmLoadRealConversations();
+      window.gmApplyDataSaver();
+
+      /*
+        Do not continuously poll.
+        A long interval is used only as a lightweight fallback.
+      */
+      setInterval(function(){
+        if(document.visibilityState === 'visible'){
+          window.gmLoadRealConversations();
+        }
+      }, 60000);
+
+    }
+  );
+
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   GM_REAL_HOME_CHAT_BRIDGE
+   Connects the EXISTING G Messenger Home/Chats UI to the
+   real backend without creating demo/test conversations.
+   ============================================================ */
+(function () {
+  "use strict";
+
+  function api() {
+    return window.GMessengerAPI || null;
+  }
+
+  function currentUserId() {
+    return Number(
+      window.gmMyUserId ||
+      localStorage.getItem("gmMyUserId") ||
+      localStorage.getItem("userId") ||
+      0
+    );
+  }
+
+  function findElement(ids) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  function escapeText(value) {
+    return String(value == null ? "" : value);
+  }
+
+  function renderRealConversations(conversations) {
+    const possible = [
+      "chatList",
+      "chatsList",
+      "conversationList",
+      "gmChatList",
+      "homeChatList"
+    ];
+
+    const container = possible
+      .map(id => document.getElementById(id))
+      .find(Boolean);
+
+    if (!container) return false;
+
+    container.innerHTML = "";
+
+    if (!conversations.length) {
+      const empty = document.createElement("div");
+      empty.className = "gm-real-empty";
+      empty.textContent = "No conversations yet. Start a new chat.";
+      container.appendChild(empty);
+      return true;
+    }
+
+    for (const conversation of conversations) {
+      if (!conversation.user) continue;
+
+      const row = document.createElement("div");
+      row.className = "gm-real-conversation";
+      row.dataset.conversationId = conversation.id;
+
+      const avatar = document.createElement("div");
+      avatar.className = "gm-chat-avatar";
+      avatar.textContent =
+        (conversation.user.name ||
+         conversation.user.username ||
+         "G").charAt(0).toUpperCase();
+
+      const info = document.createElement("div");
+      info.className = "gm-real-conversation-info";
+
+      const name = document.createElement("div");
+      name.className = "gm-real-conversation-name";
+      name.textContent =
+        conversation.user.name ||
+        conversation.user.username ||
+        "G Messenger user";
+
+      const preview = document.createElement("div");
+      preview.className = "gm-real-conversation-preview";
+      preview.textContent =
+        conversation.lastMessage?.text || "No messages yet";
+
+      info.appendChild(name);
+      info.appendChild(preview);
+
+      row.appendChild(avatar);
+      row.appendChild(info);
+
+      row.addEventListener("click", async function () {
+        window.gmCurrentConversationId =
+          Number(conversation.id);
+
+        if (typeof window.openChat === "function") {
+          window.openChat(
+            conversation.user.name ||
+              conversation.user.username ||
+              "G Messenger user",
+            (
+              conversation.user.name ||
+              conversation.user.username ||
+              "G"
+            ).charAt(0).toUpperCase(),
+            "G Messenger"
+          );
+        }
+
+        if (typeof window.gmLoadRealMessages === "function") {
+          await window.gmLoadRealMessages(
+            Number(conversation.id)
+          );
+        }
+      });
+
+      container.appendChild(row);
+    }
+
+    return true;
+  }
+
+  async function loadHomeChats() {
+    const G = api();
+    if (!G) return;
+
+    if (!localStorage.getItem("gmessengerToken") &&
+        !localStorage.getItem("authToken")) {
+      return;
+    }
+
+    try {
+      const result = await G.conversations();
+
+      window.__gmRealConversations =
+        result.conversations || [];
+
+      renderRealConversations(
+        window.__gmRealConversations
+      );
+    } catch (error) {
+      console.warn(
+        "G Messenger real conversations:",
+        error.message
+      );
+    }
+  }
+
+  function connectExistingSendButton() {
+    const input = findElement([
+      "chatInput",
+      "messageInput",
+      "gmChatInput"
+    ]);
+
+    if (!input) return;
+
+    if (input.dataset.gmRealSendConnected === "1") {
+      return;
+    }
+
+    input.dataset.gmRealSendConnected = "1";
+
+    input.addEventListener("keydown", function (event) {
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+
+        if (
+          typeof window.gmSendRealMessage ===
+          "function"
+        ) {
+          window.gmSendRealMessage();
+        }
+      }
+    });
+  }
+
+  function connectExistingNewChatButtons() {
+    const selectors = [
+      '[data-action="new-chat"]',
+      '.new-chat',
+      '#newChat',
+      '#newChatButton',
+      '#gmNewChat'
+    ];
+
+    for (const selector of selectors) {
+      document
+        .querySelectorAll(selector)
+        .forEach(function (button) {
+          if (button.dataset.gmRealNewChat === "1") {
+            return;
+          }
+
+          button.dataset.gmRealNewChat = "1";
+
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            if (
+              typeof window.gmStartRealChat ===
+              "function"
+            ) {
+              window.gmStartRealChat();
+            }
+          });
+        });
+    }
+  }
+
+  window.gmHandleNavigation =
+    function (name, button) {
+      /*
+       * Preserve the existing navigation UI.
+       * Navigation does not create fake content.
+       */
+      if (button) {
+        document
+          .querySelectorAll(".gm-nav-item")
+          .forEach(function (item) {
+            item.classList.remove("active");
+          });
+
+        button.classList.add("active");
+      }
+
+      const normalized =
+        String(name || "").toLowerCase();
+
+      if (
+        normalized.includes("chat") ||
+        normalized.includes("home")
+      ) {
+        loadHomeChats();
+      }
+    };
+
+  window.gmRefreshRealHome =
+    loadHomeChats;
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+      connectExistingSendButton();
+      connectExistingNewChatButtons();
+      loadHomeChats();
+    }
+  );
+
+  /*
+   * Very light refresh: once every 60 seconds and only
+   * while the app is visible. This preserves the
+   * extraordinarily-low mobile-data goal.
+   */
+  setInterval(function () {
+    if (
+      document.visibilityState === "visible"
+    ) {
+      loadHomeChats();
+    }
+  }, 60000);
+
+})();
+</script>
+
 </body>
 </html>
