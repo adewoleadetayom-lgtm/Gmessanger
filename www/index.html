@@ -2476,15 +2476,21 @@ token=data.token;
 localStorage.setItem('gmessengerToken',token);
 connectRealtime();
 
-currentUser=data.user;
+const verifiedUser = data && data.user;
 
-if(data.user.profileComplete){
-localStorage.setItem('gmessengerName',data.user.name||'');
-localStorage.setItem('gmessengerSetup','complete');
-show('appScreen');
-await loadConversations();
+if(!verifiedUser){
+  throw new Error('Verification succeeded, but no user profile was returned.');
+}
+
+currentUser=verifiedUser;
+
+if(Boolean(verifiedUser.profileComplete)){
+  localStorage.setItem('gmessengerName',verifiedUser.name||'');
+  localStorage.setItem('gmessengerSetup','complete');
+  show('appScreen');
+  await loadConversations();
 }else{
-show('profileScreen');
+  show('profileScreen');
 }
 }catch(e){
 alert(e.message);
