@@ -2160,11 +2160,6 @@ window.GMShare = Share;
 import { Contacts } from '@capacitor-community/contacts';
 window.GMContacts = Contacts;
 </script>
-
-<script type="module">
-import { App } from '@capacitor/app';
-window.GMApp = App;
-</script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
 let token=localStorage.getItem("gmessengerToken")||"";
@@ -2332,6 +2327,12 @@ let currentPhone='';
 let currentConversation=null;
 let currentUser=null;
 
+function show(id){
+document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+const el=document.getElementById(id);
+if(el)el.classList.add('active');
+}
+
 async function api(url,options={}){
 options.headers=Object.assign({
 'Content-Type':'application/json',
@@ -2345,97 +2346,16 @@ if(!r.ok)throw new Error(data.error||'Request failed');
 return data;
 }
 
-/* =========================
-   G MESSENGER NAVIGATION
-   ========================= */
-
-let currentScreen='';
-
-function show(id){
-document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-const el=document.getElementById(id);
-if(el){
-el.classList.add('active');
-currentScreen=id;
-}
-}
-
-function goBack(){
-
-  if(currentScreen==='loginScreen'){
-    show('loginScreen');
-    return;
-  }
-
-  if(currentScreen==='verificationScreen'){
-    show('loginScreen');
-    return;
-  }
-
-  if(currentScreen==='profileScreen'){
-    show('verificationScreen');
-    return;
-  }
-
-  if(currentScreen==='securityScreen'){
-    show('profileScreen');
-    return;
-  }
-
-  if(currentScreen==='contactsScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='chatScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='gemmaScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='appScreen'){
-    setBottomNav('navChats');
-    show('appScreen');
-    return;
-  }
-
-  show('loginScreen');
-}
-
 function startup(){
-  const setupComplete =
-    localStorage.getItem('gmessengerSetup') === 'complete';
-
-  if(token && setupComplete){
-    connectRealtime();
-    setBottomNav('navChats');
-    show('appScreen');
-    loadConversations();
-  }else{
-    if(token && !setupComplete){
-      show('profileScreen');
-    }else{
-      show('loginScreen');
-    }
-  }
+if(token){
+connectRealtime();
+setBottomNav('navChats');
+show('appScreen');
+loadConversations();
+}else{
+show('loginScreen');
 }
-
-window.addEventListener('popstate',function(){
-  goBack();
-});
-
-/* Android physical Back button */
-window.addEventListener('load',function(){
-  if(window.GMApp){
-    window.GMApp.addListener('backButton',function(){
-      goBack();
-    });
-  }
-});
+}
 
 async function register(){
 currentPhone=document.getElementById('phone').value.trim();
@@ -2605,12 +2525,6 @@ function setBottomNav(active){
 }
 
 function goChats(){
-
-  if(!token || localStorage.getItem('gmessengerSetup')!=='complete'){
-    show('loginScreen');
-    return;
-  }
-
   setBottomNav('navChats');
   show('appScreen');
   loadConversations();
@@ -2633,13 +2547,7 @@ function goCalls(){
 
 
 async function openContacts(){
-
-    if(!token || localStorage.getItem('gmessengerSetup')!=='complete'){
-      show('loginScreen');
-      return;
-    }
-
-    show('contactsScreen');
+  show('contactsScreen');
 
   const input=document.getElementById('contactSearch');
   const list=document.getElementById('contactsList');
