@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#087cff">
+<title>G Messenger</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#fff;
+  color:#111;
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+button{
+  border:0;
+  background:none;
+  cursor:pointer;
+}
+
+.screen{
+  display:none;
+  width:100%;
+  height:100dvh;
+}
+
+.screen.active{
+  display:flex;
+}
+
+/* ================= LOGIN ================= */
+
+#loginScreen{
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+
+.login-box{
+  width:100%;
+  max-width:420px;
+  text-align:center;
+}
+
+.logo{
+  width:82px;
+  height:82px;
+  margin:0 auto 20px;
+  border-radius:24px;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:42px;
+  font-weight:800;
+}
+
+.login-box h1{
+  margin:0 0 8px;
+  font-size:30px;
+}
+
+.login-box p{
+  color:#667781;
+  margin:0 0 28px;
+}
+
+.login-input{
+  width:100%;
+  padding:15px;
+  border:1px solid #d7dce1;
+  border-radius:14px;
+  outline:none;
+  margin-bottom:12px;
+}
+
+.primary-btn{
+  width:100%;
+  padding:15px;
+  border-radius:14px;
+  background:#087cff;
+  color:#fff;
+  font-weight:700;
+}
+
+/* ================= APP ================= */
+
+#appScreen{
+  position:relative;
+  flex-direction:column;
+  overflow:hidden;
+  background:#fff;
+}
+
+.app-header{
+  flex:0 0 auto;
+  padding:18px 18px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#087cff;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:21px;
+}
+
+.brand-name{
+  font-size:22px;
+  font-weight:800;
+}
+
+.header-buttons{
+  display:flex;
+  gap:6px;
+}
+
+.icon-button{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.icon-button:active{
+  background:#eef5ff;
+}
+
+.search-box{
+  margin:4px 16px 12px;
+  height:48px;
+  border-radius:16px;
+  background:#f1f4f7;
+  display:flex;
+  align-items:center;
+  padding:0 15px;
+  gap:10px;
+}
+
+.search-box span{
+  font-size:21px;
+  color:#667781;
+}
+
+.search-box input{
+  border:0;
+  outline:0;
+  background:transparent;
+  width:100%;
+  font-size:15px;
+}
+
+.filter-row{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:0 16px 12px;
+  scrollbar-width:none;
+}
+
+.filter-row::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:9px 15px;
+  border-radius:20px;
+  background:#f1f4f7;
+  color:#445;
+  font-size:13px;
+}
+
+.filter.active{
+  background:#087cff;
+  color:#fff;
+}
+
+.chat-list{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding-bottom:90px;
+}
+
+.chat-item{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px 17px;
+  min-height:76px;
+}
+
+.chat-item:active{
+  background:#f5f7f9;
+}
+
+.avatar{
+  flex:0 0 52px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:700;
+}
+
+.chat-content{
+  min-width:0;
+  flex:1;
+}
+
+.chat-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.chat-name{
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chat-time{
+  color:#667781;
+  font-size:12px;
+  flex:0 0 auto;
+}
+
+.chat-preview{
+  color:#667781;
+  font-size:14px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gemma-item .avatar{
+  background:#fff;
+  color:#087cff;
+  border:2px solid #087cff;
+}
+
+.ai-label{
+  display:inline-block;
+  margin-left:5px;
+  font-size:10px;
+  background:#e7f1ff;
+  color:#087cff;
+  padding:3px 6px;
+  border-radius:7px;
+  vertical-align:middle;
+}
+
+.fab{
+  position:absolute;
+  right:18px;
+  bottom:82px;
+  width:58px;
+  height:58px;
+  border-radius:18px;
+  background:#087cff;
+  color:#fff;
+  font-size:28px;
+  box-shadow:0 6px 20px rgba(0,0,0,.18);
+  z-index:10;
+}
+
+.bottom-nav{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:72px;
+  padding-bottom:env(safe-area-inset-bottom);
+  background:#fff;
+  border-top:1px solid #e7eaed;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  z-index:9;
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  color:#667781;
+  font-size:11px;
+}
+
+.nav-item.active{
+  color:#087cff;
+  font-weight:700;
+}
+
+.nav-icon{
+  font-size:22px;
+}
+
+/* ================= OTHER SCREENS ================= */
+
+.full-screen{
+  flex-direction:column;
+  background:#fff;
+}
+
+.screen-header{
+  height:64px;
+  flex:0 0 auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 16px;
+  border-bottom:1px solid #e7eaed;
+}
+
+.screen-header h2{
+  margin:0;
+  font-size:20px;
+}
+
+.back-btn{
+  font-size:25px;
+  width:40px;
+  height:40px;
+}
+
+.empty-screen{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  text-align:center;
+  color:#667781;
+}
+
+.empty-icon{
+  font-size:52px;
+  margin-bottom:15px;
+}
+
+.empty-screen h3{
+  color:#111;
+  margin:0 0 8px;
+}
+
+/* ================= GEMMA ================= */
+
+#gemmaScreen{
+  flex-direction:column;
+  background:#f7f9fb;
+}
+
+.gemma-header{
+  flex:0 0 auto;
+  height:66px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 12px;
+  background:#087cff;
+  color:#fff;
+}
+
+.gemma-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#fff;
+  color:#087cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:19px;
+}
+
+.gemma-title{
+  flex:1;
+}
+
+.gemma-title strong{
+  display:block;
+  font-size:16px;
+}
+
+.gemma-title small{
+  opacity:.85;
+}
+
+.gemma-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:24px 16px 20px;
+}
+
+.welcome-card{
+  max-width:430px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+}
+
+.welcome-card h2{
+  color:#087cff;
+  margin-top:0;
+}
+
+.welcome-card p{
+  color:#667781;
+  line-height:1.5;
+}
+
+.gemma-composer{
+  flex:0 0 auto;
+  display:flex;
+  gap:8px;
+  padding:10px;
+  background:#fff;
+  border-top:1px solid #e7eaed;
+}
+
+.gemma-composer textarea{
+  flex:1;
+  resize:none;
+  max-height:110px;
+  border:1px solid #d7dce1;
+  border-radius:20px;
+  padding:11px 15px;
+  outline:none;
+}
+
+.send-btn{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  font-size:19px;
+}
+
+/* ================= DESKTOP ================= */
+
+@media(min-width:700px){
+  #appScreen,
+  .full-screen,
+  #gemmaScreen{
+    max-width:700px;
+    margin:auto;
+    border-left:1px solid #e5e5e5;
+    border-right:1px solid #e5e5e5;
+  }
+
+  body{
+    background:#eef1f4;
+  }
+}
+</style>
+<style>
+
+/* =========================================================
+   G MESSENGER COMPLETE UI 2026
+   ========================================================= */
+
+.gm-v2{
+  font-family:Arial,Helvetica,sans-serif;
+  color:#111;
+  background:#fff;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.gm-v2-header{
+  height:72px;
+  flex:0 0 72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  border-bottom:1px solid #eee;
+  background:#fff;
+}
+
+.gm-v2-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:24px;
+  font-weight:700;
+}
+
+.gm-logo{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  font-weight:800;
+  box-shadow:0 3px 10px rgba(8,124,255,.22);
+}
+
+.gm-header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.gm-icon{
+  border:0;
+  background:transparent;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  font-size:25px;
+  cursor:pointer;
+}
+
+.gm-icon:active{
+  background:#f1f3f5;
+}
+
+.gm-search{
+  margin:14px 18px 8px;
+  height:54px;
+  border-radius:18px;
+  background:#f1f4f7;
+  display:flex;
+  align-items:center;
+  padding:0 16px;
+  gap:12px;
+}
+
+.gm-search span{
+  font-size:25px;
+  color:#68727c;
+}
+
+.gm-search input{
+  border:0;
+  outline:0;
+  background:transparent;
+  width:100%;
+  font-size:18px;
+}
+
+.gm-filters{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:8px 18px 14px;
+}
+
+.gm-filter{
+  border:0;
+  border-radius:22px;
+  background:#f0f2f5;
+  padding:11px 19px;
+  white-space:nowrap;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.gm-filter.active{
+  background:#087cff;
+  color:white;
+}
+
+.gm-scroll{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding-bottom:10px;
+}
+
+.gm-chat-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:12px 20px;
+  min-height:76px;
+  cursor:pointer;
+}
+
+.gm-chat-row:active{
+  background:#f5f6f7;
+}
+
+.gm-avatar{
+  width:56px;
+  height:56px;
+  flex:0 0 56px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#087cff;
+  color:#fff;
+  font-weight:700;
+  font-size:22px;
+  overflow:hidden;
+}
+
+.gm-avatar.ai{
+  background:#fff;
+  border:2px solid #087cff;
+  color:#087cff;
+}
+
+.gm-chat-info{
+  min-width:0;
+  flex:1;
+}
+
+.gm-chat-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.gm-chat-name{
+  font-size:18px;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gm-time{
+  color:#707980;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.gm-preview{
+  margin-top:5px;
+  color:#707980;
+  font-size:15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gm-badge{
+  display:inline-flex;
+  min-width:21px;
+  height:21px;
+  padding:0 6px;
+  align-items:center;
+  justify-content:center;
+  border-radius:12px;
+  background:#18a765;
+  color:#fff;
+  font-size:12px;
+  margin-left:5px;
+}
+
+.gm-fab{
+  position:absolute;
+  right:20px;
+  bottom:82px;
+  width:62px;
+  height:62px;
+  border:0;
+  border-radius:20px;
+  background:#087cff;
+  color:#fff;
+  font-size:34px;
+  box-shadow:0 8px 25px rgba(0,0,0,.18);
+  cursor:pointer;
+  z-index:20;
+}
+
+.gm-bottom{
+  flex:0 0 72px;
+  height:72px;
+  border-top:1px solid #e7e7e7;
+  background:#fff;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  z-index:15;
+}
+
+.gm-bottom button{
+  border:0;
+  background:transparent;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:13px;
+  color:#626b72;
+  cursor:pointer;
+}
+
+.gm-bottom button.active{
+  color:#087cff;
+  font-weight:700;
+}
+
+.gm-bottom .nav-icon{
+  font-size:24px;
+}
+
+.gm-section{
+  padding:18px 20px;
+}
+
+.gm-section-title{
+  font-size:30px;
+  margin:0 0 20px;
+  font-weight:500;
+}
+
+.gm-section-heading{
+  font-size:23px;
+  margin:18px 0 12px;
+}
+
+.gm-horizontal{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding-bottom:8px;
+}
+
+.gm-status{
+  width:96px;
+  height:142px;
+  flex:0 0 96px;
+  border-radius:18px;
+  overflow:hidden;
+  background:#e8edf2;
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  padding:10px;
+  color:#fff;
+  font-weight:600;
+}
+
+.gm-status.add{
+  color:#222;
+  background:#f5f5f5;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.gm-status-ring{
+  position:absolute;
+  top:9px;
+  left:50%;
+  transform:translateX(-50%);
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  border:3px solid #20bd73;
+  background:#087cff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-channel-row,
+.gm-community-row,
+.gm-call-row{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+
+.gm-large-icon{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  flex:0 0 54px;
+}
+
+.gm-row-main{
+  flex:1;
+  min-width:0;
+}
+
+.gm-row-title{
+  font-size:18px;
+  font-weight:600;
+}
+
+.gm-row-sub{
+  color:#707980;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gm-row-time{
+  color:#18a765;
+  font-size:13px;
+}
+
+.gm-action-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.gm-action{
+  text-align:center;
+}
+
+.gm-action-circle{
+  width:66px;
+  height:66px;
+  margin:auto;
+  border-radius:50%;
+  background:#f4f4f4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+}
+
+.gm-action-label{
+  margin-top:8px;
+  color:#626b72;
+}
+
+.gm-gemma{
+  background:#fff;
+}
+
+.gm-gemma-header{
+  height:70px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 16px;
+  border-bottom:1px solid #eee;
+}
+
+.gm-gemma-body{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:25px 18px 100px;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(8,124,255,.05),transparent 25%),
+    #fafafa;
+}
+
+.gm-gemma-welcome{
+  text-align:center;
+  margin-top:55px;
+}
+
+.gm-gemma-logo{
+  width:80px;
+  height:80px;
+  border-radius:28px;
+  background:#087cff;
+  color:#fff;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:43px;
+  font-weight:800;
+}
+
+.gm-gemma-welcome h2{
+  font-size:29px;
+  margin:18px 0 8px;
+}
+
+.gm-gemma-welcome p{
+  color:#707980;
+}
+
+.gm-gemma-message{
+  max-width:82%;
+  padding:12px 15px;
+  border-radius:18px;
+  margin:10px 0;
+  line-height:1.45;
+}
+
+.gm-gemma-message.user{
+  margin-left:auto;
+  background:#087cff;
+  color:#fff;
+  border-bottom-right-radius:5px;
+}
+
+.gm-gemma-message.ai{
+  background:#fff;
+  border:1px solid #e6e6e6;
+  border-bottom-left-radius:5px;
+}
+
+.gm-composer{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  min-height:66px;
+  padding:9px 12px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  background:#fff;
+  border-top:1px solid #eee;
+}
+
+.gm-composer input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:#f2f4f6;
+  border-radius:25px;
+  padding:13px 16px;
+  font-size:17px;
+}
+
+.gm-send{
+  width:48px;
+  height:48px;
+  border:0;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  font-size:20px;
+}
+
+.gm-overlay{
+  position:fixed;
+  inset:0;
+  background:#fff;
+  z-index:100;
+  display:none;
+  flex-direction:column;
+}
+
+.gm-overlay.show{
+  display:flex;
+}
+
+.gm-chat-header{
+  height:68px;
+  flex:0 0 68px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 14px;
+  border-bottom:1px solid #eee;
+}
+
+.gm-chat-header .gm-chat-name{
+  font-size:18px;
+}
+
+.gm-messages{
+  flex:1;
+  overflow-y:auto;
+  padding:20px 15px 90px;
+  background:#f7f8fa;
+}
+
+.gm-bubble{
+  max-width:78%;
+  padding:10px 13px;
+  margin:7px 0;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);
+}
+
+.gm-bubble.me{
+  margin-left:auto;
+  background:#dff1ff;
+}
+
+.gm-menu{
+  position:fixed;
+  top:64px;
+  right:12px;
+  width:235px;
+  background:#fff;
+  border-radius:15px;
+  box-shadow:0 8px 30px rgba(0,0,0,.18);
+  z-index:300;
+  overflow:hidden;
+  display:none;
+}
+
+.gm-menu.show{
+  display:block;
+}
+
+.gm-menu button{
+  width:100%;
+  border:0;
+  background:#fff;
+  text-align:left;
+  padding:15px 18px;
+  font-size:16px;
+}
+
+.gm-menu button:active{
+  background:#f2f4f6;
+}
+
+.gm-settings-card{
+  margin:12px 0;
+  padding:16px;
+  border-radius:16px;
+  background:#f4f6f8;
+}
+
+.gm-settings-row{
+  padding:17px 4px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+}
+
+@media(min-width:700px){
+  .gm-v2,
+  .gm-overlay{
+    max-width:700px;
+    margin:auto;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<section id="loginScreen" class="screen active">
+  <div class="login-box">
+    <div class="logo" aria-label="G Messenger logo"><svg viewBox="0 0 48 48"
+     width="100%"
+     height="100%"
+     fill="none"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true">
+
+  <rect x="2" y="2" width="44" height="44" rx="13"
+        fill="currentColor"/>
+
+  <path
+    d="M32.5 15.5C30.4 12.9 27.4 11.4 24 11.4C18.1 11.4 13.7 15.3 13.7 21.6C13.7 27.8 18.1 31.8 24 31.8C27.3 31.8 30.1 30.5 32.4 28.2V22H24.1"
+    stroke="white"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+</svg></div>
+    <h1>G Messenger</h1>
+    <p>Simple. Private. Connected.</p>
+
+    <input
+      id="loginName"
+      class="login-input"
+      type="text"
+      placeholder="Enter your name"
+      autocomplete="name">
+
+    <button class="primary-btn" onclick="enterMessenger()">
+      Continue
+    </button>
+  </div>
+</section>
+
+
+<!-- MAIN APP -->
+<section id="appScreen" class="screen">
+
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-label="G Messenger logo"><svg viewBox="0 0 48 48"
+     width="100%"
+     height="100%"
+     fill="none"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true">
+
+  <rect x="2" y="2" width="44" height="44" rx="13"
+        fill="currentColor"/>
+
+  <path
+    d="M32.5 15.5C30.4 12.9 27.4 11.4 24 11.4C18.1 11.4 13.7 15.3 13.7 21.6C13.7 27.8 18.1 31.8 24 31.8C27.3 31.8 30.1 30.5 32.4 28.2V22H24.1"
+    stroke="white"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"/>
+</svg></div>
+      <div class="brand-name">G Messenger</div>
+    </div>
+
+    <div class="header-buttons">
+      <button class="icon-button" onclick="openGemma()" aria-label="Gemma">✦</button>
+      <button class="icon-button" onclick="showScreen('settingsScreen')" aria-label="Settings">⋮</button>
+    </div>
+  </header>
+
+  <div class="search-box">
+    <span>⌕</span>
+    <input
+      id="chatSearch"
+      type="search"
+      placeholder="Search G Messenger"
+      oninput="renderChats()">
+  </div>
+
+  <div class="filter-row">
+    <button class="filter active" onclick="setFilter('all',this)">All</button>
+    <button class="filter" onclick="setFilter('unread',this)">Unread</button>
+    <button class="filter" onclick="setFilter('favorites',this)">Favorites</button>
+    <button class="filter" onclick="setFilter('groups',this)">Groups</button>
+  </div>
+
+  <main id="chatList" class="chat-list"></main>
+
+  <button class="fab" onclick="newChat()" aria-label="New chat">＋</button>
+
+  <nav class="bottom-nav">
+
+    <button class="nav-item active" onclick="goHome(this)">
+      <span class="nav-icon">💬</span>
+      <span>Chats</span>
+    </button>
+
+    <button class="nav-item" onclick="showSection('updatesScreen',this)">
+      <span class="nav-icon">◉</span>
+      <span>Updates</span>
+    </button>
+
+    <button class="nav-item" onclick="showSection('communitiesScreen',this)">
+      <span class="nav-icon">👥</span>
+      <span>Communities</span>
+    </button>
+
+    <button class="nav-item" onclick="showSection('callsScreen',this)">
+      <span class="nav-icon">☎</span>
+      <span>Calls</span>
+    </button>
+
+  </nav>
+</section>
+
+
+<!-- UPDATES -->
+<section id="updatesScreen" class="screen full-screen">
+  <header class="screen-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <h2>Updates</h2>
+  </header>
+
+  <div class="empty-screen">
+    <div class="empty-icon">◉</div>
+    <h3>Updates</h3>
+    <p>Status updates, channels and announcements will appear here.</p>
+  </div>
+</section>
+
+
+<!-- COMMUNITIES -->
+<section id="communitiesScreen" class="screen full-screen">
+  <header class="screen-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <h2>Communities</h2>
+  </header>
+
+  <div class="empty-screen">
+    <div class="empty-icon">👥</div>
+    <h3>Communities</h3>
+    <p>Your communities will appear here.</p>
+  </div>
+</section>
+
+
+<!-- CALLS -->
+<section id="callsScreen" class="screen full-screen">
+  <header class="screen-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <h2>Calls</h2>
+  </header>
+
+  <div class="empty-screen">
+    <div class="empty-icon">☎</div>
+    <h3>Calls</h3>
+    <p>Your voice and video calls will appear here.</p>
+  </div>
+</section>
+
+
+<!-- SETTINGS -->
+<section id="settingsScreen" class="screen full-screen">
+  <header class="screen-header">
+    <button class="back-btn" onclick="goHome()">‹</button>
+    <h2>Settings</h2>
+  </header>
+
+  <div class="empty-screen">
+    <div class="empty-icon">⚙</div>
+    <h3>Settings</h3>
+    <p>G Messenger settings will be connected here.</p>
+  </div>
+</section>
+
+
+<!-- GEMMA -->
+<section id="gemmaScreen" class="screen">
+
+  <header class="gemma-header">
+    <button class="back-btn" onclick="goHome()" style="color:#fff">‹</button>
+
+    <div class="gemma-avatar">G</div>
+
+    <div class="gemma-title">
+      <strong>Gemma ✦</strong>
+      <small>G Messenger AI</small>
+    </div>
+
+    <button
+      class="icon-button"
+      style="color:#fff"
+      onclick="alert('Gemma options will be connected in the AI stage.')">
+      ⋮
+    </button>
+  </header>
+
+  <main id="gemmaMessages" class="gemma-messages">
+
+    <div class="welcome-card">
+      <h2>Welcome to Gemma</h2>
+
+      <p>
+        Your G Messenger AI assistant is ready.
+      </p>
+
+      <p>
+        Ask questions, get explanations, translate text,
+        or get help with everyday tasks.
+      </p>
+
+      <small>
+        AI connection will be enabled in the next stage.
+      </small>
+    </div>
+
+  </main>
+
+  <div class="gemma-composer">
+
+    <textarea
+      id="gemmaInput"
+      rows="1"
+      placeholder="Message Gemma"
+      onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendGemma();}">
+    </textarea>
+
+    <button class="send-btn" onclick="sendGemma()">➤</button>
+
+  </div>
+</section>
+
+
+<script>
+const chats = [
+  {
+    name:"Gemma",
+    preview:"Your G Messenger AI assistant",
+    time:"Now",
+    initial:"G",
+    type:"gemma",
+    unread:false,
+    favorite:true,
+    group:false
+  },
+  {
+    name:"G Messenger",
+    preview:"Welcome to G Messenger",
+    time:"Now",
+    initial:"G",
+    unread:false,
+    favorite:true,
+    group:false
+  }
+];
+
+let currentFilter = "all";
+
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(screen=>{
+    screen.classList.remove("active");
+  });
+
+  const target = document.getElementById(id);
+
+  if(target){
+    target.classList.add("active");
+  }
+}
+
+
+function goHome(button){
+  showScreen("appScreen");
+
+  if(button){
+    document.querySelectorAll(".nav-item").forEach(x=>{
+      x.classList.remove("active");
+    });
+
+    button.classList.add("active");
+  }
+}
+
+
+function showSection(id,button){
+  showScreen(id);
+
+  document.querySelectorAll(".nav-item").forEach(x=>{
+    x.classList.remove("active");
+  });
+
+  if(button){
+    button.classList.add("active");
+  }
+}
+
+
+function enterMessenger(){
+  const name = document.getElementById("loginName").value.trim();
+
+  if(name){
+    localStorage.setItem("gmessengerName",name);
+  }
+
+  showScreen("appScreen");
+  renderChats();
+}
+
+
+function renderChats(){
+
+  const list = document.getElementById("chatList");
+
+  if(!list) return;
+
+  const query =
+    (document.getElementById("chatSearch")?.value || "")
+      .trim()
+      .toLowerCase();
+
+  let filtered = chats.filter(chat=>{
+
+    if(currentFilter === "unread" && !chat.unread){
+      return false;
+    }
+
+    if(currentFilter === "favorites" && !chat.favorite){
+      return false;
+    }
+
+    if(currentFilter === "groups" && !chat.group){
+      return false;
+    }
+
+    if(query){
+      return (
+        chat.name.toLowerCase().includes(query) ||
+        chat.preview.toLowerCase().includes(query)
+      );
+    }
+
+    return true;
+  });
+
+  list.innerHTML = "";
+
+  if(!filtered.length){
+    list.innerHTML = `
+      <div class="empty-screen">
+        <div class="empty-icon">⌕</div>
+        <h3>No chats found</h3>
+        <p>Try another search or start a new chat.</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach(chat=>{
+
+    const item = document.createElement("div");
+
+    item.className =
+      "chat-item " +
+      (chat.type === "gemma" ? "gemma-item" : "");
+
+    item.onclick =
+      chat.type === "gemma"
+      ? openGemma
+      : ()=>openChat(chat.name);
+
+    item.innerHTML = `
+      <div class="avatar">${escapeHtml(chat.initial)}</div>
+
+      <div class="chat-content">
+
+        <div class="chat-top">
+
+          <div class="chat-name">
+            ${escapeHtml(chat.name)}
+            ${
+              chat.type === "gemma"
+              ? '<span class="ai-label">AI</span>'
+              : ''
+            }
+          </div>
+
+          <div class="chat-time">
+            ${escapeHtml(chat.time)}
+          </div>
+
+        </div>
+
+        <div class="chat-preview">
+          ${escapeHtml(chat.preview)}
+        </div>
+
+      </div>
+    `;
+
+    list.appendChild(item);
+  });
+}
+
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function setFilter(filter,button){
+
+  currentFilter = filter;
+
+  document.querySelectorAll(".filter").forEach(x=>{
+    x.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  renderChats();
+}
+
+
+function openGemma(){
+  showScreen("gemmaScreen");
+}
+
+
+function sendGemma(){
+
+  const input =
+    document.getElementById("gemmaInput");
+
+  const messages =
+    document.getElementById("gemmaMessages");
+
+  if(!input || !messages) return;
+
+  const text = input.value.trim();
+
+  if(!text) return;
+
+  const userMessage =
+    document.createElement("div");
+
+  userMessage.style.cssText =
+    "max-width:80%;margin:10px 0 10px auto;background:#087cff;color:#fff;padding:11px 14px;border-radius:16px 16px 4px 16px;";
+
+  userMessage.textContent = text;
+
+  messages.appendChild(userMessage);
+
+  input.value = "";
+
+  const reply =
+    document.createElement("div");
+
+  reply.style.cssText =
+    "max-width:80%;margin:10px auto 10px 0;background:#fff;color:#111;padding:11px 14px;border-radius:16px 16px 16px 4px;box-shadow:0 1px 4px rgba(0,0,0,.08);";
+
+  reply.textContent =
+    "Gemma AI connection will be enabled in the next stage.";
+
+  messages.appendChild(reply);
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+
+function openChat(name){
+
+  alert(
+    name +
+    " chat screen will be connected in the next chat stage."
+  );
+}
+
+
+function newChat(){
+
+  alert(
+    "New chat will be connected in the next stage."
+  );
+}
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+
+  const savedName =
+    localStorage.getItem("gmessengerName");
+
+  if(savedName){
+    showScreen("appScreen");
+  }
+
+  renderChats();
+});
+</script>
+
+<script>
+
+/* =========================================================
+   G MESSENGER COMPLETE UI JAVASCRIPT
+   ========================================================= */
+
+(function(){
+
+const chats = [
+  {name:"Gemma",preview:"Your G Messenger AI assistant",time:"Now",ai:true,favorite:true},
+  {name:"G Messenger",preview:"Welcome to G Messenger",time:"Now"},
+  {name:"GoodLeaders",preview:"Leadership starts with service",time:"Yesterday",group:true},
+  {name:"Family Group",preview:"New message",time:"Yesterday",unread:3,group:true},
+  {name:"Friends",preview:"Photo",time:"Yesterday",unread:2},
+  {name:"School Group",preview:"Announcement",time:"Monday",group:true},
+  {name:"Project Team",preview:"Let's continue the project",time:"Sunday",favorite:true,unread:1}
+];
+
+const statuses = [
+  "My Status","Sunday","AUNTY FUNMI","Friends","Family"
+];
+
+const channels = [
+  ["G Messenger News","Latest updates from G Messenger"],
+  ["GoodLeaders","Leadership, education and motivation"],
+  ["Technology","Technology and innovation"],
+  ["Nigeria Updates","News and community updates"]
+];
+
+const communities = [
+  ["GoodLeaders Community","Announcements and groups"],
+  ["School Community","Students and teachers"],
+  ["Family Community","Family announcements"]
+];
+
+const calls = [
+  ["AUNTY TOLA","Outgoing voice call","Yesterday, 8:35 PM","☎"],
+  ["Tola","Outgoing voice call","Yesterday, 8:35 PM","☎"],
+  ["Joshua","Incoming voice call","August 21, 7:51 PM","↙"],
+  ["Project Team","Outgoing video call","August 21, 7:50 PM","▣"]
+];
+
+let currentFilter="all";
+
+function $(id){return document.getElementById(id);}
+
+function gmShow(id){
+  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+  const el=$(id);
+  if(el) el.classList.add("active");
+}
+
+function gmNav(name){
+  if(name==="chats"){
+    gmShow("appScreen");
+  }else{
+    gmShow(name+"Screen");
+  }
+
+  document.querySelectorAll(".gm-bottom button").forEach(b=>{
+    b.classList.toggle("active",b.dataset.nav===name);
+  });
+}
+
+function avatar(name,ai){
+  return `<div class="gm-avatar ${ai?"ai":""}">${ai?"✦":name.charAt(0).toUpperCase()}</div>`;
+}
+
+function renderChats(){
+  const list=$("gmChatList");
+  if(!list)return;
+
+  const q=($("gmChatSearch")?.value||"").toLowerCase();
+
+  let result=chats.filter(c=>{
+    const matches=(c.name+" "+c.preview).toLowerCase().includes(q);
+    if(!matches)return false;
+
+    if(currentFilter==="unread")return c.unread;
+    if(currentFilter==="favorites")return c.favorite;
+    if(currentFilter==="groups")return c.group;
+    return true;
+  });
+
+  list.innerHTML=result.map((c,i)=>`
+    <div class="gm-chat-row" onclick="${c.ai?"openGemma()":"gmOpenChat("+i+")"}">
+      ${avatar(c.name,c.ai)}
+      <div class="gm-chat-info">
+        <div class="gm-chat-top">
+          <div class="gm-chat-name">${escapeHtml(c.name)} ${c.ai?'<span class="gm-badge">AI</span>':""}</div>
+          <div class="gm-time">${c.time}</div>
+        </div>
+        <div class="gm-preview">${escapeHtml(c.preview)}
+          ${c.unread?`<span class="gm-badge">${c.unread}</span>`:""}
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function escapeHtml(v){
+  return String(v).replace(/[&<>"']/g,x=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#039;"
+  }[x]));
+}
+
+function gmSetFilter(filter,btn){
+  currentFilter=filter;
+  document.querySelectorAll(".gm-filter").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  renderChats();
+}
+
+function gmOpenChat(i){
+  const c=chats[i];
+  let overlay=$("gmChatOverlay");
+
+  overlay.innerHTML=`
+    <div class="gm-chat-header">
+      <button class="gm-icon" onclick="gmCloseChat()">‹</button>
+      ${avatar(c.name,false)}
+      <div class="gm-chat-name">${escapeHtml(c.name)}</div>
+      <div style="margin-left:auto">
+        <button class="gm-icon" onclick="alert('Voice call')">☎</button>
+        <button class="gm-icon" onclick="alert('Video call')">▣</button>
+        <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+      </div>
+    </div>
+
+    <div class="gm-messages" id="gmMessages">
+      <div class="gm-bubble">${escapeHtml(c.preview)}</div>
+      <div class="gm-bubble me">Hello ${escapeHtml(c.name)}.</div>
+    </div>
+
+    <div class="gm-composer">
+      <button class="gm-icon">☺</button>
+      <input id="gmMessageInput" placeholder="Message"
+        onkeydown="if(event.key==='Enter')gmSendMessage()">
+      <button class="gm-icon">📎</button>
+      <button class="gm-icon">▣</button>
+      <button class="gm-send" onclick="gmSendMessage()">➤</button>
+    </div>
+  `;
+
+  overlay.classList.add("show");
+}
+
+function gmCloseChat(){
+  $("gmChatOverlay").classList.remove("show");
+}
+
+function gmSendMessage(){
+  const input=$("gmMessageInput");
+  const text=input?.value.trim();
+  if(!text)return;
+
+  const box=$("gmMessages");
+  box.insertAdjacentHTML("beforeend",
+    `<div class="gm-bubble me">${escapeHtml(text)}</div>`
+  );
+  input.value="";
+  box.scrollTop=box.scrollHeight;
+
+  setTimeout(()=>{
+    box.insertAdjacentHTML("beforeend",
+      `<div class="gm-bubble">Thanks for your message. This conversation is ready for the real messaging backend.</div>`
+    );
+    box.scrollTop=box.scrollHeight;
+  },500);
+}
+
+window.openGemma=function(){
+  gmShow("gemmaScreen");
+  document.querySelectorAll(".gm-bottom button").forEach(b=>b.classList.remove("active"));
+};
+
+window.sendGemma=function(){
+  const input=$("gmGemmaInput");
+  const text=input?.value.trim();
+  if(!text)return;
+
+  const body=$("gmGemmaBody");
+
+  const welcome=body.querySelector(".gm-gemma-welcome");
+  if(welcome)welcome.remove();
+
+  body.insertAdjacentHTML("beforeend",
+    `<div class="gm-gemma-message user">${escapeHtml(text)}</div>`
+  );
+
+  input.value="";
+  body.scrollTop=body.scrollHeight;
+
+  setTimeout(()=>{
+    body.insertAdjacentHTML("beforeend",
+      `<div class="gm-gemma-message ai">
+        I'm Gemma, the G Messenger AI assistant. Your message was received.
+      </div>`
+    );
+    body.scrollTop=body.scrollHeight;
+  },600);
+};
+
+function buildScreens(){
+
+  const app=$("appScreen");
+  if(app){
+    app.className="screen gm-v2";
+    app.innerHTML=`
+      <header class="gm-v2-header">
+        <div class="gm-v2-brand">
+          <div class="gm-logo">G</div>
+          <span>G Messenger</span>
+        </div>
+        <div class="gm-header-actions">
+          <button class="gm-icon" onclick="openGemma()">✦</button>
+          <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+        </div>
+      </header>
+
+      <div class="gm-search">
+        <span>⌕</span>
+        <input id="gmChatSearch" type="search"
+          placeholder="Search G Messenger"
+          oninput="renderChats()">
+      </div>
+
+      <div class="gm-filters">
+        <button class="gm-filter active" onclick="gmSetFilter('all',this)">All</button>
+        <button class="gm-filter" onclick="gmSetFilter('unread',this)">Unread</button>
+        <button class="gm-filter" onclick="gmSetFilter('favorites',this)">Favorites</button>
+        <button class="gm-filter" onclick="gmSetFilter('groups',this)">Groups</button>
+      </div>
+
+      <main class="gm-scroll" id="gmChatList"></main>
+
+      <button class="gm-fab" onclick="gmNewChat()">＋</button>
+
+      ${bottomNav("chats")}
+    `;
+  }
+
+  const updates=$("updatesScreen");
+  if(updates){
+    updates.className="screen gm-v2";
+    updates.innerHTML=`
+      <header class="gm-v2-header">
+        <div class="gm-section-title" style="margin:0">Updates</div>
+        <div class="gm-header-actions">
+          <button class="gm-icon">⌕</button>
+          <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+        </div>
+      </header>
+
+      <main class="gm-scroll">
+        <section class="gm-section">
+          <h2 class="gm-section-heading">Status</h2>
+          <div class="gm-horizontal">
+            <div class="gm-status add" onclick="alert('Create a status')">
+              <strong>＋<br>Add status</strong>
+            </div>
+            ${statuses.slice(1).map((x,i)=>`
+              <div class="gm-status" style="background:${i%2?'#253c52':'#087cff'}"
+                   onclick="alert('Viewing ${escapeHtml(x)} status')">
+                <div class="gm-status-ring">${x.charAt(0)}</div>
+                <span>${escapeHtml(x)}</span>
+              </div>
+            `).join("")}
+          </div>
+
+          <h2 class="gm-section-heading">Channels</h2>
+          <button class="gm-filter" onclick="alert('Explore channels')">Explore</button>
+
+          ${channels.map(c=>`
+            <div class="gm-channel-row">
+              <div class="gm-large-icon">G</div>
+              <div class="gm-row-main">
+                <div class="gm-row-title">${escapeHtml(c[0])}</div>
+                <div class="gm-row-sub">${escapeHtml(c[1])}</div>
+              </div>
+              <div class="gm-row-time">Now</div>
+            </div>
+          `).join("")}
+        </section>
+      </main>
+
+      ${bottomNav("updates")}
+    `;
+  }
+
+  const comm=$("communitiesScreen");
+  if(comm){
+    comm.className="screen gm-v2";
+    comm.innerHTML=`
+      <header class="gm-v2-header">
+        <div class="gm-section-title" style="margin:0">Communities</div>
+        <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+      </header>
+
+      <main class="gm-scroll">
+        <section class="gm-section">
+          <div class="gm-community-row" onclick="gmNewCommunity()">
+            <div class="gm-large-icon">＋</div>
+            <div class="gm-row-main">
+              <div class="gm-row-title">New community</div>
+              <div class="gm-row-sub">Create a community</div>
+            </div>
+          </div>
+
+          ${communities.map(c=>`
+            <div class="gm-community-row">
+              <div class="gm-large-icon">👥</div>
+              <div class="gm-row-main">
+                <div class="gm-row-title">${escapeHtml(c[0])}</div>
+                <div class="gm-row-sub">${escapeHtml(c[1])}</div>
+              </div>
+            </div>
+          `).join("")}
+
+          <div style="padding:20px 0;color:#68727a">› View all</div>
+
+          <div class="gm-settings-card">
+            <strong>Announcements</strong>
+            <p style="color:#707980">Community announcements will appear here.</p>
+          </div>
+        </section>
+      </main>
+
+      ${bottomNav("communities")}
+    `;
+  }
+
+  const callsScreen=$("callsScreen");
+  if(callsScreen){
+    callsScreen.className="screen gm-v2";
+    callsScreen.innerHTML=`
+      <header class="gm-v2-header">
+        <div class="gm-section-title" style="margin:0">Calls</div>
+        <div class="gm-header-actions">
+          <button class="gm-icon">⌕</button>
+          <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+        </div>
+      </header>
+
+      <main class="gm-scroll">
+        <section class="gm-section">
+          <div class="gm-action-grid">
+            <div class="gm-action" onclick="alert('Start call')">
+              <div class="gm-action-circle">☎</div>
+              <div class="gm-action-label">Call</div>
+            </div>
+            <div class="gm-action" onclick="alert('Schedule call')">
+              <div class="gm-action-circle">▣</div>
+              <div class="gm-action-label">Schedule</div>
+            </div>
+            <div class="gm-action" onclick="alert('Keypad')">
+              <div class="gm-action-circle">⠿</div>
+              <div class="gm-action-label">Keypad</div>
+            </div>
+            <div class="gm-action" onclick="alert('Favorites')">
+              <div class="gm-action-circle">♡</div>
+              <div class="gm-action-label">Favorites</div>
+            </div>
+          </div>
+
+          <h2 class="gm-section-heading">Recent</h2>
+
+          ${calls.map(c=>`
+            <div class="gm-call-row">
+              ${avatar(c[0],false)}
+              <div class="gm-row-main">
+                <div class="gm-row-title">${escapeHtml(c[0])}</div>
+                <div class="gm-row-sub">${c[3]} ${escapeHtml(c[1])} · ${escapeHtml(c[2])}</div>
+              </div>
+              <button class="gm-icon" onclick="alert('Calling ${escapeHtml(c[0])}')">☎</button>
+            </div>
+          `).join("")}
+        </section>
+      </main>
+
+      <button class="gm-fab" onclick="alert('Start new call')">☎</button>
+      ${bottomNav("calls")}
+    `;
+  }
+
+  const gemma=$("gemmaScreen");
+  if(gemma){
+    gemma.className="screen gm-v2 gm-gemma";
+    gemma.innerHTML=`
+      <header class="gm-gemma-header">
+        <button class="gm-icon" onclick="gmNav('chats')">‹</button>
+        <div class="gm-logo" style="width:42px;height:42px;border-radius:13px">G</div>
+        <div>
+          <strong>Gemma</strong><br>
+          <small style="color:#707980">G Messenger AI</small>
+        </div>
+        <div style="margin-left:auto">
+          <button class="gm-icon" onclick="alert('Gemma history')">◷</button>
+          <button class="gm-icon" onclick="gmToggleMenu()">⋮</button>
+        </div>
+      </header>
+
+      <main class="gm-gemma-body" id="gmGemmaBody">
+        <div class="gm-gemma-welcome">
+          <div class="gm-gemma-logo">G</div>
+          <h2>Welcome to Gemma</h2>
+          <p>Your G Messenger AI assistant</p>
+        </div>
+      </main>
+
+      <div class="gm-composer">
+        <button class="gm-icon">☺</button>
+        <input id="gmGemmaInput" placeholder="Message Gemma"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendGemma()}">
+        <button class="gm-icon">📎</button>
+        <button class="gm-send" onclick="sendGemma()">➤</button>
+      </div>
+    `;
+  }
+
+  const settings=$("settingsScreen");
+  if(settings){
+    settings.className="screen gm-v2";
+    settings.innerHTML=`
+      <header class="gm-v2-header">
+        <button class="gm-icon" onclick="gmNav('chats')">‹</button>
+        <div class="gm-section-title" style="margin:0">Settings</div>
+        <div></div>
+      </header>
+
+      <main class="gm-scroll">
+        <section class="gm-section">
+          <div class="gm-settings-card">
+            <div class="gm-v2-brand">
+              <div class="gm-logo">G</div>
+              <div>
+                <strong>${escapeHtml(localStorage.getItem("gmName")||"G Messenger User")}</strong>
+                <div style="color:#707980;font-size:14px">G Messenger account</div>
+              </div>
+            </div>
+          </div>
+
+          ${[
+            ["Account","Profile, phone number and account settings"],
+            ["Privacy","Privacy controls and blocked contacts"],
+            ["Security","Security and verification"],
+            ["Notifications","Message and call notifications"],
+            ["Chats","Chat appearance and history"],
+            ["Storage and data","Network and data usage"],
+            ["Linked devices","Manage connected devices"],
+            ["Help","Help centre and support"]
+          ].map(x=>`
+            <div class="gm-settings-row" onclick="alert('${x[0]}')">
+              <div>
+                <strong>${x[0]}</strong>
+                <div style="color:#707980;font-size:14px;margin-top:3px">${x[1]}</div>
+              </div>
+              <span>›</span>
+            </div>
+          `).join("")}
+        </section>
+      </main>
+    `;
+  }
+
+  let overlay=document.getElementById("gmChatOverlay");
+  if(!overlay){
+    overlay=document.createElement("section");
+    overlay.id="gmChatOverlay";
+    overlay.className="gm-overlay";
+    document.body.appendChild(overlay);
+  }
+
+  let menu=document.getElementById("gmGlobalMenu");
+  if(!menu){
+    menu=document.createElement("div");
+    menu.id="gmGlobalMenu";
+    menu.className="gm-menu";
+    menu.innerHTML=`
+      <button onclick="gmNewGroup()">New group</button>
+      <button onclick="gmBroadcast()">New broadcast</button>
+      <button onclick="alert('Linked devices')">Linked devices</button>
+      <button onclick="gmStarred()">Starred messages</button>
+      <button onclick="gmReadAll()">Read all</button>
+      <button onclick="gmNav('settings')">Settings</button>
+    `;
+    document.body.appendChild(menu);
+  }
+
+  renderChats();
+}
+
+function bottomNav(active){
+  return `
+    <nav class="gm-bottom">
+      <button data-nav="chats" class="${active==="chats"?"active":""}"
+        onclick="gmNav('chats')">
+        <span class="nav-icon">💬</span>
+        <span>Chats</span>
+      </button>
+
+      <button data-nav="updates" class="${active==="updates"?"active":""}"
+        onclick="gmNav('updates')">
+        <span class="nav-icon">◉</span>
+        <span>Updates</span>
+      </button>
+
+      <button data-nav="communities" class="${active==="communities"?"active":""}"
+        onclick="gmNav('communities')">
+        <span class="nav-icon">👥</span>
+        <span>Communities</span>
+      </button>
+
+      <button data-nav="calls" class="${active==="calls"?"active":""}"
+        onclick="gmNav('calls')">
+        <span class="nav-icon">☎</span>
+        <span>Calls</span>
+      </button>
+    </nav>
+  `;
+}
+
+window.gmToggleMenu=function(){
+  const m=$("gmGlobalMenu");
+  if(m)m.classList.toggle("show");
+};
+
+document.addEventListener("click",function(e){
+  const m=$("gmGlobalMenu");
+  if(!m)return;
+  if(!e.target.closest("#gmGlobalMenu") &&
+     !e.target.closest(".gm-icon")){
+    m.classList.remove("show");
+  }
+});
+
+window.gmNewChat=function(){
+  const name=prompt("Enter contact name");
+  if(!name)return;
+
+  chats.unshift({
+    name:name.trim(),
+    preview:"New conversation",
+    time:"Now"
+  });
+
+  renderChats();
+};
+
+window.gmNewGroup=function(){
+  $("gmGlobalMenu")?.classList.remove("show");
+  const name=prompt("Enter group name");
+  if(!name)return;
+
+  chats.unshift({
+    name:name.trim(),
+    preview:"New group created",
+    time:"Now",
+    group:true
+  });
+
+  gmNav("chats");
+  renderChats();
+};
+
+window.gmBroadcast=function(){
+  $("gmGlobalMenu")?.classList.remove("show");
+  alert("Broadcast creation is ready for contact selection.");
+};
+
+window.gmStarred=function(){
+  $("gmGlobalMenu")?.classList.remove("show");
+  alert("Starred messages will appear here.");
+};
+
+window.gmReadAll=function(){
+  chats.forEach(c=>delete c.unread);
+  $("gmGlobalMenu")?.classList.remove("show");
+  renderChats();
+};
+
+window.gmNewCommunity=function(){
+  const name=prompt("Enter community name");
+  if(!name)return;
+  communities.unshift([name.trim(),"New G Messenger community"]);
+  buildScreens();
+  gmNav("communities");
+};
+
+window.gmNav=gmNav;
+window.renderChats=renderChats;
+window.gmOpenChat=gmOpenChat;
+window.gmCloseChat=gmCloseChat;
+window.gmSendMessage=gmSendMessage;
+
+window.enterMessenger=function(){
+  const input=$("loginName");
+  const name=input?.value.trim()||"G Messenger User";
+  localStorage.setItem("gmName",name);
+  gmShow("appScreen");
+  document.querySelectorAll(".gm-bottom button").forEach(b=>{
+    b.classList.toggle("active",b.dataset.nav==="chats");
+  });
+};
+
+document.addEventListener("DOMContentLoaded",function(){
+  buildScreens();
+});
+
+})();
+
+</script>
+</body>
+</html>

@@ -617,142 +617,9 @@ app.post('/api/conversations/:id/messages', authRequired, (req, res) => {
   messages.push(message);
   writeMessages(messages);
 
-  const otherUserId =
-    Number(conversation.user1) === myId
-      ? Number(conversation.user2)
-      : Number(conversation.user1);
-
-  const recipientOnline = onlineUsers.has(otherUserId);
-
-  if (recipientOnline) {
-    message.status = 'delivered';
-
-    const savedMessages = readMessages();
-    const savedIndex = savedMessages.findIndex(
-      m => Number(m.id) === Number(message.id)
-    );
-
-    if (savedIndex !== -1) {
-      savedMessages[savedIndex].status = 'delivered';
-      writeMessages(savedMessages);
-    }
-  }
-
-  emitToUser(otherUserId, 'gm:new-message', {
-    conversationId,
-    message
-  });
-
-  emitToUser(myId, 'gm:message-status', {
-    conversationId,
-    messageId: message.id,
-    status: message.status
-  });
-
   res.status(201).json({
     ok: true,
     message
-  });
-});
-
-
-/*
-  Message actions — edit and delete.
-*/
-app.patch('/api/messages/:id', authRequired, (req, res) => {
-  const messageId = Number(req.params.id);
-  const myId = Number(req.user.id);
-  const text = String(req.body.text || '').trim();
-
-  if (!text) {
-    return res.status(400).json({ error: 'Message cannot be empty' });
-  }
-
-  if (text.length > 10000) {
-    return res.status(400).json({ error: 'Message is too long' });
-  }
-
-  const messages = readMessages();
-  const message = messages.find(m => Number(m.id) === messageId);
-
-  if (!message) {
-    return res.status(404).json({ error: 'Message not found' });
-  }
-
-  if (Number(message.sender_id) !== myId) {
-    return res.status(403).json({ error: 'You can only edit your own messages' });
-  }
-
-  message.text = text;
-  message.edited = true;
-  message.edited_at = new Date().toISOString();
-
-  writeMessages(messages);
-
-  const conversations = readConversations();
-  const conversation = conversations.find(
-    c => Number(c.id) === Number(message.conversation_id)
-  );
-
-  if (conversation) {
-    const otherUserId =
-      Number(conversation.user1) === myId
-        ? Number(conversation.user2)
-        : Number(conversation.user1);
-
-    emitToUser(otherUserId, 'gm:message-edited', {
-      conversationId: Number(message.conversation_id),
-      message
-    });
-  }
-
-  res.json({ ok: true, message });
-});
-
-app.delete('/api/messages/:id', authRequired, (req, res) => {
-  const messageId = Number(req.params.id);
-  const myId = Number(req.user.id);
-
-  const messages = readMessages();
-  const index = messages.findIndex(m => Number(m.id) === messageId);
-
-  if (index === -1) {
-    return res.status(404).json({ error: 'Message not found' });
-  }
-
-  const message = messages[index];
-
-  if (Number(message.sender_id) !== myId) {
-    return res.status(403).json({ error: 'You can only delete your own messages' });
-  }
-
-  message.deleted = true;
-  message.deleted_at = new Date().toISOString();
-  message.text = '';
-
-  writeMessages(messages);
-
-  const conversations = readConversations();
-  const conversation = conversations.find(
-    c => Number(c.id) === Number(message.conversation_id)
-  );
-
-  if (conversation) {
-    const otherUserId =
-      Number(conversation.user1) === myId
-        ? Number(conversation.user2)
-        : Number(conversation.user1);
-
-    emitToUser(otherUserId, 'gm:message-deleted', {
-      conversationId: Number(message.conversation_id),
-      messageId
-    });
-  }
-
-  res.json({
-    ok: true,
-    messageId,
-    deleted: true
   });
 });
 
@@ -780,7 +647,7 @@ app.post('/api/conversations/:id/read', authRequired, (req, res) => {
   }
 
   const messages = readMessages();
-  const readIds = [];
+  let changed = false;
 
   for (const message of messages) {
     if (
@@ -789,29 +656,15 @@ app.post('/api/conversations/:id/read', authRequired, (req, res) => {
       message.status !== 'read'
     ) {
       message.status = 'read';
-      readIds.push(Number(message.id));
+      changed = true;
     }
   }
 
-  writeMessages(messages);
-
-  const otherUserId =
-    Number(conversation.user1) === myId
-      ? Number(conversation.user2)
-      : Number(conversation.user1);
-
-  if (readIds.length) {
-    emitToUser(otherUserId, 'gm:message-read', {
-      conversationId,
-      messageIds: readIds,
-      readBy: myId
-    });
+  if (changed) {
+    writeMessages(messages);
   }
 
-  res.json({
-    ok: true,
-    readIds
-  });
+  res.json({ ok: true });
 });
 
 /*
@@ -898,101 +751,6 @@ app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(__dirname, 'www', 'index.html'));
 });
 
-
-/* ============================================================
-   G MESSENGER — REALTIME STAGE 1
-   ============================================================ */
-
-const onlineUsers = new Map();
-
-function emitToUser(userId, event, data) {
-  const sockets = onlineUsers.get(Number(userId));
-  if (!sockets) return;
-
-  for (const socketId of sockets) {
-    io.to(socketId).emit(event, data);
-  }
-}
-
-io.on('connection', (socket) => {
-
-  socket.on('gm:authenticate', (token) => {
-    try {
-      const user = jwt.verify(String(token || ''), JWT_SECRET);
-      const userId = Number(user.id);
-
-      if (!userId) return;
-
-      socket.userId = userId;
-
-      if (!onlineUsers.has(userId)) {
-        onlineUsers.set(userId, new Set());
-      }
-
-      onlineUsers.get(userId).add(socket.id);
-
-      socket.emit('gm:authenticated', { userId });
-
-      io.emit('gm:user-online', { userId });
-
-    } catch {
-      socket.disconnect(true);
-    }
-  });
-
-  socket.on('gm:typing', ({ conversationId, typing }) => {
-    if (!socket.userId || !conversationId) return;
-
-    const conversations = readConversations();
-    const conversation = conversations.find(c =>
-      Number(c.id) === Number(conversationId) &&
-      (
-        Number(c.user1) === Number(socket.userId) ||
-        Number(c.user2) === Number(socket.userId)
-      )
-    );
-
-    if (!conversation) return;
-
-    const otherUserId =
-      Number(conversation.user1) === Number(socket.userId)
-        ? Number(conversation.user2)
-        : Number(conversation.user1);
-
-    emitToUser(otherUserId, 'gm:typing', {
-      conversationId: Number(conversationId),
-      userId: Number(socket.userId),
-      typing: Boolean(typing)
-    });
-  });
-
-  socket.on('disconnect', () => {
-    if (!socket.userId) return;
-
-    const userId = Number(socket.userId);
-    const sockets = onlineUsers.get(userId);
-
-    if (!sockets) return;
-
-    sockets.delete(socket.id);
-
-    if (sockets.size === 0) {
-      onlineUsers.delete(userId);
-      io.emit('gm:user-offline', { userId });
-    }
-  });
-});
-
-app.get('/api/users/:id/online', authRequired, (req, res) => {
-  const userId = Number(req.params.id);
-
-  res.json({
-    ok: true,
-    userId,
-    online: onlineUsers.has(userId)
-  });
-});
-
-httpServer.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`G Messenger server running on port ${PORT}`);
 });

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#087cff">
+<title>G Messenger</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f8fc;
+  color:#172033;
+}
+
+button,input,textarea{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+body{
+  overflow:hidden;
+}
+
+#app{
+  width:100%;
+  height:100dvh;
+}
+
+/* =========================
+   SCREEN SYSTEM
+========================= */
+
+.screen{
+  display:none;
+  width:100%;
+  height:100%;
+}
+
+.screen.active{
+  display:flex;
+}
+
+/* =========================
+   CHAT HOME
+========================= */
+
+#chatsScreen{
+  flex-direction:column;
+  background:#fff;
+}
+
+.home-header{
+  flex:0 0 auto;
+  padding:
+    max(18px,env(safe-area-inset-top))
+    18px
+    12px;
+  background:#fff;
+  border-bottom:1px solid #edf0f5;
+}
+
+.brand-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.brand-logo{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:20px;
+}
+
+.brand-name{
+  font-size:22px;
+  font-weight:800;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.icon-button{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#f1f5fa;
+  color:#26364d;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+}
+
+.search-box{
+  margin-top:14px;
+  height:48px;
+  border-radius:15px;
+  background:#f1f4f8;
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  gap:10px;
+}
+
+.search-box span{
+  color:#718096;
+  font-size:19px;
+}
+
+.search-box input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#172033;
+  font-size:15px;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-top:12px;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:0 0 auto;
+  padding:8px 14px;
+  border-radius:18px;
+  background:#f1f4f8;
+  color:#59677b;
+  font-size:13px;
+  font-weight:700;
+}
+
+.filter.active{
+  background:#087cff;
+  color:#fff;
+}
+
+/* =========================
+   CHAT LIST
+========================= */
+
+.chat-list{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  background:#fff;
+}
+
+.chat-row{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:13px 17px;
+  background:#fff;
+  border-bottom:1px solid #f0f2f6;
+  text-align:left;
+}
+
+.chat-row:active{
+  background:#f4f7fb;
+}
+
+.avatar{
+  flex:0 0 52px;
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  font-size:19px;
+}
+
+.avatar.gemma{
+  background:#eaf3ff;
+  color:#087cff;
+  border:2px solid #087cff;
+}
+
+.chat-main{
+  min-width:0;
+  flex:1;
+}
+
+.chat-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.chat-name{
+  font-weight:750;
+  font-size:15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chat-time{
+  flex:0 0 auto;
+  font-size:11px;
+  color:#8793a3;
+}
+
+.chat-preview{
+  margin-top:5px;
+  color:#758196;
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gemma-label{
+  color:#087cff;
+  font-size:11px;
+  font-weight:800;
+  margin-left:5px;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.empty{
+  padding:50px 25px;
+  text-align:center;
+  color:#778397;
+}
+
+.empty strong{
+  display:block;
+  color:#26364d;
+  margin-bottom:8px;
+}
+
+/* =========================
+   FAB
+========================= */
+
+.fab{
+  position:fixed;
+  right:18px;
+  bottom:82px;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  font-size:27px;
+  box-shadow:0 8px 24px rgba(8,124,255,.28);
+  z-index:20;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
+.bottom-nav{
+  flex:0 0 auto;
+  height:70px;
+  padding-bottom:env(safe-area-inset-bottom);
+  background:#fff;
+  border-top:1px solid #e9edf3;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.nav-item{
+  background:#fff;
+  color:#7a8799;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:11px;
+  font-weight:700;
+}
+
+.nav-icon{
+  font-size:21px;
+  line-height:21px;
+}
+
+.nav-item.active{
+  color:#087cff;
+}
+
+/* =========================
+   SIMPLE SECTION SCREENS
+========================= */
+
+.section-screen{
+  flex-direction:column;
+  background:#f7f9fc;
+}
+
+.section-header{
+  flex:0 0 auto;
+  padding:
+    max(18px,env(safe-area-inset-top))
+    18px
+    15px;
+  background:#fff;
+  border-bottom:1px solid #e8edf3;
+}
+
+.section-header h1{
+  margin:0;
+  font-size:22px;
+}
+
+.section-content{
+  flex:1;
+  overflow:auto;
+  padding:24px 18px;
+}
+
+.section-card{
+  background:#fff;
+  border-radius:18px;
+  padding:22px;
+  border:1px solid #e9edf3;
+}
+
+.section-card h2{
+  margin-top:0;
+}
+
+/* =========================
+   CHAT SCREEN
+========================= */
+
+#chatScreen,
+#gemmaScreen{
+  flex-direction:column;
+  background:#eef3f8;
+}
+
+.chat-header{
+  flex:0 0 auto;
+  min-height:66px;
+  padding:
+    max(8px,env(safe-area-inset-top))
+    10px
+    8px;
+  background:#fff;
+  border-bottom:1px solid #e4e9ef;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.back{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:transparent;
+  font-size:25px;
+  color:#24344b;
+}
+
+.header-avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+}
+
+.header-info{
+  min-width:0;
+  flex:1;
+}
+
+.header-name{
+  font-weight:800;
+}
+
+.header-status{
+  font-size:12px;
+  color:#758196;
+  margin-top:3px;
+}
+
+.chat-messages{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  padding:18px;
+}
+
+.welcome{
+  max-width:520px;
+  margin:50px auto;
+  background:#fff;
+  border-radius:20px;
+  padding:26px;
+  text-align:center;
+  box-shadow:0 3px 12px rgba(20,40,70,.05);
+}
+
+.welcome h2{
+  margin-top:0;
+  color:#087cff;
+}
+
+.composer{
+  flex:0 0 auto;
+  background:#fff;
+  border-top:1px solid #e5eaf0;
+  padding:
+    9px
+    10px
+    max(9px,env(safe-area-inset-bottom));
+  display:flex;
+  gap:8px;
+  align-items:flex-end;
+}
+
+.composer textarea{
+  flex:1;
+  min-height:43px;
+  max-height:120px;
+  resize:none;
+  border:1px solid #dfe5ec;
+  border-radius:22px;
+  padding:11px 15px;
+  outline:0;
+}
+
+.send{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:#087cff;
+  color:#fff;
+  font-size:19px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(min-width:700px){
+  #app{
+    max-width:720px;
+    margin:auto;
+    box-shadow:0 0 35px rgba(30,50,80,.08);
+  }
+
+  .fab{
+    position:absolute;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- ================= CHAT HOME ================= -->
+
+  <section id="chatsScreen" class="screen active">
+
+    <header class="home-header">
+
+      <div class="brand-row">
+
+        <div class="brand">
+          <div class="brand-logo">G</div>
+          <div class="brand-name">G Messenger</div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-button" onclick="newChat()" aria-label="New chat">＋</button>
+          <button class="icon-button" onclick="showSection('settings')" aria-label="Settings">⋮</button>
+        </div>
+
+      </div>
+
+      <div class="search-box">
+        <span>⌕</span>
+        <input
+          id="chatSearch"
+          type="search"
+          placeholder="Ask Gemma or Search"
+          autocomplete="off"
+          oninput="renderChats()">
+      </div>
+
+      <div class="filters">
+
+        <button class="filter active" data-filter="all" onclick="setFilter('all',this)">
+          All
+        </button>
+
+        <button class="filter" data-filter="unread" onclick="setFilter('unread',this)">
+          Unread
+        </button>
+
+        <button class="filter" data-filter="favorites" onclick="setFilter('favorites',this)">
+          Favorites
+        </button>
+
+        <button class="filter" data-filter="groups" onclick="setFilter('groups',this)">
+          Groups
+        </button>
+
+      </div>
+
+    </header>
+
+    <main id="chatList" class="chat-list"></main>
+
+    <button class="fab" onclick="openGemma()" aria-label="Open Gemma">
+      ✦
+    </button>
+
+    <nav class="bottom-nav">
+
+      <button class="nav-item active" onclick="showSection('chats')">
+        <span class="nav-icon">▣</span>
+        <span>Chats</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('updates')">
+        <span class="nav-icon">◉</span>
+        <span>Updates</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('communities')">
+        <span class="nav-icon">♟</span>
+        <span>Communities</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('calls')">
+        <span class="nav-icon">☎</span>
+        <span>Calls</span>
+      </button>
+
+    </nav>
+
+  </section>
+
+
+  <!-- ================= UPDATES ================= -->
+
+  <section id="updatesScreen" class="screen section-screen">
+
+    <header class="section-header">
+      <h1>Updates</h1>
+    </header>
+
+    <main class="section-content">
+      <div class="section-card">
+        <h2>Your Updates</h2>
+        <p>Share status updates and discover what is happening on G Messenger.</p>
+      </div>
+    </main>
+
+    <BottomNav></BottomNav>
+
+  </section>
+
+
+  <!-- ================= COMMUNITIES ================= -->
+
+  <section id="communitiesScreen" class="screen section-screen">
+
+    <header class="section-header">
+      <h1>Communities</h1>
+    </header>
+
+    <main class="section-content">
+      <div class="section-card">
+        <h2>Your Communities</h2>
+        <p>Communities will appear here as the community system is connected.</p>
+      </div>
+    </main>
+
+    <BottomNav></BottomNav>
+
+  </section>
+
+
+  <!-- ================= CALLS ================= -->
+
+  <section id="callsScreen" class="screen section-screen">
+
+    <header class="section-header">
+      <h1>Calls</h1>
+    </header>
+
+    <main class="section-content">
+      <div class="section-card">
+        <h2>Recent Calls</h2>
+        <p>Your voice and video calls will appear here.</p>
+      </div>
+    </main>
+
+    <BottomNav></BottomNav>
+
+  </section>
+
+
+  <!-- ================= SETTINGS ================= -->
+
+  <section id="settingsScreen" class="screen section-screen">
+
+    <header class="section-header">
+      <h1>Settings</h1>
+    </header>
+
+    <main class="section-content">
+      <div class="section-card">
+        <h2>G Messenger Settings</h2>
+        <p>Account, privacy, notifications and security settings will be connected here.</p>
+      </div>
+    </main>
+
+  </section>
+
+
+  <!-- ================= NORMAL CHAT ================= -->
+
+  <section id="chatScreen" class="screen">
+
+    <header class="chat-header">
+
+      <button class="back" onclick="backToChats()">‹</button>
+
+      <div id="chatAvatar" class="header-avatar">G</div>
+
+      <div class="header-info">
+        <div id="chatName" class="header-name">G Messenger</div>
+        <div id="chatStatus" class="header-status">online</div>
+      </div>
+
+    </header>
+
+    <main id="chatMessages" class="chat-messages">
+
+      <div class="welcome">
+        <h2>Welcome to G Messenger</h2>
+        <p>Your conversation will appear here.</p>
+      </div>
+
+    </main>
+
+    <div class="composer">
+
+      <textarea
+        id="chatInput"
+        rows="1"
+        placeholder="Message"
+        onkeydown="handleChatKey(event)"></textarea>
+
+      <button class="send" onclick="sendChat()">➤</button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= GEMMA ================= -->
+
+  <section id="gemmaScreen" class="screen">
+
+    <header class="chat-header">
+
+      <button class="back" onclick="backToChats()">‹</button>
+
+      <div class="header-avatar" style="background:#eaf3ff;color:#087cff">
+        G
+      </div>
+
+      <div class="header-info">
+        <div class="header-name">Gemma</div>
+        <div class="header-status">G Messenger AI</div>
+      </div>
+
+    </header>
+
+    <main id="gemmaMessages" class="chat-messages">
+
+      <div class="welcome">
+        <h2>Welcome to Gemma</h2>
+        <p>Your G Messenger AI assistant is ready.</p>
+        <p>Ask questions, get explanations, translate text, or get help with everyday tasks.</p>
+        <small>AI connection will be enabled in the next stage.</small>
+      </div>
+
+    </main>
+
+    <div class="composer">
+
+      <textarea
+        id="gemmaInput"
+        rows="1"
+        placeholder="Message Gemma"
+        onkeydown="handleGemmaKey(event)"></textarea>
+
+      <button class="send" onclick="sendGemma()">➤</button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+"use strict";
+
+/* =========================
+   DATA
+========================= */
+
+const chats = [
+  {
+    id:"gemma",
+    name:"Gemma",
+    preview:"Your G Messenger AI assistant",
+    time:"",
+    initial:"G",
+    type:"ai",
+    unread:false,
+    favorite:true,
+    group:false
+  },
+  {
+    id:"gmessenger",
+    name:"G Messenger",
+    preview:"Welcome to G Messenger",
+    time:"Now",
+    initial:"G",
+    type:"chat",
+    unread:false,
+    favorite:true,
+    group:false
+  }
+];
+
+let currentFilter = "all";
+
+/* =========================
+   SCREEN CONTROL
+========================= */
+
+function hideAllScreens(){
+  document.querySelectorAll(".screen").forEach(function(screen){
+    screen.classList.remove("active");
+  });
+}
+
+function showScreen(id){
+  hideAllScreens();
+
+  const screen = document.getElementById(id);
+
+  if(screen){
+    screen.classList.add("active");
+  }
+}
+
+function showSection(name){
+  const map = {
+    chats:"chatsScreen",
+    updates:"updatesScreen",
+    communities:"communitiesScreen",
+    calls:"callsScreen",
+    settings:"settingsScreen"
+  };
+
+  showScreen(map[name] || "chatsScreen");
+
+  document.querySelectorAll(".nav-item").forEach(function(item){
+    item.classList.remove("active");
+  });
+
+  if(name === "chats"){
+    document.querySelector(".nav-item:nth-child(1)")?.classList.add("active");
+  }
+
+  if(name === "updates"){
+    document.querySelector(".nav-item:nth-child(2)")?.classList.add("active");
+  }
+
+  if(name === "communities"){
+    document.querySelector(".nav-item:nth-child(3)")?.classList.add("active");
+  }
+
+  if(name === "calls"){
+    document.querySelector(".nav-item:nth-child(4)")?.classList.add("active");
+  }
+}
+
+function backToChats(){
+  showSection("chats");
+}
+
+/* =========================
+   BOTTOM NAV FOR OTHER SCREENS
+========================= */
+
+function createBottomNav(){
+  return `
+    <nav class="bottom-nav">
+
+      <button class="nav-item" onclick="showSection('chats')">
+        <span class="nav-icon">▣</span>
+        <span>Chats</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('updates')">
+        <span class="nav-icon">◉</span>
+        <span>Updates</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('communities')">
+        <span class="nav-icon">♟</span>
+        <span>Communities</span>
+      </button>
+
+      <button class="nav-item" onclick="showSection('calls')">
+        <span class="nav-icon">☎</span>
+        <span>Calls</span>
+      </button>
+
+    </nav>
+  `;
+}
+
+/* Replace placeholder bottom-nav tags safely. */
+document.querySelectorAll("BottomNav").forEach(function(el){
+  el.outerHTML = createBottomNav();
+});
+
+/* =========================
+   CHAT HOME
+========================= */
+
+function setFilter(filter, button){
+  currentFilter = filter;
+
+  document.querySelectorAll(".filter").forEach(function(item){
+    item.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  renderChats();
+}
+
+function renderChats(){
+
+  const list = document.getElementById("chatList");
+
+  if(!list){
+    return;
+  }
+
+  const query =
+    document.getElementById("chatSearch")?.value
+      .trim()
+      .toLowerCase() || "";
+
+  let filtered = chats.filter(function(chat){
+
+    if(currentFilter === "unread" && !chat.unread){
+      return false;
+    }
+
+    if(currentFilter === "favorites" && !chat.favorite){
+      return false;
+    }
+
+    if(currentFilter === "groups" && !chat.group){
+      return false;
+    }
+
+    if(query){
+      return (
+        chat.name.toLowerCase().includes(query) ||
+        chat.preview.toLowerCase().includes(query)
+      );
+    }
+
+    return true;
+  });
+
+  if(!filtered.length){
+    list.innerHTML = `
+      <div class="empty">
+        <strong>No chats found</strong>
+        Try another search or filter.
+      </div>
+    `;
+    return;
+  }
+
+  list.innerHTML = filtered.map(function(chat){
+
+    const isGemma = chat.type === "ai";
+
+    return `
+      <button class="chat-row"
+        onclick="${isGemma ? "openGemma()" : "openChat('" + escapeAttr(chat.name) + "','" + escapeAttr(chat.initial) + "')"}">
+
+        <div class="avatar ${isGemma ? "gemma" : ""}">
+          ${escapeHtml(chat.initial)}
+        </div>
+
+        <div class="chat-main">
+
+          <div class="chat-top">
+            <div class="chat-name">
+              ${escapeHtml(chat.name)}
+              ${isGemma ? '<span class="gemma-label">AI</span>' : ""}
+            </div>
+
+            <div class="chat-time">
+              ${escapeHtml(chat.time)}
+            </div>
+          </div>
+
+          <div class="chat-preview">
+            ${escapeHtml(chat.preview)}
+          </div>
+
+        </div>
+
+      </button>
+    `;
+  }).join("");
+}
+
+/* =========================
+   NORMAL CHAT
+========================= */
+
+function openChat(name, initial){
+
+  document.getElementById("chatName").textContent = name;
+  document.getElementById("chatAvatar").textContent = initial || "G";
+  document.getElementById("chatStatus").textContent = "online";
+
+  showScreen("chatScreen");
+
+  setTimeout(function(){
+    document.getElementById("chatInput")?.focus();
+  },100);
+}
+
+function sendChat(){
+
+  const input = document.getElementById("chatInput");
+
+  if(!input){
+    return;
+  }
+
+  const text = input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+  const messages = document.getElementById("chatMessages");
+
+  const bubble = document.createElement("div");
+
+  bubble.style.cssText =
+    "max-width:80%;margin:8px 0 8px auto;" +
+    "background:#087cff;color:#fff;padding:10px 13px;" +
+    "border-radius:16px 16px 4px 16px;";
+
+  bubble.textContent = text;
+
+  messages.appendChild(bubble);
+
+  input.value = "";
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function handleChatKey(event){
+
+  if(event.key === "Enter" && !event.shiftKey){
+    event.preventDefault();
+    sendChat();
+  }
+}
+
+/* =========================
+   GEMMA
+========================= */
+
+function openGemma(){
+
+  showScreen("gemmaScreen");
+
+  setTimeout(function(){
+    document.getElementById("gemmaInput")?.focus();
+  },100);
+}
+
+function sendGemma(){
+
+  const input = document.getElementById("gemmaInput");
+
+  if(!input){
+    return;
+  }
+
+  const text = input.value.trim();
+
+  if(!text){
+    return;
+  }
+
+  const messages = document.getElementById("gemmaMessages");
+
+  const userBubble = document.createElement("div");
+
+  userBubble.style.cssText =
+    "max-width:82%;margin:8px 0 8px auto;" +
+    "background:#087cff;color:#fff;padding:10px 13px;" +
+    "border-radius:16px 16px 4px 16px;";
+
+  userBubble.textContent = text;
+
+  messages.appendChild(userBubble);
+
+  input.value = "";
+
+  const reply = document.createElement("div");
+
+  reply.style.cssText =
+    "max-width:82%;margin:8px auto 8px 0;" +
+    "background:#fff;color:#26364d;padding:10px 13px;" +
+    "border-radius:16px 16px 16px 4px;";
+
+  reply.textContent =
+    "Gemma AI connection will be enabled in the next stage.";
+
+  messages.appendChild(reply);
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function handleGemmaKey(event){
+
+  if(event.key === "Enter" && !event.shiftKey){
+    event.preventDefault();
+    sendGemma();
+  }
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+function newChat(){
+  alert("New chat will be connected in the next stage.");
+}
+
+/* =========================
+   SECURITY HELPERS
+========================= */
+
+function escapeHtml(value){
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function escapeAttr(value){
+  return String(value)
+    .replaceAll("\\","\\\\")
+    .replaceAll("'","\\'");
+}
+
+/* =========================
+   START
+========================= */
+
+renderChats();
+
+</script>
+
+</body>
+</html>

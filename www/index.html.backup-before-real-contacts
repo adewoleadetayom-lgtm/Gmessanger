@@ -1,0 +1,6231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#075e54">
+<title>G Messenger</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --green:#075e54;
+  --green2:#128c7e;
+  --blue:#087cff;
+  --bg:#f0f2f5;
+  --card:#fff;
+  --text:#111b21;
+  --muted:#667781;
+  --line:#e9edef;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input{
+  font:inherit;
+}
+
+.screen{
+  min-height:100vh;
+  display:none;
+}
+
+.screen.active{
+  display:flex;
+}
+
+/* ================= LOGIN ================= */
+
+.login-screen{
+  align-items:center;
+  justify-content:center;
+  padding:22px;
+  background:linear-gradient(180deg,#f7fbff,#eef5ff);
+}
+
+.login-card{
+  width:100%;
+  max-width:430px;
+  background:white;
+  border-radius:28px;
+  padding:30px 24px;
+  box-shadow:0 12px 40px rgba(0,0,0,.10);
+  text-align:center;
+}
+
+.logo{
+  width:88px;
+  height:88px;
+  margin:0 auto 18px;
+  padding:4px;
+  border-radius:27px;
+  background:linear-gradient(145deg,#fff,#e9f3ff);
+  box-shadow:0 12px 30px rgba(8,124,255,.20);
+}
+
+.gm-logo-svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.login-card h1{
+  margin:7px 0;
+  color:var(--blue);
+}
+
+.subtitle{
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.field{
+  text-align:left;
+  margin:18px 0;
+}
+
+.field label{
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+.field input{
+  width:100%;
+  border:1px solid #d5dde5;
+  border-radius:14px;
+  padding:14px;
+  outline:none;
+}
+
+.field input:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px rgba(8,124,255,.10);
+}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:14px;
+  padding:14px;
+  background:var(--blue);
+  color:white;
+  font-weight:bold;
+}
+
+.secondary{
+  width:100%;
+  border:1px solid #d5dde5;
+  border-radius:14px;
+  padding:13px;
+  background:white;
+  color:var(--blue);
+  font-weight:bold;
+  margin-top:10px;
+}
+
+.small{
+  font-size:12px;
+  color:#8696a0;
+  line-height:1.5;
+  margin-top:16px;
+}
+
+/* ================= MAIN APP ================= */
+
+.app{
+  flex-direction:column;
+  background:var(--bg);
+}
+
+.app-header{
+  background:var(--green);
+  color:white;
+  padding:12px 15px 9px;
+}
+
+.header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.app-title{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:-.3px;
+}
+
+.header-actions{
+  display:flex;
+  gap:5px;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:white;
+  font-size:20px;
+}
+
+.icon-btn:active{
+  background:rgba(255,255,255,.15);
+}
+
+.search-wrap{
+  padding:9px 12px;
+  background:var(--green);
+}
+
+.search{
+  width:100%;
+  border:0;
+  border-radius:22px;
+  padding:11px 16px;
+  outline:none;
+  background:white;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px 12px;
+  background:white;
+  border-bottom:1px solid var(--line);
+}
+
+.filter{
+  border:0;
+  border-radius:18px;
+  padding:7px 14px;
+  background:#f0f2f5;
+  color:var(--muted);
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.filter.active{
+  background:#d9fdd3;
+  color:#075e54;
+}
+
+.chat-list{
+  flex:1;
+  overflow:auto;
+}
+
+.gemma-card{
+  display:flex;
+  align-items:center;
+  padding:14px 15px;
+  background:white;
+  border-bottom:1px solid var(--line);
+  cursor:pointer;
+}
+
+.gemma-logo{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  background:linear-gradient(145deg,#087cff,#004fe0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-right:13px;
+  box-shadow:0 5px 14px rgba(8,124,255,.25);
+  flex-shrink:0;
+}
+
+.gemma-logo svg{
+  width:42px;
+  height:42px;
+}
+
+.gemma-info{
+  flex:1;
+}
+
+.gemma-name{
+  font-size:16px;
+  font-weight:bold;
+}
+
+.gemma-sub{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.ai-badge{
+  color:#087cff;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.chat{
+  display:flex;
+  align-items:center;
+  padding:13px 15px;
+  background:white;
+  border-bottom:1px solid var(--line);
+}
+
+.avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:#d9fdd3;
+  color:#075e54;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  font-size:20px;
+  margin-right:13px;
+  flex-shrink:0;
+}
+
+.chat-info{
+  flex:1;
+  min-width:0;
+}
+
+.chat-name{
+  font-weight:bold;
+}
+
+.chat-preview{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chat-right{
+  text-align:right;
+  margin-left:8px;
+}
+
+.time{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.unread{
+  margin-top:5px;
+  display:inline-flex;
+  min-width:20px;
+  height:20px;
+  padding:0 6px;
+  border-radius:12px;
+  align-items:center;
+  justify-content:center;
+  background:#25d366;
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.bottom-nav{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  background:white;
+  border-top:1px solid #dfe5e7;
+  padding-bottom:3px;
+}
+
+.bottom-nav button{
+  border:0;
+  background:white;
+  padding:9px 2px 7px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.bottom-nav button span{
+  display:block;
+  font-size:20px;
+  margin-bottom:3px;
+}
+
+.bottom-nav button.active{
+  color:#075e54;
+  font-weight:bold;
+}
+
+.fab{
+  position:fixed;
+  right:19px;
+  bottom:70px;
+  width:57px;
+  height:57px;
+  border:0;
+  border-radius:50%;
+  background:#087cff;
+  color:white;
+  font-size:27px;
+  box-shadow:0 7px 20px rgba(8,124,255,.30);
+}
+
+.empty{
+  padding:50px 25px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* ================= GEMMA ================= */
+
+.gemma-screen{
+  flex-direction:column;
+  background:#f5f7fb;
+}
+
+.gemma-header{
+  background:linear-gradient(135deg,#087cff,#005bea);
+  color:white;
+  padding:12px 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.gemma-header button{
+  border:0;
+  background:transparent;
+  color:white;
+  font-size:24px;
+}
+
+.gemma-title{
+  font-weight:bold;
+}
+
+.gemma-status{
+  font-size:11px;
+  opacity:.85;
+  margin-top:2px;
+}
+
+.gemma-messages{
+  flex:1;
+  padding:18px 14px;
+  overflow:auto;
+}
+
+.gemma-welcome{
+  max-width:330px;
+  margin:25px auto;
+  background:white;
+  padding:20px;
+  border-radius:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,.06);
+}
+
+.gemma-input{
+  display:flex;
+  gap:8px;
+  padding:10px;
+  background:white;
+  border-top:1px solid #e3e7ec;
+}
+
+.gemma-input input{
+  flex:1;
+  border:0;
+  background:#f0f2f5;
+  border-radius:22px;
+  padding:12px 15px;
+  outline:none;
+}
+
+.gemma-send{
+  width:46px;
+  height:46px;
+  border:0;
+  border-radius:50%;
+  background:#087cff;
+  color:white;
+  font-size:19px;
+}
+
+
+/* ================= MODERN CHAT UI ================= */
+
+.app-header{
+  box-shadow:0 1px 0 rgba(0,0,0,.08);
+}
+
+.app-title{
+  font-size:21px;
+}
+
+.header-actions{
+  margin-left:auto;
+}
+
+.icon-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.filters{
+  scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.chat-list{
+  background:#f0f2f5;
+}
+
+.gemma-card,
+.chat{
+  min-height:76px;
+}
+
+.gemma-card{
+  position:relative;
+}
+
+.gemma-card:active,
+.chat:active{
+  background:#f5f6f6;
+}
+
+.gemma-name,
+.chat-name{
+  font-size:16px;
+  color:#111b21;
+}
+
+.chat-preview{
+  color:#667781;
+}
+
+.chat-right{
+  min-width:45px;
+}
+
+.time{
+  font-size:12px;
+}
+
+.unread{
+  background:#25d366;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings-screen{
+  flex-direction:column;
+  background:#f0f2f5;
+}
+
+.settings-header{
+  height:62px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 14px;
+  background:#075e54;
+  color:white;
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+
+.settings-header h2{
+  margin:0;
+  font-size:20px;
+}
+
+.settings-back{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:0;
+  background:transparent;
+  color:white;
+  border-radius:50%;
+}
+
+.settings-back:active{
+  background:rgba(255,255,255,.15);
+}
+
+.settings-content{
+  flex:1;
+  overflow:auto;
+  padding-bottom:30px;
+}
+
+.settings-profile{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:22px 18px;
+  background:white;
+  margin-bottom:10px;
+}
+
+.settings-avatar{
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d9fdd3;
+  color:#075e54;
+  font-size:24px;
+  font-weight:bold;
+}
+
+.settings-profile strong{
+  display:block;
+  font-size:17px;
+}
+
+.settings-profile span{
+  display:block;
+  color:#667781;
+  font-size:13px;
+  margin-top:4px;
+}
+
+.settings-section-title{
+  padding:16px 18px 8px;
+  color:#667781;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.settings-row{
+  width:100%;
+  min-height:72px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:11px 18px;
+  border:0;
+  border-bottom:1px solid #e9edef;
+  background:white;
+  text-align:left;
+}
+
+.settings-row:active{
+  background:#f5f6f6;
+}
+
+.settings-icon{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#075e54;
+  background:#d9fdd3;
+  flex-shrink:0;
+}
+
+.settings-row-text{
+  flex:1;
+  min-width:0;
+}
+
+.settings-row-text strong{
+  display:block;
+  font-size:15px;
+  color:#111b21;
+}
+
+.settings-row-text span{
+  display:block;
+  margin-top:4px;
+  color:#667781;
+  font-size:12px;
+}
+
+.settings-arrow{
+  color:#8696a0;
+  font-size:25px;
+}
+
+
+/* ================= MODERN G MESSENGER CHAT ================= */
+
+.gm-chat-screen{
+  flex-direction:column;
+  background:#efeae2;
+}
+
+.gm-chat-header{
+  height:62px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:7px 8px;
+  background:#075e54;
+  color:white;
+  box-shadow:0 1px 3px rgba(0,0,0,.18);
+  flex-shrink:0;
+}
+
+.gm-chat-back,
+.gm-chat-action{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-chat-back:active,
+.gm-chat-action:active{
+  background:rgba(255,255,255,.15);
+}
+
+.gm-chat-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d9fdd3;
+  color:#075e54;
+  font-weight:bold;
+  font-size:19px;
+  flex-shrink:0;
+}
+
+.gm-chat-contact{
+  flex:1;
+  min-width:0;
+}
+
+.gm-chat-contact-name{
+  font-size:16px;
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.gm-chat-status{
+  margin-top:2px;
+  font-size:11px;
+  opacity:.88;
+}
+
+.gm-chat-header-actions{
+  display:flex;
+  gap:1px;
+}
+
+.gm-chat-messages{
+  flex:1;
+  overflow:auto;
+  padding:14px 10px 18px;
+  background-color:#efeae2;
+  background-image:
+    radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);
+  background-size:18px 18px;
+}
+
+.gm-date-divider{
+  width:max-content;
+  max-width:90%;
+  margin:8px auto 14px;
+  padding:6px 11px;
+  border-radius:8px;
+  background:#fff;
+  color:#667781;
+  font-size:11px;
+  box-shadow:0 1px 1px rgba(0,0,0,.08);
+}
+
+.gm-message{
+  display:flex;
+  margin:3px 0;
+}
+
+.gm-message.incoming{
+  justify-content:flex-start;
+}
+
+.gm-message.outgoing{
+  justify-content:flex-end;
+}
+
+.gm-bubble{
+  position:relative;
+  max-width:min(78%,430px);
+  padding:8px 9px 5px;
+  border-radius:9px;
+  font-size:14px;
+  line-height:1.4;
+  box-shadow:0 1px 1px rgba(0,0,0,.12);
+  word-wrap:break-word;
+}
+
+.gm-message.incoming .gm-bubble{
+  background:white;
+  border-top-left-radius:3px;
+}
+
+.gm-message.outgoing .gm-bubble{
+  background:#d9fdd3;
+  border-top-right-radius:3px;
+}
+
+.gm-message-text{
+  padding-right:52px;
+}
+
+.gm-message-meta{
+  float:right;
+  margin-left:7px;
+  margin-top:3px;
+  color:#667781;
+  font-size:10px;
+  white-space:nowrap;
+}
+
+.gm-checks{
+  color:#53a7df;
+  font-weight:bold;
+  margin-left:2px;
+}
+
+.gm-chat-composer{
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  padding:7px 8px;
+  background:#f0f2f5;
+  border-top:1px solid #dfe5e7;
+}
+
+.gm-round-btn{
+  width:43px;
+  height:43px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#54656f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.gm-round-btn:active{
+  background:#dfe5e7;
+}
+
+.gm-input-wrap{
+  flex:1;
+  min-width:0;
+  min-height:43px;
+  display:flex;
+  align-items:center;
+  background:white;
+  border-radius:22px;
+  padding:0 5px 0 14px;
+}
+
+.gm-chat-input{
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:10px 4px;
+  font-size:14px;
+  resize:none;
+}
+
+.gm-emoji-btn{
+  width:36px;
+  height:36px;
+  border:0;
+  background:transparent;
+  color:#54656f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+}
+
+.gm-send-btn{
+  width:45px;
+  height:45px;
+  border:0;
+  border-radius:50%;
+  background:#128c7e;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  box-shadow:0 2px 5px rgba(0,0,0,.16);
+}
+
+.gm-send-btn:active{
+  transform:scale(.96);
+}
+
+.gm-voice-btn{
+  width:45px;
+  height:45px;
+  border:0;
+  border-radius:50%;
+  background:#128c7e;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+
+.gm-attachment-panel{
+  display:none;
+  padding:13px;
+  background:#f0f2f5;
+  border-top:1px solid #dfe5e7;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.gm-attachment-panel.open{
+  display:grid;
+}
+
+.gm-attachment-item{
+  border:0;
+  background:white;
+  border-radius:14px;
+  padding:11px 5px;
+  color:#54656f;
+  font-size:11px;
+}
+
+.gm-attachment-item svg{
+  display:block;
+  margin:0 auto 5px;
+}
+
+/* ================= GEMMA CHAT ================= */
+
+.gemma-screen{
+  background:#efeae2;
+}
+
+.gemma-header{
+  background:#075e54;
+}
+
+.gemma-messages{
+  background-color:#efeae2;
+  background-image:
+    radial-gradient(rgba(0,0,0,.035) 1px,transparent 1px);
+  background-size:18px 18px;
+}
+
+.gemma-welcome{
+  border-radius:9px;
+  box-shadow:0 1px 2px rgba(0,0,0,.10);
+}
+
+.gemma-input{
+  background:#f0f2f5;
+}
+
+
+/* ============================================================
+   G MESSENGER — 2026 ANDROID MOBILE CHAT EXPERIENCE
+   ============================================================ */
+
+html,
+body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
+
+*{
+  -webkit-tap-highlight-color:transparent;
+  box-sizing:border-box;
+}
+
+button,
+textarea,
+input{
+  font-family:inherit;
+}
+
+button{
+  touch-action:manipulation;
+}
+
+/* ---------------- CHAT SCREEN ---------------- */
+
+.gm-chat-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:#efeae2;
+}
+
+/* ---------------- CHAT HEADER ---------------- */
+
+.gm-chat-header{
+  position:relative;
+  z-index:20;
+  width:100%;
+  min-height:64px;
+  height:64px;
+  padding:
+    max(5px, env(safe-area-inset-top))
+    6px
+    5px
+    6px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  background:#075e54;
+  color:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.20);
+  flex-shrink:0;
+}
+
+.gm-chat-back,
+.gm-chat-action{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-chat-back:active,
+.gm-chat-action:active{
+  background:rgba(255,255,255,.16);
+  transform:scale(.95);
+}
+
+.gm-chat-avatar{
+  width:43px;
+  height:43px;
+  min-width:43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d9fdd3;
+  color:#075e54;
+  font-size:18px;
+  font-weight:700;
+  overflow:hidden;
+}
+
+.gm-chat-contact{
+  flex:1;
+  min-width:0;
+  padding-left:2px;
+  overflow:hidden;
+}
+
+.gm-chat-contact-name{
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:16px;
+  line-height:20px;
+  font-weight:600;
+}
+
+.gm-chat-status{
+  width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin-top:1px;
+  font-size:11px;
+  line-height:15px;
+  opacity:.86;
+}
+
+.gm-chat-header-actions{
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+
+/* ---------------- CHAT BACKGROUND ---------------- */
+
+.gm-chat-messages,
+.gemma-messages{
+  flex:1;
+  min-height:0;
+  width:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
+  scroll-behavior:smooth;
+  padding:
+    10px
+    8px
+    16px;
+  background-color:#efeae2;
+  background-image:
+    radial-gradient(
+      rgba(84,72,63,.055) 1px,
+      transparent 1px
+    );
+  background-size:18px 18px;
+}
+
+/* ---------------- DATE DIVIDER ---------------- */
+
+.gm-date-divider{
+  width:max-content;
+  max-width:90%;
+  margin:5px auto 13px;
+  padding:6px 12px;
+  border-radius:8px;
+  background:rgba(255,255,255,.90);
+  color:#667781;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.2px;
+  box-shadow:0 1px 2px rgba(0,0,0,.10);
+}
+
+/* ---------------- MESSAGE ROW ---------------- */
+
+.gm-message{
+  width:100%;
+  display:flex;
+  margin:2px 0;
+  padding:0 1px;
+}
+
+.gm-message.incoming{
+  justify-content:flex-start;
+}
+
+.gm-message.outgoing{
+  justify-content:flex-end;
+}
+
+/* ---------------- MESSAGE BUBBLE ---------------- */
+
+.gm-bubble{
+  position:relative;
+  max-width:min(82%,440px);
+  min-width:42px;
+  padding:7px 8px 5px;
+  border-radius:9px;
+  font-size:14px;
+  line-height:1.42;
+  color:#111b21;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+  box-shadow:0 1px 1.5px rgba(0,0,0,.14);
+}
+
+.gm-message.incoming .gm-bubble{
+  background:#fff;
+  border-top-left-radius:3px;
+}
+
+.gm-message.outgoing .gm-bubble{
+  background:#d9fdd3;
+  border-top-right-radius:3px;
+}
+
+.gm-message-text{
+  display:inline;
+  padding-right:52px;
+}
+
+.gm-message-meta{
+  float:right;
+  margin-left:7px;
+  margin-top:4px;
+  color:#667781;
+  font-size:9px;
+  line-height:11px;
+  white-space:nowrap;
+}
+
+.gm-checks{
+  color:#53a7df;
+  font-weight:700;
+  letter-spacing:-2px;
+  margin-left:2px;
+}
+
+/* ---------------- COMPOSER ---------------- */
+
+.gm-chat-composer{
+  position:relative;
+  z-index:20;
+  width:100%;
+  display:flex;
+  align-items:flex-end;
+  gap:5px;
+  padding:
+    6px
+    7px
+    max(7px, env(safe-area-inset-bottom));
+  background:#f0f2f5;
+  border-top:1px solid #dde3e6;
+  flex-shrink:0;
+}
+
+.gm-round-btn{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#54656f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-round-btn:active{
+  background:#dfe5e7;
+  transform:scale(.94);
+}
+
+.gm-input-wrap{
+  flex:1;
+  min-width:0;
+  min-height:44px;
+  max-height:122px;
+  display:flex;
+  align-items:flex-end;
+  background:#fff;
+  border-radius:23px;
+  padding:0 4px 0 12px;
+  box-shadow:0 1px 1px rgba(0,0,0,.05);
+}
+
+.gm-chat-input{
+  flex:1;
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  max-height:112px;
+  border:0;
+  outline:0;
+  resize:none;
+  overflow-y:auto;
+  background:transparent;
+  color:#111b21;
+  padding:11px 4px 10px;
+  font-size:15px;
+  line-height:21px;
+  -webkit-appearance:none;
+}
+
+.gm-chat-input::placeholder{
+  color:#8696a0;
+}
+
+.gm-emoji-btn{
+  width:38px;
+  height:40px;
+  min-width:38px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#54656f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+}
+
+.gm-emoji-btn:active{
+  background:#edf0f1;
+}
+
+.gm-send-btn,
+.gm-voice-btn{
+  width:45px;
+  height:45px;
+  min-width:45px;
+  min-height:45px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  background:#128c7e;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 2px 5px rgba(0,0,0,.17);
+}
+
+.gm-send-btn:active,
+.gm-voice-btn:active{
+  transform:scale(.93);
+}
+
+/* ---------------- ATTACHMENTS ---------------- */
+
+.gm-attachment-panel{
+  display:none;
+  width:100%;
+  padding:10px;
+  background:#f0f2f5;
+  border-top:1px solid #dfe5e7;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.gm-attachment-panel.open{
+  display:grid;
+}
+
+.gm-attachment-item{
+  min-height:64px;
+  border:0;
+  border-radius:13px;
+  background:#fff;
+  color:#54656f;
+  font-size:11px;
+  box-shadow:0 1px 2px rgba(0,0,0,.06);
+}
+
+.gm-attachment-item:active{
+  transform:scale(.96);
+  background:#f5f6f6;
+}
+
+/* ---------------- GEMMA ---------------- */
+
+.gemma-screen{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  background:#efeae2;
+}
+
+.gemma-screen .gm-chat-header{
+  background:#075e54;
+}
+
+.gemma-welcome{
+  max-width:88%;
+  margin:22px auto;
+  padding:18px;
+  border-radius:10px;
+  background:#fff;
+  color:#111b21;
+  box-shadow:0 1px 2px rgba(0,0,0,.12);
+  line-height:1.45;
+}
+
+.gemma-welcome h2{
+  font-size:20px !important;
+}
+
+.gemma-welcome p{
+  font-size:14px;
+}
+
+/* ---------------- ANDROID SMALL PHONES ---------------- */
+
+@media (max-width:380px){
+
+  .gm-chat-header{
+    height:60px;
+    min-height:60px;
+    padding-left:3px;
+    padding-right:3px;
+  }
+
+  .gm-chat-back,
+  .gm-chat-action{
+    width:40px;
+    height:40px;
+    min-width:40px;
+    min-height:40px;
+  }
+
+  .gm-chat-avatar{
+    width:40px;
+    height:40px;
+    min-width:40px;
+  }
+
+  .gm-chat-contact-name{
+    font-size:15px;
+  }
+
+  .gm-chat-status{
+    font-size:10px;
+  }
+
+  .gm-bubble{
+    max-width:86%;
+    font-size:13.5px;
+  }
+
+  .gm-round-btn{
+    width:42px;
+    height:42px;
+    min-width:42px;
+  }
+
+  .gm-send-btn,
+  .gm-voice-btn{
+    width:43px;
+    height:43px;
+    min-width:43px;
+    min-height:43px;
+  }
+
+  .gm-input-wrap{
+    min-height:43px;
+  }
+
+  .gm-chat-input{
+    font-size:14px;
+  }
+}
+
+/* ---------------- LANDSCAPE ---------------- */
+
+@media (orientation:landscape) and (max-height:500px){
+
+  .gm-chat-header{
+    height:54px;
+    min-height:54px;
+  }
+
+  .gm-chat-messages,
+  .gemma-messages{
+    padding-top:6px;
+    padding-bottom:8px;
+  }
+
+  .gm-chat-composer{
+    padding-top:4px;
+    padding-bottom:4px;
+  }
+}
+
+/* ---------------- ACCESSIBILITY / TOUCH ---------------- */
+
+@media (prefers-reduced-motion:reduce){
+
+  .gm-chat-messages,
+  .gemma-messages{
+    scroll-behavior:auto;
+  }
+}
+
+/* Keep chat content above Android gesture/navigation areas. */
+
+.gm-chat-screen,
+.gemma-screen{
+  padding-bottom:0;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:500px){
+  .login-card{
+    box-shadow:none;
+    border-radius:22px;
+  }
+}
+</style>
+<!-- GM-HOME-2026-CSS -->
+<style>
+
+/* ================= G MESSENGER 2026 HOME ================= */
+
+#appScreen.gm-home-host{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  min-height:100dvh;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  background:#fff;
+  color:#111;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.gm-home2026{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  overflow:hidden;
+}
+
+.gm-home-header{
+  height:66px;
+  min-height:66px;
+  padding:7px 14px 5px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#fff;
+  box-sizing:border-box;
+}
+
+.gm-brand-wrap{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  gap:7px;
+}
+
+.gm-brand-mark{
+  width:31px;
+  height:31px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#1faa61;
+  flex:0 0 auto;
+}
+
+.gm-brand-name{
+  color:#1fa760;
+  font-size:26px;
+  line-height:1;
+  font-weight:750;
+  letter-spacing:-.8px;
+  white-space:nowrap;
+}
+
+.gm-home-actions{
+  display:flex;
+  align-items:center;
+  gap:2px;
+}
+
+.gm-top-icon{
+  width:44px;
+  height:44px;
+  padding:0;
+  border:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  color:#111;
+}
+
+.gm-top-icon:active{
+  background:#f0f0f0;
+  transform:scale(.96);
+}
+
+.gm-search-wrap{
+  height:52px;
+  min-height:52px;
+  margin:3px 18px 8px;
+  padding:0 15px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-radius:28px;
+  background:#f3f3f1;
+  color:#60666a;
+  box-sizing:border-box;
+}
+
+.gm-search-wrap svg{
+  flex:0 0 auto;
+}
+
+#gmHomeSearch{
+  width:100%;
+  min-width:0;
+  height:48px;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#2b2f32;
+  font-size:17px;
+  line-height:48px;
+  padding:0;
+  margin:0;
+  -webkit-appearance:none;
+}
+
+#gmHomeSearch::placeholder{
+  color:#60666a;
+  opacity:1;
+}
+
+#gmHomeSearch::-webkit-search-cancel-button{
+  display:none;
+}
+
+.gm-clear-search{
+  display:none;
+}
+
+.gm-filter-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:2px 18px 12px;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  flex:0 0 auto;
+}
+
+.gm-filter-row::-webkit-scrollbar{
+  display:none;
+}
+
+.gm-filter{
+  min-height:43px;
+  height:43px;
+  padding:0 16px;
+  border:1px solid #cfd1d2;
+  border-radius:23px;
+  background:#fff;
+  color:#60666a;
+  font-size:15px;
+  font-weight:500;
+  white-space:nowrap;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  flex:0 0 auto;
+}
+
+.gm-filter.active{
+  background:#dff7e5;
+  border-color:#a8dcb8;
+  color:#166b3b;
+}
+
+.gm-filter:active{
+  transform:scale(.98);
+}
+
+.gm-filter-count{
+  font-size:14px;
+}
+
+.gm-add-filter{
+  width:48px;
+  padding:0;
+}
+
+.gm-chat-home-list{
+  flex:1 1 auto;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:0 0 92px;
+  background:#fff;
+  -webkit-overflow-scrolling:touch;
+}
+
+.gm-chat-row{
+  width:100%;
+  min-height:82px;
+  padding:8px 18px 8px 20px;
+  margin:0;
+  border:0;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  text-align:left;
+  color:#111;
+  box-sizing:border-box;
+}
+
+.gm-chat-row:active{
+  background:#f5f6f6;
+}
+
+.gm-avatar{
+  width:56px;
+  height:56px;
+  min-width:56px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#e0f4e5,#a9d9b8);
+  color:#176c3e;
+  font-size:21px;
+  font-weight:700;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+.gm-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.gm-avatar-letter{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+}
+
+.gm-chat-main{
+  min-width:0;
+  flex:1;
+  display:block;
+}
+
+.gm-chat-line{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+
+.gm-chat-line strong{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:17px;
+  font-weight:600;
+  line-height:1.25;
+  color:#111;
+}
+
+.gm-chat-line time{
+  flex:0 0 auto;
+  font-size:12px;
+  color:#687176;
+  line-height:1;
+}
+
+.gm-preview{
+  margin-top:4px;
+  align-items:center;
+}
+
+.gm-preview > span:first-child{
+  flex:1;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#697277;
+  font-size:15px;
+  line-height:1.3;
+}
+
+.gm-checks{
+  color:#8d989d;
+  font-weight:700;
+  letter-spacing:-2px;
+}
+
+.gm-unread{
+  min-width:22px;
+  height:22px;
+  padding:0 6px;
+  border-radius:12px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#1fa760;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  box-sizing:border-box;
+  flex:0 0 auto;
+}
+
+.gm-empty{
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:30px;
+  color:#687176;
+  text-align:center;
+}
+
+.gm-empty-icon{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#f1f2f2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  margin-bottom:8px;
+}
+
+.gm-empty strong{
+  color:#202427;
+  font-size:16px;
+}
+
+.gm-empty span{
+  font-size:13px;
+}
+
+.gm-fab{
+  position:absolute;
+  right:17px;
+  bottom:87px;
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:17px;
+  background:#20ad68;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.18);
+  z-index:20;
+}
+
+.gm-fab:active{
+  transform:scale(.95);
+}
+
+.gm-bottom-nav{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:76px;
+  padding:5px 9px calc(5px + env(safe-area-inset-bottom));
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  align-items:start;
+  gap:2px;
+  background:#fff;
+  border-top:1px solid #eceeee;
+  box-shadow:0 -2px 8px rgba(0,0,0,.03);
+  box-sizing:border-box;
+  z-index:15;
+}
+
+.gm-nav-item{
+  min-width:0;
+  height:65px;
+  border:0;
+  background:transparent;
+  color:#202427;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  font-size:13px;
+  font-weight:500;
+}
+
+.gm-nav-item.active{
+  font-weight:700;
+}
+
+.gm-nav-icon{
+  position:relative;
+  min-width:48px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:18px;
+}
+
+.gm-nav-item.active .gm-nav-icon{
+  background:#dff8e5;
+  color:#16703e;
+}
+
+.gm-nav-badge{
+  position:absolute;
+  right:2px;
+  top:-1px;
+  min-width:17px;
+  height:17px;
+  padding:0 4px;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1fa760;
+  color:#fff;
+  font-size:9px;
+  line-height:1;
+  box-sizing:border-box;
+}
+
+.gm-call-badge{
+  right:0;
+}
+
+@media (min-width:600px){
+  .gm-home2026{
+    max-width:600px;
+    margin:0 auto;
+    border-left:1px solid #eee;
+    border-right:1px solid #eee;
+  }
+}
+
+@media (max-width:380px){
+  .gm-home-header{
+    padding-left:14px;
+    padding-right:10px;
+  }
+
+  .gm-brand-name{
+    font-size:23px;
+  }
+
+  .gm-brand-mark{
+    width:27px;
+  }
+
+  .gm-search-wrap{
+    margin-left:14px;
+    margin-right:14px;
+  }
+
+  .gm-filter-row{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .gm-chat-row{
+    padding-left:16px;
+    padding-right:14px;
+    gap:11px;
+  }
+
+  .gm-avatar{
+    width:52px;
+    height:52px;
+    min-width:52px;
+  }
+
+  .gm-chat-line strong{
+    font-size:16px;
+  }
+
+  .gm-preview > span:first-child{
+    font-size:14px;
+  }
+
+  .gm-nav-item{
+    font-size:12px;
+  }
+}
+
+</style>
+<!-- END GM-HOME-2026-CSS -->
+<!-- GM-CHAT-2026-CSS -->
+<style>
+
+/* ================= G MESSENGER CHAT 2026 ================= */
+
+#chatScreen.gm-chat2026-host{
+  position:relative !important;
+  width:100% !important;
+  height:100dvh !important;
+  min-height:100dvh !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  background:#efeae2 !important;
+  color:#111 !important;
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif !important;
+}
+
+#chatScreen.gm-chat2026-host::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  opacity:.12;
+  background-image:
+    radial-gradient(circle at 20% 20%,#777 0 1px,transparent 1.5px),
+    radial-gradient(circle at 70% 60%,#777 0 1px,transparent 1.5px);
+  background-size:28px 28px,34px 34px;
+}
+
+.gm-chat2026-shell{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  z-index:2;
+}
+
+.gm-chat2026-header{
+  height:64px;
+  min-height:64px;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:6px 8px 6px 4px;
+  box-sizing:border-box;
+  background:#f7f7f7;
+  border-bottom:1px solid #ddd;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  z-index:10;
+}
+
+.gm-chat-back{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#111;
+  flex:0 0 auto;
+}
+
+.gm-chat-back:active{
+  background:#e9e9e9;
+}
+
+.gm-chat-head-avatar{
+  width:43px;
+  height:43px;
+  min-width:43px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d7eee0;
+  color:#16703e;
+  font-size:17px;
+  font-weight:700;
+}
+
+.gm-chat-head-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.gm-chat-head-info{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+}
+
+.gm-chat-head-name{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:17px;
+  font-weight:650;
+  color:#111;
+  line-height:1.25;
+}
+
+.gm-chat-head-status{
+  display:block;
+  margin-top:1px;
+  font-size:12px;
+  color:#667076;
+  white-space:nowrap;
+}
+
+.gm-chat-head-actions{
+  display:flex;
+  align-items:center;
+  gap:0;
+}
+
+.gm-chat-action{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-chat-action:active{
+  background:#e8e8e8;
+  transform:scale(.96);
+}
+
+.gm-chat2026-messages{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:12px 10px 14px;
+  box-sizing:border-box;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+
+.gm-date-chip{
+  width:max-content;
+  max-width:90%;
+  margin:4px auto 12px;
+  padding:5px 10px;
+  border-radius:8px;
+  background:#fff;
+  color:#6b7275;
+  font-size:11px;
+  box-shadow:0 1px 2px rgba(0,0,0,.08);
+}
+
+.gm-system-message{
+  max-width:85%;
+  margin:8px auto;
+  padding:7px 10px;
+  border-radius:8px;
+  background:#fff3c4;
+  color:#65605a;
+  font-size:12px;
+  text-align:center;
+}
+
+.gm-message-bubble{
+  max-width:82%;
+  width:max-content;
+  margin:5px 0;
+  padding:7px 9px 5px;
+  border-radius:9px;
+  box-shadow:0 1px 1px rgba(0,0,0,.08);
+  position:relative;
+  word-wrap:break-word;
+}
+
+.gm-message-in{
+  margin-right:auto;
+  background:#fff;
+  border-top-left-radius:3px;
+}
+
+.gm-message-out{
+  margin-left:auto;
+  background:#d9fdd3;
+  border-top-right-radius:3px;
+}
+
+.gm-message-text{
+  font-size:15px;
+  line-height:1.38;
+  color:#202427;
+  white-space:pre-wrap;
+}
+
+.gm-message-meta{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:4px;
+  margin-top:2px;
+  font-size:10px;
+  color:#737b7e;
+}
+
+.gm-message-checks{
+  color:#58a6d7;
+  font-weight:700;
+}
+
+.gm-voice-bubble{
+  min-width:205px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.gm-voice-play{
+  width:39px;
+  height:39px;
+  border:0;
+  border-radius:50%;
+  background:#20a966;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+
+.gm-voice-wave{
+  height:28px;
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:2px;
+  overflow:hidden;
+}
+
+.gm-voice-wave i{
+  width:3px;
+  min-width:3px;
+  border-radius:3px;
+  background:#6f777a;
+  opacity:.7;
+}
+
+.gm-voice-duration{
+  font-size:11px;
+  color:#697174;
+  white-space:nowrap;
+}
+
+.gm-chat2026-composer{
+  min-height:63px;
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+  display:flex;
+  align-items:flex-end;
+  gap:6px;
+  background:#f7f7f7;
+  border-top:1px solid #ddd;
+  box-sizing:border-box;
+  z-index:10;
+}
+
+.gm-compose-plus,
+.gm-compose-mic,
+.gm-compose-send{
+  width:45px;
+  height:45px;
+  min-width:45px;
+  border:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:transparent;
+  color:#202427;
+}
+
+.gm-compose-plus:active,
+.gm-compose-mic:active,
+.gm-compose-send:active{
+  transform:scale(.94);
+  background:#e8e8e8;
+}
+
+.gm-compose-input{
+  flex:1;
+  min-width:0;
+  min-height:45px;
+  max-height:110px;
+  border:0;
+  outline:0;
+  resize:none;
+  border-radius:23px;
+  padding:12px 15px;
+  box-sizing:border-box;
+  background:#fff;
+  color:#222;
+  font:inherit;
+  font-size:15px;
+  line-height:20px;
+}
+
+.gm-compose-mic{
+  background:#20a966;
+  color:#fff;
+}
+
+.gm-compose-send{
+  display:none;
+  background:#20a966;
+  color:#fff;
+}
+
+.gm-recording-bar{
+  position:absolute;
+  left:8px;
+  right:8px;
+  bottom:74px;
+  min-height:57px;
+  display:none;
+  align-items:center;
+  gap:10px;
+  padding:7px 10px;
+  border-radius:15px;
+  background:#fff;
+  box-shadow:0 4px 18px rgba(0,0,0,.18);
+  z-index:30;
+}
+
+.gm-recording-bar.active{
+  display:flex;
+}
+
+.gm-recording-dot{
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#e53935;
+  animation:gmPulse 1s infinite;
+}
+
+@keyframes gmPulse{
+  0%,100%{opacity:1}
+  50%{opacity:.3}
+}
+
+.gm-recording-time{
+  font-size:15px;
+  font-weight:600;
+  color:#222;
+  min-width:48px;
+}
+
+.gm-recording-text{
+  flex:1;
+  color:#70777a;
+  font-size:13px;
+}
+
+.gm-recording-cancel{
+  border:0;
+  background:transparent;
+  color:#d32f2f;
+  font-size:13px;
+  font-weight:600;
+  padding:8px;
+}
+
+.gm-call-screen{
+  position:absolute;
+  inset:0;
+  z-index:100;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  background:#0b1710;
+  color:#fff;
+}
+
+.gm-call-screen.active{
+  display:flex;
+}
+
+.gm-call-avatar{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#d9f3e1;
+  color:#16703e;
+  font-size:38px;
+  font-weight:700;
+  margin-bottom:20px;
+}
+
+.gm-call-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.gm-call-name{
+  font-size:24px;
+  font-weight:650;
+}
+
+.gm-call-status{
+  margin-top:7px;
+  color:#b9c5bd;
+  font-size:14px;
+}
+
+.gm-call-actions{
+  position:absolute;
+  bottom:42px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
+.gm-call-control{
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:50%;
+  background:#26362c;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-call-end{
+  background:#e53935;
+}
+
+.gm-call-notice{
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:115px;
+  padding:10px 13px;
+  border-radius:12px;
+  background:rgba(255,255,255,.1);
+  color:#cfd8d2;
+  text-align:center;
+  font-size:12px;
+}
+
+@media(min-width:600px){
+  #chatScreen.gm-chat2026-host{
+    max-width:600px !important;
+    margin:0 auto !important;
+  }
+}
+
+@media(max-width:380px){
+  .gm-chat-head-name{
+    font-size:16px;
+  }
+
+  .gm-chat-action{
+    width:38px;
+  }
+
+  .gm-chat2026-messages{
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .gm-message-bubble{
+    max-width:87%;
+  }
+
+  .gm-voice-bubble{
+    min-width:185px;
+  }
+}
+
+</style>
+<!-- END GM-CHAT-2026-CSS -->
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<section id="loginScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">
+      <svg class="gm-logo-svg" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="mainLogoGradient"
+                          x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0a84ff"/>
+            <stop offset="100%" stop-color="#005bea"/>
+          </linearGradient>
+        </defs>
+
+        <circle cx="50" cy="50" r="47"
+                fill="url(#mainLogoGradient)"/>
+
+        <path d="M72 31
+                 C65 24 56 20 47 20
+                 C30 20 18 33 18 50
+                 C18 67 31 80 47 80
+                 C56 80 64 77 71 71
+                 L71 53
+                 L48 53
+                 L48 64
+                 L60 64
+                 C57 68 53 70 47 70
+                 C36 70 29 62 29 50
+                 C29 38 36 30 47 30
+                 C54 30 60 33 64 38 Z"
+              fill="white"/>
+
+        <path d="M66 70 L78 82 L78 67"
+              fill="white"/>
+      </svg>
+    </div>
+
+    <h1>G Messenger</h1>
+
+    <p class="subtitle">
+      Fast, private messaging and communication.
+    </p>
+
+    <div class="field">
+      <label>Phone number</label>
+      <input id="phone"
+             type="tel"
+             placeholder="+234 800 000 0000">
+    </div>
+
+    <button class="primary" onclick="sendCode()">
+      Continue
+    </button>
+
+    <div id="loginError"
+         class="small"
+         style="display:none;color:#d32f2f">
+      Please enter a valid phone number.
+    </div>
+
+    <p class="small">
+      By continuing, you agree to the G Messenger Terms
+      and Privacy Policy.
+    </p>
+  </div>
+</section>
+
+<!-- VERIFICATION -->
+<section id="verificationScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">
+      <svg class="gm-logo-svg" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="47" fill="#087cff"/>
+        <path d="M72 31C65 24 56 20 47 20C30 20 18 33 18 50C18 67 31 80 47 80C56 80 64 77 71 71L71 53L48 53L48 64L60 64C57 68 53 70 47 70C36 70 29 62 29 50C29 38 36 30 47 30C54 30 60 33 64 38Z" fill="white"/>
+        <path d="M66 70L78 82L78 67" fill="white"/>
+      </svg>
+    </div>
+
+    <h1>Verify your number</h1>
+
+    <p class="subtitle">
+      Enter the six-digit verification code.
+    </p>
+
+    <div class="field">
+      <label>Verification code</label>
+      <input id="verificationCode"
+             type="text"
+             inputmode="numeric"
+             maxlength="6"
+             placeholder="123456">
+    </div>
+
+    <button class="primary" onclick="verifyCode()">
+      Verify
+    </button>
+
+    <button class="secondary"
+            onclick="showScreen('loginScreen')">
+      Change number
+    </button>
+  </div>
+</section>
+
+<!-- PROFILE -->
+<section id="profileScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">
+      <svg class="gm-logo-svg" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="47" fill="#087cff"/>
+        <path d="M72 31C65 24 56 20 47 20C30 20 18 33 18 50C18 67 31 80 47 80C56 80 64 77 71 71L71 53L48 53L48 64L60 64C57 68 53 70 47 70C36 70 29 62 29 50C29 38 36 30 47 30C54 30 60 33 64 38Z" fill="white"/>
+        <path d="M66 70L78 82L78 67" fill="white"/>
+      </svg>
+    </div>
+
+    <h1>Create your profile</h1>
+
+    <p class="subtitle">
+      Choose the name and username people will see.
+    </p>
+
+    <div class="field">
+      <label>Your name</label>
+      <input id="profileName" type="text"
+             placeholder="Your name">
+    </div>
+
+    <div class="field">
+      <label>Username</label>
+      <input id="username" type="text"
+             placeholder="@username">
+    </div>
+
+    <button class="primary" onclick="createProfile()">
+      Continue
+    </button>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section id="securityScreen" class="screen login-screen">
+  <div class="login-card">
+
+    <div class="logo">
+      <svg class="gm-logo-svg" viewBox="0 0 100 100"
+           xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="47" fill="#087cff"/>
+        <path d="M72 31C65 24 56 20 47 20C30 20 18 33 18 50C18 67 31 80 47 80C56 80 64 77 71 71L71 53L48 53L48 64L60 64C57 68 53 70 47 70C36 70 29 62 29 50C29 38 36 30 47 30C54 30 60 33 64 38Z" fill="white"/>
+        <path d="M66 70L78 82L78 67" fill="white"/>
+      </svg>
+    </div>
+
+    <h1>Two-Step Verification</h1>
+
+    <p class="subtitle">
+      Add a six-digit PIN to protect your account.
+    </p>
+
+    <div class="field">
+      <label>Security PIN</label>
+      <input id="securityPin"
+             type="password"
+             inputmode="numeric"
+             maxlength="6"
+             placeholder="6-digit PIN">
+    </div>
+
+    <div class="field">
+      <label>Recovery email (optional)</label>
+      <input id="recoveryEmail"
+             type="email"
+             placeholder="you@example.com">
+    </div>
+
+    <button class="primary" onclick="finishSetup()">
+      Finish setup
+    </button>
+  </div>
+</section>
+
+<!-- MAIN APP -->
+<section id="appScreen" class="screen app">
+
+  <header class="app-header">
+    <div class="header-top">
+      <div class="app-title">G Messenger</div>
+
+      <div class="header-actions">
+        <button class="icon-btn"
+                onclick="openSettings()"
+                aria-label="Settings">
+          <svg viewBox="0 0 24 24" width="23" height="23" fill="none"
+               stroke="currentColor" stroke-width="2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.8 1.8-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V22h-2.55v-.1a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.8-1.8.06-.06A1.7 1.7 0 0 0 8.1 15a1.7 1.7 0 0 0-1.56-1.03H6.4v-2.55h.14A1.7 1.7 0 0 0 8.1 10.4a1.7 1.7 0 0 0-.34-1.88L7.7 8.46l1.8-1.8.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V5h2.55v.1a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.8 1.8-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H22v2.55h-.1A1.7 1.7 0 0 0 19.4 15z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="search-wrap">
+    <input class="search"
+           type="search"
+           placeholder="Search G Messenger"
+           oninput="filterChats(this.value)">
+  </div>
+
+  <div class="filters">
+    <button class="filter active">All</button>
+    <button class="filter">Unread</button>
+    <button class="filter">Groups</button>
+    <button class="filter">Favorites</button>
+  </div>
+
+  <main id="chatList" class="chat-list">
+
+    <!-- GEMMA -->
+    <div class="gemma-card"
+         data-name="Gemma AI"
+         onclick="openGemma()">
+
+      <div class="gemma-logo">
+        <svg viewBox="0 0 100 100"
+             xmlns="http://www.w3.org/2000/svg">
+
+          <circle cx="50" cy="50" r="47"
+                  fill="white"/>
+
+          <path d="M72 31
+                   C65 24 56 20 47 20
+                   C30 20 18 33 18 50
+                   C18 67 31 80 47 80
+                   C56 80 64 77 71 71
+                   L71 53
+                   L48 53
+                   L48 64
+                   L60 64
+                   C57 68 53 70 47 70
+                   C36 70 29 62 29 50
+                   C29 38 36 30 47 30
+                   C54 30 60 33 64 38 Z"
+                fill="#087cff"/>
+
+          <path d="M66 70L78 82L78 67"
+                fill="#087cff"/>
+        </svg>
+      </div>
+
+      <div class="gemma-info">
+        <div class="gemma-name">
+          Gemma <span class="ai-badge">AI</span>
+        </div>
+
+        <div class="gemma-sub">
+          Your G Messenger AI assistant
+        </div>
+      </div>
+
+      <div style="color:#087cff;font-size:20px">›</div>
+    </div>
+
+    <div class="chat"
+         data-name="G Messenger"
+         onclick="openChat('G Messenger','G','online')">
+
+      <div class="avatar">G</div>
+
+      <div class="chat-info">
+        <div class="chat-name">G Messenger</div>
+        <div class="chat-preview">
+          Welcome to G Messenger
+        </div>
+      </div>
+
+      <div class="chat-right">
+        <div class="time">Now</div>
+      </div>
+    </div>
+
+
+
+  </main>
+
+  <button class="fab"
+          onclick="newChat()">
+    ＋
+  </button>
+
+  <nav class="bottom-nav">
+    <button class="active">
+      <span>💬</span>Chats
+    </button>
+
+    <button>
+      <span>◉</span>Updates
+    </button>
+
+    <button>
+      <span>👥</span>Communities
+    </button>
+
+    <button>
+      <span>📞</span>Calls
+    </button>
+  </nav>
+
+</section>
+
+
+<!-- SETTINGS SCREEN -->
+<section id="settingsScreen" class="screen settings-screen">
+
+  <header class="settings-header">
+    <button class="settings-back" onclick="showScreen('appScreen')" aria-label="Back">
+      <svg viewBox="0 0 24 24" width="25" height="25" fill="none"
+           stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5"/>
+        <path d="M12 19l-7-7 7-7"/>
+      </svg>
+    </button>
+
+    <h2>Settings</h2>
+  </header>
+
+  <main class="settings-content">
+
+    <div class="settings-profile">
+      <div class="settings-avatar">G</div>
+      <div>
+        <strong>G Messenger</strong>
+        <span>Account and preferences</span>
+      </div>
+    </div>
+
+    <div class="settings-section-title">APP</div>
+
+    <button class="settings-row" onclick="focusMessengerSearch()">
+      <div class="settings-icon search-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <path d="m20 20-4-4"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Search</strong>
+        <span>Search your conversations</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+    <button class="settings-row" onclick="window.GMessengerDataSaver.open()">
+      <div class="settings-icon data-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20V10"/>
+          <path d="M7 20v-5"/>
+          <path d="M17 20v-8"/>
+          <path d="M4 20h16"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Data Saver</strong>
+        <span>Control media and network usage</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+    <button class="settings-row" onclick="alert('')">
+      <div class="settings-icon camera-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7h3l2-2h6l2 2h3v12H4z"/>
+          <circle cx="12" cy="13" r="3.5"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Camera</strong>
+        <span>Camera and media settings</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+    <div class="settings-section-title">ACCOUNT</div>
+
+    <button class="settings-row" onclick="alert('')">
+      <div class="settings-icon account-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 21c1.5-4 4-6 8-6s6.5 2 8 6"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Account</strong>
+        <span>Privacy, security and account information</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+    <button class="settings-row" onclick="alert('')">
+      <div class="settings-icon notification-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+          <path d="M10 21h4"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Notifications</strong>
+        <span>Message and call notifications</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+    <button class="settings-row" onclick="alert('')">
+      <div class="settings-icon privacy-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="10" width="14" height="10" rx="2"/>
+          <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+        </svg>
+      </div>
+      <div class="settings-row-text">
+        <strong>Privacy</strong>
+        <span>Control who can contact you</span>
+      </div>
+      <span class="settings-arrow">›</span>
+    </button>
+
+  </main>
+</section>
+
+<!-- CHAT SCREEN -->
+<section id="chatScreen" class="screen gm-chat-screen">
+
+  <header class="gm-chat-header">
+
+    <button class="gm-chat-back"
+            onclick="showScreen('appScreen')"
+            aria-label="Back">
+
+      <svg viewBox="0 0 24 24" width="23" height="23"
+           fill="none" stroke="currentColor"
+           stroke-width="2.2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M19 12H5"/>
+        <path d="M12 19l-7-7 7-7"/>
+      </svg>
+
+    </button>
+
+    <div id="chatAvatar" class="gm-chat-avatar">A</div>
+
+    <div class="gm-chat-contact">
+      <div id="chatContactName"
+           class="gm-chat-contact-name">
+        G Messenger
+      </div>
+
+      <div id="chatContactStatus"
+           class="gm-chat-status">
+        online
+      </div>
+    </div>
+
+    <div class="gm-chat-header-actions">
+
+      <button class="gm-chat-action"
+              onclick="alert('')"
+              aria-label="Video call">
+
+        <svg viewBox="0 0 24 24" width="21" height="21"
+             fill="none" stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <rect x="3" y="6" width="13" height="12" rx="2"/>
+          <path d="m16 10 5-3v10l-5-3z"/>
+        </svg>
+
+      </button>
+
+      <button class="gm-chat-action"
+              onclick="alert('')"
+              aria-label="Voice call">
+
+        <svg viewBox="0 0 24 24" width="21" height="21"
+             fill="none" stroke="currentColor"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2
+                   19.8 19.8 0 0 1-8.6-3.1
+                   19.5 19.5 0 0 1-6-6
+                   A19.8 19.8 0 0 1 2.1 4.2
+                   2 2 0 0 1 4.1 2h3
+                   a2 2 0 0 1 2 1.7
+                   12.8 12.8 0 0 0 .7 2.8
+                   2 2 0 0 1-.5 2.1L8 9.9
+                   a16 16 0 0 0 6 6l1.3-1.3
+                   a2 2 0 0 1 2.1-.5
+                   12.8 12.8 0 0 0 2.8.7
+                   A2 2 0 0 1 22 16.9z"/>
+        </svg>
+
+      </button>
+
+      <button class="gm-chat-action"
+              onclick="alert('')"
+              aria-label="More options">
+
+        <svg viewBox="0 0 24 24" width="22" height="22"
+             fill="currentColor">
+          <circle cx="5" cy="12" r="1.5"/>
+          <circle cx="12" cy="12" r="1.5"/>
+          <circle cx="19" cy="12" r="1.5"/>
+        </svg>
+
+      </button>
+
+    </div>
+
+  </header>
+
+  <main id="chatMessages" class="gm-chat-messages">
+
+    <div class="gm-date-divider">TODAY</div>
+
+    <div class="gm-message incoming">
+      <div class="gm-bubble">
+        <span class="gm-message-text">
+          Welcome to G Messenger.
+        </span>
+        <span class="gm-message-meta">Now</span>
+      </div>
+    </div>
+
+    <div class="gm-message outgoing">
+      <div class="gm-bubble">
+        <span class="gm-message-text">
+          Hello 👋
+        </span>
+        <span class="gm-message-meta">
+          Now <span class="gm-checks">✓✓</span>
+        </span>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="attachmentPanel" class="gm-attachment-panel">
+
+    <button class="gm-attachment-item"
+            onclick="alert('')">
+      📷<br>Photos
+    </button>
+
+    <button class="gm-attachment-item"
+            onclick="alert('')">
+      ◉<br>Camera
+    </button>
+
+    <button class="gm-attachment-item"
+            onclick="alert('')">
+      ▣<br>Document
+    </button>
+
+    <button class="gm-attachment-item"
+            onclick="alert('')">
+      ●<br>Location
+    </button>
+
+  </div>
+
+  <div class="gm-chat-composer">
+
+    <button class="gm-round-btn"
+            onclick="toggleAttachments()"
+            aria-label="Attach">
+
+      <svg viewBox="0 0 24 24" width="22" height="22"
+           fill="none" stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="m21.4 11.6-8.9 8.9
+                 a6 6 0 0 1-8.5-8.5l9.5-9.5
+                 a4 4 0 0 1 5.7 5.7l-9.6 9.6
+                 a2 2 0 0 1-2.8-2.8l8.9-8.9"/>
+      </svg>
+
+    </button>
+
+    <div class="gm-input-wrap">
+
+      <textarea id="chatInput"
+                class="gm-chat-input"
+                rows="1"
+                placeholder="Message"
+                oninput="autoResizeChatInput()"
+                onkeydown="handleChatEnter(event)"></textarea>
+
+      <button class="gm-emoji-btn"
+              onclick="insertEmoji()"
+              aria-label="Emoji">
+        ☺
+      </button>
+
+    </div>
+
+    <button id="chatSendBtn"
+            class="gm-send-btn"
+            onclick="gmSendRealMessage()"
+            aria-label="Send">
+
+      <svg viewBox="0 0 24 24" width="20" height="20"
+           fill="none" stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="m22 2-7 20-4-9-9-4z"/>
+        <path d="M22 2 11 13"/>
+      </svg>
+
+    </button>
+
+  </div>
+
+</section>
+
+<!-- GEMMA SCREEN -->
+<section id="gemmaScreen"
+         class="screen gemma-screen">
+
+  <header class="gm-chat-header">
+
+    <button class="gm-chat-back"
+            onclick="showScreen('appScreen')"
+            aria-label="Back">
+
+      <svg viewBox="0 0 24 24" width="23" height="23"
+           fill="none" stroke="currentColor"
+           stroke-width="2.2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="M19 12H5"/>
+        <path d="M12 19l-7-7 7-7"/>
+      </svg>
+
+    </button>
+
+    <div class="gm-chat-avatar"
+         style="background:#fff;color:#087cff">
+
+      G
+
+    </div>
+
+    <div class="gm-chat-contact">
+      <div class="gm-chat-contact-name">
+        Gemma
+      </div>
+
+      <div class="gm-chat-status">
+        G Messenger AI
+      </div>
+    </div>
+
+    <div class="gm-chat-header-actions">
+
+      <button class="gm-chat-action"
+              onclick="alert('')">
+        ♫
+      </button>
+
+      <button class="gm-chat-action"
+              onclick="alert('')">
+        ⋮
+      </button>
+
+    </div>
+
+  </header>
+
+  <main id="gemmaMessages"
+        class="gemma-messages">
+
+    <div class="gemma-welcome">
+
+      <h2 style="margin-top:0;color:#087cff">
+        Welcome to Gemma
+      </h2>
+
+      <p>
+        Your G Messenger AI assistant is ready.
+      </p>
+
+      <p style="color:#667781;font-size:13px">
+        Ask questions, get explanations, translate text,
+        or get help with everyday tasks.
+      </p>
+
+      <small style="color:#8696a0">
+        Gemma AI
+      </small>
+
+    </div>
+
+  </main>
+
+  <div class="gm-chat-composer">
+
+    <button class="gm-round-btn"
+            onclick="toggleGemmaAttachments()"
+            aria-label="Attach">
+      ＋
+    </button>
+
+    <div class="gm-input-wrap">
+
+      <textarea id="gemmaInput"
+                class="gm-chat-input"
+                rows="1"
+                placeholder="Message Gemma"
+                oninput="autoResizeGemmaInput()"
+                onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendGemma()}"></textarea>
+
+      <button class="gm-emoji-btn"
+              onclick="insertGemmaEmoji()"
+              aria-label="Emoji">
+        ☺
+      </button>
+
+    </div>
+
+    <button class="gm-send-btn"
+            onclick="sendGemma()"
+            aria-label="Send">
+
+      <svg viewBox="0 0 24 24" width="20" height="20"
+           fill="none" stroke="currentColor"
+           stroke-width="2"
+           stroke-linecap="round"
+           stroke-linejoin="round">
+        <path d="m22 2-7 20-4-9-9-4z"/>
+        <path d="M22 2 11 13"/>
+      </svg>
+
+    </button>
+
+  </div>
+
+</section>
+
+<script src="data-saver.js"></script>
+
+<script>
+let authToken = null;
+let currentPhone = '';
+
+document.addEventListener('DOMContentLoaded', restoreStartupScreen);
+
+function showScreen(id){
+  document.querySelectorAll('.screen')
+    .forEach(s => s.classList.remove('active'));
+
+  const target = document.getElementById(id);
+
+  if(target){
+    target.classList.add('active');
+  }
+}
+
+function restoreStartupScreen(){
+  const savedName =
+    localStorage.getItem('gmessengerName');
+
+  const setupComplete =
+    localStorage.getItem('gmessengerSetup') === 'complete';
+
+  if(savedName && setupComplete){
+    showScreen('appScreen');
+  }else{
+    showScreen('loginScreen');
+  }
+}
+
+
+
+async function sendCode(){
+  const phone =
+    document.getElementById('phone').value.trim();
+
+  const error =
+    document.getElementById('loginError');
+
+  if(phone.length < 7){
+    error.style.display='block';
+    return;
+  }
+
+  error.style.display='none';
+  currentPhone=phone;
+
+  try{
+    const response = await fetch('/api/auth/register',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({phone})
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || 'Registration failed');
+    }
+
+    showScreen('verificationScreen');
+
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+async function verifyCode(){
+  const code =
+    document.getElementById('verificationCode')
+      .value.trim();
+
+  if(!/^[0-9]{6}$/.test(code)){
+    alert('Enter the 6-digit verification code.');
+    return;
+  }
+
+  try{
+    const response=await fetch('/api/auth/verify',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        phone:currentPhone,
+        code
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || 'Verification failed');
+    }
+
+    authToken=data.token;
+
+    if(data.user.profileComplete){
+      showScreen('appScreen');
+    }else{
+      showScreen('profileScreen');
+    }
+
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+async function createProfile(){
+  const name =
+    document.getElementById('profileName')
+      .value.trim();
+
+  const username =
+    document.getElementById('username')
+      .value.trim();
+
+  if(name.length < 2){
+    alert('Please enter your name.');
+    return;
+  }
+
+  if(username.length < 3){
+    alert('Please choose a username.');
+    return;
+  }
+
+  try{
+    const response=await fetch('/api/profile',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':'Bearer '+authToken
+      },
+      body:JSON.stringify({
+        name,
+        username
+      })
+    });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || 'Profile update failed');
+    }
+
+    showScreen('securityScreen');
+
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+async function finishSetup(){
+  const pin =
+    document.getElementById('securityPin')
+      .value.trim();
+
+  const recoveryEmail =
+    document.getElementById('recoveryEmail')
+      .value.trim();
+
+  if(!/^[0-9]{6}$/.test(pin)){
+    alert('Create a 6-digit security PIN.');
+    return;
+  }
+
+  try{
+    const response=await fetch(
+      '/api/security/two-step',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization':'Bearer '+authToken
+        },
+        body:JSON.stringify({
+          pin,
+          recoveryEmail
+        })
+      });
+
+    const data=await response.json();
+
+    if(!response.ok){
+      throw new Error(
+        data.error || 'Security setup failed'
+      );
+    }
+
+    localStorage.setItem(
+      'gmessengerSetup',
+      'complete'
+    );
+
+    showScreen('appScreen');
+
+  }catch(error){
+    alert(error.message);
+  }
+}
+
+function filterChats(value){
+  const query=value.toLowerCase().trim();
+
+  document.querySelectorAll(
+    '#chatList .chat,#chatList .gemma-card'
+  ).forEach(item=>{
+    const name=
+      (item.dataset.name || '').toLowerCase();
+
+    item.style.display=
+      !query || name.includes(query)
+        ? 'flex'
+        : 'none';
+  });
+}
+
+function newChat(){
+  alert(
+    ''
+  );
+}
+
+
+function openSettings(){
+  showScreen('settingsScreen');
+}
+
+function focusMessengerSearch(){
+  showScreen('appScreen');
+
+  setTimeout(() => {
+    const search = document.querySelector('.search');
+
+    if(search){
+      search.focus();
+      search.scrollIntoView({behavior:'smooth',block:'center'});
+    }
+  }, 100);
+}
+
+
+function openChat(name, initial, status){
+  document.getElementById('chatContactName').textContent = name;
+  document.getElementById('chatAvatar').textContent = initial || name.charAt(0).toUpperCase();
+  document.getElementById('chatContactStatus').textContent = status || 'online';
+
+  showScreen('chatScreen');
+
+  setTimeout(() => {
+    const messages = document.getElementById('chatMessages');
+    if(messages){
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    const input = document.getElementById('chatInput');
+    if(input){
+      input.focus();
+    }
+  }, 150);
+}
+
+function toggleAttachments(){
+  const panel = document.getElementById('attachmentPanel');
+
+  if(panel){
+    panel.classList.toggle('open');
+  }
+}
+
+function autoResizeChatInput(){
+  const input = document.getElementById('chatInput');
+
+  if(!input)return;
+
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight,120) + 'px';
+}
+
+function handleChatEnter(event){
+  if(event.key === 'Enter' && !event.shiftKey){
+    event.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function insertEmoji(){
+  const input = document.getElementById('chatInput');
+
+  if(!input)return;
+
+  input.value += '😊';
+  input.focus();
+  autoResizeChatInput();
+}
+
+function sendChatMessage(){
+  const input = document.getElementById('chatInput');
+  const messages = document.getElementById('chatMessages');
+
+  if(!input || !messages)return;
+
+  const text = input.value.trim();
+
+  if(!text)return;
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'gm-message outgoing';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'gm-bubble';
+
+  const messageText = document.createElement('span');
+  messageText.className = 'gm-message-text';
+  messageText.textContent = text;
+
+  const meta = document.createElement('span');
+  meta.className = 'gm-message-meta';
+  meta.innerHTML = 'Now <span class="gm-checks">✓✓</span>';
+
+  bubble.appendChild(messageText);
+  bubble.appendChild(meta);
+  wrapper.appendChild(bubble);
+  messages.appendChild(wrapper);
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function autoResizeGemmaInput(){
+  const input = document.getElementById('gemmaInput');
+
+  if(!input)return;
+
+  input.style.height = 'auto';
+  input.style.height = Math.min(input.scrollHeight,120) + 'px';
+}
+
+function insertGemmaEmoji(){
+  const input = document.getElementById('gemmaInput');
+
+  if(!input)return;
+
+  input.value += '😊';
+  input.focus();
+  autoResizeGemmaInput();
+}
+
+function toggleGemmaAttachments(){
+
+}
+
+function openGemma(){
+  showScreen('gemmaScreen');
+}
+
+function sendGemma(){
+  const input=
+    document.getElementById('gemmaInput');
+
+  const text=input.value.trim();
+
+  if(!text)return;
+
+  const messages=
+    document.getElementById('gemmaMessages');
+
+  const userMessage=document.createElement('div');
+
+  userMessage.style.cssText=
+    'max-width:80%;margin:8px 0 8px auto;background:#d9fdd3;padding:10px 13px;border-radius:15px 15px 3px 15px;line-height:1.4';
+
+  userMessage.textContent=text;
+
+  messages.appendChild(userMessage);
+
+  input.value='';
+
+  const reply=document.createElement('div');
+
+  reply.style.cssText=
+    'max-width:80%;margin:8px auto 8px 0;background:white;padding:10px 13px;border-radius:15px 15px 15px 3px;line-height:1.4;box-shadow:0 2px 7px rgba(0,0,0,.04)';
+
+  reply.textContent=
+    '';
+
+  messages.appendChild(reply);
+
+  messages.scrollTop=messages.scrollHeight;
+}
+
+
+/* ============================================================
+   G MESSENGER — ANDROID CHAT BEHAVIOR
+   ============================================================ */
+
+(function(){
+
+  function keepChatAtBottom(id){
+    const box = document.getElementById(id);
+    if(!box) return;
+
+    requestAnimationFrame(function(){
+      box.scrollTop = box.scrollHeight;
+    });
+  }
+
+  window.addEventListener('resize', function(){
+    const active = document.activeElement;
+
+    if(active && (
+      active.id === 'chatInput' ||
+      active.id === 'gemmaInput'
+    )){
+      setTimeout(function(){
+        keepChatAtBottom(
+          active.id === 'gemmaInput'
+            ? 'gemmaMessages'
+            : 'chatMessages'
+        );
+      },120);
+    }
+  });
+
+  document.addEventListener('click', function(e){
+    const input = e.target.closest(
+      '#chatInput, #gemmaInput'
+    );
+
+    if(input){
+      setTimeout(function(){
+        keepChatAtBottom(
+          input.id === 'gemmaInput'
+            ? 'gemmaMessages'
+            : 'chatMessages'
+        );
+      },180);
+    }
+  });
+
+})();
+
+</script>
+
+<!-- GM-HOME-2026-JS -->
+<script>
+
+(function(){
+  "use strict";
+
+  function gmEsc(value){
+    return String(value ?? "").replace(/[&<>"']/g,function(m){
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m];
+    });
+  }
+
+  function gmCollectChats(app){
+    const nodes = Array.from(
+      app.querySelectorAll(".chat,.gemma-card")
+    );
+
+    const seen = new Set();
+
+    return nodes.map(function(node,index){
+      const name =
+        node.getAttribute("data-name") ||
+        node.querySelector(
+          ".chat-name,.gemma-name,strong,h3"
+        )?.textContent?.trim() ||
+        (index === 0 ? "G Messenger" : "New Chat");
+
+      const preview =
+        node.querySelector(
+          ".chat-preview,.gemma-preview,.preview,p"
+        )?.textContent?.trim() ||
+        "Start a new conversation";
+
+      const time =
+        node.querySelector(
+          ".time,.chat-time,.gemma-time"
+        )?.textContent?.trim() || "";
+
+      const img = node.querySelector("img");
+
+      const key = name.toLowerCase();
+
+      if(seen.has(key)){
+        return null;
+      }
+
+      seen.add(key);
+
+      return {
+        name:name,
+        preview:preview,
+        time:time,
+        image:img?.getAttribute("src") || "",
+        unread:
+          node.querySelector(
+            ".unread,.badge"
+          )?.textContent?.trim() || "",
+        initial:
+          (name.charAt(0) || "G").toUpperCase()
+      };
+    }).filter(Boolean);
+  }
+
+  function gmAvatar(chat,index){
+    if(chat.image){
+      return '<img src="' +
+        gmEsc(chat.image) +
+        '" alt="">';
+    }
+
+    const letters = [
+      "G","A","S","M","D","F","C"
+    ];
+
+    const letter =
+      gmEsc(
+        chat.initial ||
+        letters[index % letters.length]
+      );
+
+    return '<span class="gm-avatar-letter">' +
+      letter +
+      '</span>';
+  }
+
+  function gmOpenChat(name){
+    if(typeof window.openChat === "function"){
+      window.openChat(
+        name,
+        name.charAt(0).toUpperCase(),
+        "online"
+      );
+    }else if(typeof window.showScreen === "function"){
+      window.showScreen("chatScreen");
+    }
+  }
+
+  function gmOpenGemma(){
+    if(typeof window.openGemma === "function"){
+      window.openGemma();
+    }else if(typeof window.showScreen === "function"){
+      window.showScreen("gemmaScreen");
+    }
+  }
+
+  function gmSettings(){
+    if(typeof window.openSettings === "function"){
+      window.openSettings();
+    }else if(typeof window.showScreen === "function"){
+      window.showScreen("settingsScreen");
+    }
+  }
+
+  function gmBuildHome(){
+    const app =
+      document.getElementById("appScreen");
+
+    if(!app ||
+       app.dataset.gmHome2026 === "1"){
+      return;
+    }
+
+    let chats = gmCollectChats(app);
+
+    if(!chats.length){
+      chats = [
+        {
+          name:"Gemma",
+          preview:"G Messenger AI",
+          time:"",
+          image:"",
+          unread:"",
+          initial:"G"
+        },
+        {
+          name:"G Messenger",
+          preview:"Welcome to G Messenger",
+          time:"",
+          image:"",
+          unread:"",
+          initial:"G"
+        }
+      ];
+    }
+
+    app.dataset.gmHome2026 = "1";
+    app.classList.add("gm-home-host");
+
+    app.innerHTML = `
+      <section
+        class="gm-home2026"
+        aria-label="G Messenger Chats">
+
+        <header class="gm-home-header">
+
+          <div class="gm-brand-wrap">
+
+            <div
+              class="gm-brand-mark"
+              aria-hidden="true">
+
+              <svg
+                viewBox="0 0 32 32"
+                width="28"
+                height="28"
+                fill="none">
+
+                <path
+                  d="M6 7.5A5.5 5.5 0 0 1 11.5 2h9A5.5 5.5 0 0 1 26 7.5v7A5.5 5.5 0 0 1 20.5 20H14l-5.5 5v-5.5A5.5 5.5 0 0 1 3 14V7.5A5.5 5.5 0 0 1 8.5 2"
+                  stroke="currentColor"
+                  stroke-width="2.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
+
+                <path
+                  d="M10 11.5c1.5-2 3.3-3 5.4-3 2.5 0 4.2 1.1 5.6 3.3"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round"/>
+
+              </svg>
+
+            </div>
+
+            <div class="gm-brand-name">
+              G Messenger
+            </div>
+
+          </div>
+
+          <div class="gm-home-actions">
+
+            <button
+              class="gm-top-icon"
+              type="button"
+              aria-label="Camera"
+              onclick="gmCameraAction()">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path
+                  d="M4 7h4l1.5-2h5L16 7h4v12H4z"/>
+
+                <circle
+                  cx="12"
+                  cy="13"
+                  r="3.5"/>
+
+              </svg>
+
+            </button>
+
+            <button
+              class="gm-top-icon"
+              type="button"
+              aria-label="Settings"
+              onclick="gmSettings()">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                fill="currentColor">
+
+                <circle cx="5" cy="12" r="1.7"/>
+                <circle cx="12" cy="12" r="1.7"/>
+                <circle cx="19" cy="12" r="1.7"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </header>
+
+        <div class="gm-search-wrap">
+
+          <svg
+            viewBox="0 0 24 24"
+            width="23"
+            height="23"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round">
+
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m20 20-4-4"/>
+
+          </svg>
+
+          <input
+            id="gmHomeSearch"
+            type="search"
+            autocomplete="off"
+            placeholder="Ask Gemma or Search"
+            aria-label="Search chats">
+
+        </div>
+
+        <div
+          class="gm-filter-row"
+          role="tablist"
+          aria-label="Chat filters">
+
+          <button
+            class="gm-filter active"
+            type="button"
+            onclick="gmFilterChats('all',this)">
+
+            All
+            <span
+              class="gm-filter-count"
+              id="gmAllCount"></span>
+
+          </button>
+
+          <button
+            class="gm-filter"
+            type="button"
+            onclick="gmFilterChats('unread',this)">
+
+            Unread
+            <span
+              class="gm-filter-count"
+              id="gmUnreadCount"></span>
+
+          </button>
+
+          <button
+            class="gm-filter"
+            type="button"
+            onclick="gmFilterChats('favorites',this)">
+
+            Favorites
+
+          </button>
+
+          <button
+            class="gm-filter"
+            type="button"
+            onclick="gmFilterChats('groups',this)">
+
+            Groups
+
+          </button>
+
+          <button
+            class="gm-filter gm-add-filter"
+            type="button"
+            aria-label="New chat"
+            onclick="gmNewChat()">
+
+            <svg
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round">
+
+              <path d="M12 5v14"/>
+              <path d="M5 12h14"/>
+
+            </svg>
+
+          </button>
+
+        </div>
+
+        <main
+          class="gm-chat-home-list"
+          id="gmChatHomeList">
+        </main>
+
+        <button
+          class="gm-fab"
+          type="button"
+          aria-label="Open Gemma AI"
+          onclick="gmOpenGemma()">
+
+          <svg
+            viewBox="0 0 32 32"
+            width="28"
+            height="28"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+
+            <path
+              d="M16 3l2.3 7.7L26 13l-7.7 2.3L16 23l-2.3-7.7L6 13l7.7-2.3z"/>
+
+            <path
+              d="M24.5 21l1.1 3.4L29 25.5l-3.4 1.1L24.5 30l-1.1-3.4L20 25.5l3.4-1.1z"/>
+
+          </svg>
+
+        </button>
+
+        <nav
+          class="gm-bottom-nav"
+          aria-label="Main navigation">
+
+          <button
+            class="gm-nav-item active"
+            type="button"
+            onclick="gmNavHome(this)">
+
+            <span class="gm-nav-icon">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path d="M4 6.5h16v11H4z"/>
+                <path d="M4 8l8 5 8-5"/>
+
+              </svg>
+
+              <b
+                id="gmNavUnread"
+                class="gm-nav-badge"></b>
+
+            </span>
+
+            <span>Chats</span>
+
+          </button>
+
+          <button
+            class="gm-nav-item"
+            type="button"
+            onclick="gmComingSoon('Updates',this)">
+
+            <span class="gm-nav-icon">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.1"
+                stroke-linecap="round">
+
+                <circle cx="12" cy="12" r="8"/>
+                <path d="M12 8v4l3 2"/>
+
+              </svg>
+
+            </span>
+
+            <span>Updates</span>
+
+          </button>
+
+          <button
+            class="gm-nav-item"
+            type="button"
+            onclick="gmComingSoon('Communities',this)">
+
+            <span class="gm-nav-icon">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="26"
+                height="26"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round">
+
+                <circle cx="9" cy="8" r="3"/>
+                <circle cx="17" cy="9" r="2.5"/>
+                <path d="M3 19c.7-3.3 2.6-5 6-5s5.3 1.7 6 5"/>
+                <path d="M15 14c3.4-.2 5.3 1.4 6 4.5"/>
+
+              </svg>
+
+            </span>
+
+            <span>Communities</span>
+
+          </button>
+
+          <button
+            class="gm-nav-item"
+            type="button"
+            onclick="gmComingSoon('Calls',this)">
+
+            <span class="gm-nav-icon">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="25"
+                height="25"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.1"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path
+                  d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 22 16.9z"/>
+
+              </svg>
+
+              <b class="gm-nav-badge gm-call-badge">
+                1
+              </b>
+
+            </span>
+
+            <span>Calls</span>
+
+          </button>
+
+        </nav>
+
+      </section>
+    `;
+
+    window.__gmHomeChats = chats;
+
+    window.gmRenderChats = function(){
+
+      const list =
+        document.getElementById(
+          "gmChatHomeList"
+        );
+
+      if(!list){
+        return;
+      }
+
+      const q =
+        (
+          document.getElementById(
+            "gmHomeSearch"
+          )?.value || ""
+        ).trim().toLowerCase();
+
+      const filter =
+        window.__gmHomeFilter || "all";
+
+      const data =
+        (window.__gmHomeChats || []).filter(
+          function(chat){
+
+            const hay =
+              (
+                chat.name +
+                " " +
+                chat.preview
+              ).toLowerCase();
+
+            if(q && !hay.includes(q)){
+              return false;
+            }
+
+            if(
+              filter === "unread" &&
+              !chat.unread
+            ){
+              return false;
+            }
+
+            if(
+              filter === "favorites" &&
+              !/favorite|star|★/i.test(hay)
+            ){
+              return false;
+            }
+
+            if(
+              filter === "groups" &&
+              !/group|community|team|church|class/i.test(hay)
+            ){
+              return false;
+            }
+
+            return true;
+          }
+        );
+
+      if(!data.length){
+
+        list.innerHTML =
+          '<div class="gm-empty">' +
+            '<div class="gm-empty-icon">⌕</div>' +
+            '<strong>No chats found</strong>' +
+            '<span>Try another name or search term.</span>' +
+          '</div>';
+
+      }else{
+
+        list.innerHTML =
+          data.map(
+            function(chat,index){
+
+              const unread =
+                chat.unread
+                ? '<span class="gm-unread">' +
+                    gmEsc(chat.unread) +
+                  '</span>'
+                : "";
+
+              const checks =
+                chat.name === "G Messenger"
+                ? '<span class="gm-checks">✓✓</span> '
+                : "";
+
+              return (
+                '<button ' +
+                  'class="gm-chat-row" ' +
+                  'type="button" ' +
+                  'data-chat-name="' +
+                  gmEsc(chat.name) +
+                '">' +
+
+                  '<span class="gm-avatar">' +
+                    gmAvatar(chat,index) +
+                  '</span>' +
+
+                  '<span class="gm-chat-main">' +
+
+                    '<span class="gm-chat-line">' +
+                      '<strong>' +
+                        gmEsc(chat.name) +
+                      '</strong>' +
+
+                      '<time>' +
+                        gmEsc(chat.time) +
+                      '</time>' +
+
+                    '</span>' +
+
+                    '<span class="gm-chat-line gm-preview">' +
+
+                      '<span>' +
+                        checks +
+                        gmEsc(chat.preview) +
+                      '</span>' +
+
+                      unread +
+
+                    '</span>' +
+
+                  '</span>' +
+
+                '</button>'
+              );
+            }
+          ).join("");
+
+        list
+          .querySelectorAll(".gm-chat-row")
+          .forEach(
+            function(row){
+
+              row.addEventListener(
+                "click",
+                function(){
+
+                  gmOpenChat(
+                    row.getAttribute(
+                      "data-chat-name"
+                    ) || "Chat"
+                  );
+
+                }
+              );
+
+            }
+          );
+      }
+
+      const unreadCount =
+        (window.__gmHomeChats || [])
+          .filter(function(c){
+            return c.unread;
+          }).length;
+
+      const all =
+        document.getElementById(
+          "gmAllCount"
+        );
+
+      const unread =
+        document.getElementById(
+          "gmUnreadCount"
+        );
+
+      const badge =
+        document.getElementById(
+          "gmNavUnread"
+        );
+
+      if(all){
+        all.textContent =
+          (window.__gmHomeChats || []).length
+          ? (window.__gmHomeChats || []).length
+          : "";
+      }
+
+      if(unread){
+        unread.textContent =
+          unreadCount
+          ? unreadCount
+          : "";
+      }
+
+      if(badge){
+        badge.textContent =
+          unreadCount
+          ? unreadCount
+          : "";
+      }
+    };
+
+    window.gmFilterChats =
+      function(filter,button){
+
+        window.__gmHomeFilter = filter;
+
+        document
+          .querySelectorAll(".gm-filter")
+          .forEach(function(b){
+            b.classList.remove("active");
+          });
+
+        if(button){
+          button.classList.add("active");
+        }
+
+        window.gmRenderChats();
+      };
+
+    window.gmClearSearch =
+      function(){
+
+        const input =
+          document.getElementById(
+            "gmHomeSearch"
+          );
+
+        if(input){
+
+          input.value = "";
+
+          input.focus();
+
+          window.gmRenderChats();
+
+        }
+      };
+
+    window.gmNewChat =
+      function(){
+
+        if(
+          typeof window.openChat ===
+          "function"
+        ){
+
+          window.openChat(
+            "New Chat",
+            "N",
+            "online"
+          );
+
+        }else{
+
+          alert(
+            ""
+          );
+
+        }
+      };
+
+    window.gmCameraAction =
+      function(){
+
+        alert(
+          ""
+        );
+
+      };
+
+    window.gmNavHome =
+      function(button){
+
+        document
+          .querySelectorAll(".gm-nav-item")
+          .forEach(function(b){
+            b.classList.remove("active");
+          });
+
+        button.classList.add("active");
+      };
+
+    window.gmComingSoon =
+      function(name,button){
+
+        document
+          .querySelectorAll(".gm-nav-item")
+          .forEach(function(b){
+            b.classList.remove("active");
+          });
+
+        button.classList.add("active");
+document
+          .querySelector(".gm-nav-item")
+          ?.classList.add("active");
+      };
+
+    document
+      .getElementById("gmHomeSearch")
+      ?.addEventListener(
+        "input",
+        function(){
+
+          window.gmRenderChats();
+
+        }
+      );
+
+    window.__gmHomeFilter = "all";
+
+    window.gmRenderChats();
+  }
+
+  if(
+    document.readyState ===
+    "loading"
+  ){
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      gmBuildHome
+    );
+
+  }else{
+
+    gmBuildHome();
+
+  }
+
+})();
+
+</script>
+<!-- END GM-HOME-2026-JS -->
+<!-- GM-CHAT-2026-JS -->
+<script>
+
+(function(){
+  "use strict";
+
+  if(window.__GM_CHAT_2026_READY){
+    return;
+  }
+
+  window.__GM_CHAT_2026_READY = true;
+
+  let recorder = null;
+  let recordChunks = [];
+  let recordStarted = 0;
+  let recordTimer = null;
+  let currentStream = null;
+
+  function esc(v){
+    return String(v ?? "").replace(/[&<>"']/g,function(m){
+      return {
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m];
+    });
+  }
+
+  function getChatScreen(){
+    return document.getElementById("chatScreen");
+  }
+
+  function getCurrentName(){
+    const el =
+      document.querySelector(
+        "#chatScreen .chat-name,#chatScreen #chatTitle,#chatScreen .chat-title"
+      );
+
+    return el?.textContent?.trim() || "Chat";
+  }
+
+  function getCurrentAvatar(){
+    const el =
+      document.querySelector(
+        "#chatScreen img.chat-avatar,#chatScreen img.avatar,#chatScreen .chat-avatar img"
+      );
+
+    return el?.getAttribute("src") || "";
+  }
+
+  function renderVoiceWave(){
+    let out = "";
+
+    const heights = [
+      8,14,21,11,18,25,12,8,17,23,
+      13,26,15,9,20,14,24,11,18,8,
+      15,22,12,26,17,9,19,14,23,11
+    ];
+
+    heights.forEach(function(h){
+      out += '<i style="height:'+h+'px"></i>';
+    });
+
+    return out;
+  }
+
+  function scrollMessages(){
+    const box =
+      document.getElementById("gmChat2026Messages");
+
+    if(box){
+      requestAnimationFrame(function(){
+        box.scrollTop = box.scrollHeight;
+      });
+    }
+  }
+
+  function addVoiceMessage(blob,duration){
+    const box =
+      document.getElementById("gmChat2026Messages");
+
+    if(!box){
+      return;
+    }
+
+    const url = URL.createObjectURL(blob);
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className =
+      "gm-message-bubble gm-message-out";
+
+    bubble.innerHTML =
+      '<div class="gm-voice-bubble">' +
+        '<button class="gm-voice-play" type="button" aria-label="Play voice message">' +
+          '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">' +
+            '<path d="M8 5v14l11-7z"/>' +
+          '</svg>' +
+        '</button>' +
+
+        '<span class="gm-voice-wave">' +
+          renderVoiceWave() +
+        '</span>' +
+
+        '<span class="gm-voice-duration">' +
+          esc(duration) +
+        '</span>' +
+      '</div>' +
+
+      '<div class="gm-message-meta">' +
+        '<span>Now</span>' +
+        '<span class="gm-message-checks">✓✓</span>' +
+      '</div>';
+
+    const audio =
+      document.createElement("audio");
+
+    audio.preload = "metadata";
+    audio.src = url;
+
+    const play =
+      bubble.querySelector(".gm-voice-play");
+
+    play.addEventListener("click",function(){
+      if(audio.paused){
+        audio.play().catch(function(){});
+        play.innerHTML =
+          '<svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor">' +
+            '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' +
+          '</svg>';
+      }else{
+        audio.pause();
+        play.innerHTML =
+          '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">' +
+            '<path d="M8 5v14l11-7z"/>' +
+          '</svg>';
+      }
+    });
+
+    audio.addEventListener("ended",function(){
+      play.innerHTML =
+        '<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">' +
+          '<path d="M8 5v14l11-7z"/>' +
+        '</svg>';
+    });
+
+    bubble.appendChild(audio);
+    box.appendChild(bubble);
+
+    scrollMessages();
+  }
+
+  function formatDuration(seconds){
+    const s =
+      Math.max(0,Math.floor(seconds));
+
+    const m =
+      Math.floor(s / 60);
+
+    const r =
+      s % 60;
+
+    return (
+      String(m).padStart(2,"0") +
+      ":" +
+      String(r).padStart(2,"0")
+    );
+  }
+
+  function showRecordingBar(){
+    const bar =
+      document.getElementById("gmRecordingBar");
+
+    if(bar){
+      bar.classList.add("active");
+    }
+  }
+
+  function hideRecordingBar(){
+    const bar =
+      document.getElementById("gmRecordingBar");
+
+    if(bar){
+      bar.classList.remove("active");
+    }
+  }
+
+  function updateRecordingTime(){
+    const el =
+      document.getElementById("gmRecordingTime");
+
+    if(el){
+      el.textContent =
+        formatDuration(
+          (Date.now() - recordStarted) / 1000
+        );
+    }
+  }
+
+  async function startRecording(){
+    if(recorder){
+      return;
+    }
+
+    if(
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ){
+      alert(
+        "Microphone recording is not available in this WebView."
+      );
+      return;
+    }
+
+    try{
+      currentStream =
+        await navigator.mediaDevices.getUserMedia({
+          audio:true
+        });
+
+      const options = {};
+
+      if(
+        typeof MediaRecorder !== "undefined" &&
+        MediaRecorder.isTypeSupported &&
+        MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+      ){
+        options.mimeType =
+          "audio/webm;codecs=opus";
+      }
+
+      recorder =
+        new MediaRecorder(
+          currentStream,
+          options
+        );
+
+      recordChunks = [];
+      recordStarted = Date.now();
+
+      recorder.ondataavailable =
+        function(event){
+          if(event.data && event.data.size){
+            recordChunks.push(event.data);
+          }
+        };
+
+      recorder.onstop =
+        function(){
+
+          clearInterval(recordTimer);
+          recordTimer = null;
+
+          const duration =
+            (Date.now() - recordStarted) / 1000;
+
+          const blob =
+            new Blob(
+              recordChunks,
+              {
+                type:
+                  recorder.mimeType ||
+                  "audio/webm"
+              }
+            );
+
+          if(blob.size > 0){
+            addVoiceMessage(
+              blob,
+              formatDuration(duration)
+            );
+          }
+
+          if(currentStream){
+            currentStream
+              .getTracks()
+              .forEach(function(track){
+                track.stop();
+              });
+          }
+
+          currentStream = null;
+          recorder = null;
+          recordChunks = [];
+
+          hideRecordingBar();
+        };
+
+      recorder.start();
+
+      showRecordingBar();
+
+      updateRecordingTime();
+
+      recordTimer =
+        setInterval(
+          updateRecordingTime,
+          250
+        );
+
+    }catch(error){
+      recorder = null;
+
+      if(currentStream){
+        currentStream
+          .getTracks()
+          .forEach(function(track){
+            track.stop();
+          });
+      }
+
+      currentStream = null;
+
+      alert(
+        "Microphone permission is required for voice messages."
+      );
+    }
+  }
+
+  function stopRecording(){
+    if(
+      recorder &&
+      recorder.state !== "inactive"
+    ){
+      recorder.stop();
+    }
+  }
+
+  function cancelRecording(){
+    if(
+      recorder &&
+      recorder.state !== "inactive"
+    ){
+      recorder.onstop = function(){
+
+        clearInterval(recordTimer);
+        recordTimer = null;
+
+        if(currentStream){
+          currentStream
+            .getTracks()
+            .forEach(function(track){
+              track.stop();
+            });
+        }
+
+        currentStream = null;
+        recorder = null;
+        recordChunks = [];
+
+        hideRecordingBar();
+      };
+
+      recorder.stop();
+    }else{
+      hideRecordingBar();
+    }
+  }
+
+  window.gmStartVoiceMessage =
+    startRecording;
+
+  window.gmStopVoiceMessage =
+    stopRecording;
+
+  window.gmCancelVoiceMessage =
+    cancelRecording;
+
+  window.gmStartVoiceCall =
+    function(){
+
+      const screen =
+        document.getElementById(
+          "gmCallScreen"
+        );
+
+      if(!screen){
+        return;
+      }
+
+      const name =
+        getCurrentName();
+
+      const nameEl =
+        document.getElementById(
+          "gmCallName"
+        );
+
+      const avatar =
+        document.getElementById(
+          "gmCallAvatar"
+        );
+
+      if(nameEl){
+        nameEl.textContent = name;
+      }
+
+      const src =
+        getCurrentAvatar();
+
+      if(avatar){
+        if(src){
+          avatar.innerHTML =
+            '<img src="' +
+            esc(src) +
+            '" alt="">';
+        }else{
+          avatar.textContent =
+            (name.charAt(0) || "G").toUpperCase();
+        }
+      }
+
+      screen.classList.add("active");
+
+      const status =
+        document.getElementById(
+          "gmCallStatus"
+        );
+
+      if(status){
+        status.textContent =
+          "Calling…";
+      }
+
+      if(
+        navigator.mediaDevices &&
+        navigator.mediaDevices.getUserMedia
+      ){
+        navigator.mediaDevices
+          .getUserMedia({audio:true})
+          .then(function(stream){
+
+            window.__gmCallStream = stream;
+
+            if(status){
+              status.textContent =
+                "Voice call";
+            }
+
+          })
+          .catch(function(){
+
+            if(status){
+              status.textContent =
+                "Microphone permission required";
+            }
+
+          });
+      }
+    };
+
+  window.gmEndVoiceCall =
+    function(){
+
+      if(window.__gmCallStream){
+        window.__gmCallStream
+          .getTracks()
+          .forEach(function(track){
+            track.stop();
+          });
+
+        window.__gmCallStream = null;
+      }
+
+      document
+        .getElementById("gmCallScreen")
+        ?.classList.remove("active");
+    };
+
+  function gmBack(){
+    if(typeof window.showScreen === "function"){
+      window.showScreen("appScreen");
+      return;
+    }
+
+    const chat =
+      getChatScreen();
+
+    if(chat){
+      chat.style.display = "none";
+    }
+  }
+
+  function gmSendText(){
+    const input =
+      document.getElementById(
+        "gmComposeInput"
+      );
+
+    if(!input){
+      return;
+    }
+
+    const text =
+      input.value.trim();
+
+    if(!text){
+      return;
+    }
+
+    if(typeof window.sendMessage === "function"){
+      window.sendMessage(text);
+    }else{
+      const box =
+        document.getElementById(
+          "gmChat2026Messages"
+        );
+
+      if(box){
+        const bubble =
+          document.createElement("div");
+
+        bubble.className =
+          "gm-message-bubble gm-message-out";
+
+        bubble.innerHTML =
+          '<div class="gm-message-text">' +
+            esc(text) +
+          '</div>' +
+          '<div class="gm-message-meta">' +
+            '<span>Now</span>' +
+            '<span class="gm-message-checks">✓✓</span>' +
+          '</div>';
+
+        box.appendChild(bubble);
+        scrollMessages();
+      }
+    }
+
+    input.value = "";
+    input.dispatchEvent(new Event("input"));
+  }
+
+  function buildChat(){
+    const chat =
+      getChatScreen();
+
+    if(!chat){
+      return;
+    }
+
+    if(
+      chat.dataset.gmChat2026 === "1"
+    ){
+      return;
+    }
+
+    chat.dataset.gmChat2026 = "1";
+    chat.classList.add("gm-chat2026-host");
+
+    const oldHTML =
+      chat.innerHTML;
+
+    chat.innerHTML = `
+      <section class="gm-chat2026-shell">
+
+        <header class="gm-chat2026-header">
+
+          <button
+            class="gm-chat-back"
+            type="button"
+            aria-label="Back"
+            onclick="gmChatBack()">
+
+            <svg
+              viewBox="0 0 24 24"
+              width="25"
+              height="25"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+
+              <path d="M19 12H5"/>
+              <path d="m12 19-7-7 7-7"/>
+
+            </svg>
+
+          </button>
+
+          <div
+            class="gm-chat-head-avatar"
+            id="gmChatHeadAvatar">
+            G
+          </div>
+
+          <div class="gm-chat-head-info">
+
+            <strong
+              class="gm-chat-head-name"
+              id="gmChatHeadName">
+              Chat
+            </strong>
+
+            <span
+              class="gm-chat-head-status"
+              id="gmChatHeadStatus">
+              online
+            </span>
+
+          </div>
+
+          <div class="gm-chat-head-actions">
+
+            <button
+              class="gm-chat-action"
+              type="button"
+              aria-label="Voice call"
+              onclick="gmStartVoiceCall()">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+
+                <path
+                  d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7 12.8 12.8 0 0 0 .7 2.8 2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5 12.8 12.8 0 0 0 2.8.7A2 2 0 0 1 22 16.9z"/>
+
+              </svg>
+
+            </button>
+
+            <button
+              class="gm-chat-action"
+              type="button"
+              aria-label="More options">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="22"
+                height="22"
+                fill="currentColor">
+
+                <circle cx="12" cy="5" r="1.7"/>
+                <circle cx="12" cy="12" r="1.7"/>
+                <circle cx="12" cy="19" r="1.7"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </header>
+
+        <main
+          class="gm-chat2026-messages"
+          id="gmChat2026Messages">
+
+          <div class="gm-date-chip">
+            Today
+          </div>
+
+          <div class="gm-system-message">
+            Messages are protected in this conversation.
+          </div>
+
+        </main>
+
+        <div
+          class="gm-recording-bar"
+          id="gmRecordingBar">
+
+          <span class="gm-recording-dot"></span>
+
+          <span
+            class="gm-recording-time"
+            id="gmRecordingTime">
+            00:00
+          </span>
+
+          <span class="gm-recording-text">
+            Recording voice message
+          </span>
+
+          <button
+            class="gm-recording-cancel"
+            type="button"
+            onclick="gmCancelVoiceMessage()">
+            Cancel
+          </button>
+
+        </div>
+
+        <footer class="gm-chat2026-composer">
+
+          <button
+            class="gm-compose-plus"
+            type="button"
+            aria-label="Attach">
+
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.1"
+              stroke-linecap="round">
+
+              <path d="M12 5v14"/>
+              <path d="M5 12h14"/>
+
+            </svg>
+
+          </button>
+
+          <textarea
+            id="gmComposeInput"
+            class="gm-compose-input"
+            rows="1"
+            placeholder="Message"
+            autocomplete="off"></textarea>
+
+          <button
+            id="gmComposeMic"
+            class="gm-compose-mic"
+            type="button"
+            aria-label="Record voice message"
+            onclick="gmStartVoiceMessage()">
+
+            <svg
+              viewBox="0 0 24 24"
+              width="21"
+              height="21"
+              fill="currentColor">
+
+              <path
+                d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z"/>
+
+              <path
+                d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"/>
+
+            </svg>
+
+          </button>
+
+          <button
+            id="gmComposeSend"
+            class="gm-compose-send"
+            type="button"
+            aria-label="Send"
+            onclick="gmSendText()">
+
+            <svg
+              viewBox="0 0 24 24"
+              width="21"
+              height="21"
+              fill="currentColor">
+
+              <path d="m3 20 18-8L3 4v6l12 2-12 2z"/>
+
+            </svg>
+
+          </button>
+
+        </footer>
+
+        <section
+          class="gm-call-screen"
+          id="gmCallScreen">
+
+          <div
+            class="gm-call-avatar"
+            id="gmCallAvatar">
+            G
+          </div>
+
+          <div
+            class="gm-call-name"
+            id="gmCallName">
+            Chat
+          </div>
+
+          <div
+            class="gm-call-status"
+            id="gmCallStatus">
+            Calling…
+          </div>
+
+          <div class="gm-call-notice">
+            Voice calling interface ready. Device-to-device calling requires a signaling service.
+          </div>
+
+          <div class="gm-call-actions">
+
+            <button
+              class="gm-call-control"
+              type="button"
+              aria-label="Mute">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="23"
+                height="23"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round">
+
+                <path d="M12 15a3 3 0 0 0 3-3V7a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z"/>
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>
+
+              </svg>
+
+            </button>
+
+            <button
+              class="gm-call-control gm-call-end"
+              type="button"
+              aria-label="End call"
+              onclick="gmEndVoiceCall()">
+
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="currentColor">
+
+                <path
+                  d="M6.6 10.8a15.8 15.8 0 0 0 10.8 0l1.5-1.2a1.6 1.6 0 0 1 2.5 1.1l.3 2.6a1.7 1.7 0 0 1-1.2 1.8 18.8 18.8 0 0 1-16.9 0 1.7 1.7 0 0 1-1.2-1.8l.3-2.6a1.6 1.6 0 0 1 2.5-1.1z"/>
+
+              </svg>
+
+            </button>
+
+          </div>
+
+        </section>
+
+        <div style="display:none">
+          ${oldHTML}
+        </div>
+
+      </section>
+    `;
+
+    window.gmChatBack = gmBack;
+
+    const input =
+      document.getElementById(
+        "gmComposeInput"
+      );
+
+    const mic =
+      document.getElementById(
+        "gmComposeMic"
+      );
+
+    const send =
+      document.getElementById(
+        "gmComposeSend"
+      );
+
+    if(input){
+
+      input.addEventListener(
+        "input",
+        function(){
+
+          const hasText =
+            input.value.trim().length > 0;
+
+          if(send){
+            send.style.display =
+              hasText ? "flex" : "none";
+          }
+
+          if(mic){
+            mic.style.display =
+              hasText ? "none" : "flex";
+          }
+
+          input.style.height = "45px";
+
+          input.style.height =
+            Math.min(
+              input.scrollHeight,
+              110
+            ) + "px";
+
+        }
+      );
+
+      input.addEventListener(
+        "keydown",
+        function(event){
+
+          if(
+            event.key === "Enter" &&
+            !event.shiftKey
+          ){
+            event.preventDefault();
+            gmSendText();
+          }
+
+        }
+      );
+    }
+
+    const name =
+      getCurrentName();
+
+    const nameEl =
+      document.getElementById(
+        "gmChatHeadName"
+      );
+
+    if(nameEl){
+      nameEl.textContent = name;
+    }
+
+    const avatar =
+      document.getElementById(
+        "gmChatHeadAvatar"
+      );
+
+    const src =
+      getCurrentAvatar();
+
+    if(avatar){
+
+      if(src){
+
+        avatar.innerHTML =
+          '<img src="' +
+          esc(src) +
+          '" alt="">';
+
+      }else{
+
+        avatar.textContent =
+          (name.charAt(0) || "G")
+            .toUpperCase();
+
+      }
+
+    }
+
+    scrollMessages();
+  }
+
+  window.gmRebuildChat2026 =
+    function(){
+      buildChat();
+    };
+
+  function watchChat(){
+    const chat =
+      getChatScreen();
+
+    if(!chat){
+      return;
+    }
+
+    if(
+      chat.style.display !== "none" ||
+      chat.classList.contains("active")
+    ){
+      buildChat();
+    }
+  }
+
+  if(
+    document.readyState === "loading"
+  ){
+    document.addEventListener(
+      "DOMContentLoaded",
+      watchChat
+    );
+  }else{
+    watchChat();
+  }
+
+  const observer =
+    new MutationObserver(
+      function(){
+        const chat =
+          getChatScreen();
+
+        if(
+          chat &&
+          !chat.dataset.gmChat2026 &&
+          (
+            chat.style.display !== "none" ||
+            chat.classList.contains("active")
+          )
+        ){
+          buildChat();
+        }
+      }
+    );
+
+  observer.observe(
+    document.documentElement,
+    {
+      childList:true,
+      subtree:true
+    }
+  );
+
+})();
+
+</script>
+<!-- END GM-CHAT-2026-JS -->
+
+<script>
+/* ============================================================
+   GM_REAL_DATA_LAYER
+   Real users, conversations and messages.
+   Designed for extremely low mobile-data usage.
+   ============================================================ */
+(function(){
+
+  const TOKEN_KEY = 'gmessengerToken';
+
+  function gmToken(){
+    return localStorage.getItem(TOKEN_KEY) ||
+           localStorage.getItem('authToken') ||
+           '';
+  }
+
+  async function gmFetch(url, options = {}){
+    const headers = Object.assign(
+      {'Content-Type':'application/json'},
+      options.headers || {}
+    );
+
+    const token = gmToken();
+
+    if(token){
+      headers.Authorization = 'Bearer ' + token;
+    }
+
+    const response = await fetch(url, {
+      ...options,
+      headers
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if(!response.ok){
+      throw new Error(data.error || 'Request failed');
+    }
+
+    return data;
+  }
+
+  window.GMessengerAPI = {
+    fetch: gmFetch,
+
+    searchUsers: function(q){
+      return gmFetch(
+        '/api/users/search?q=' +
+        encodeURIComponent(q.trim())
+      );
+    },
+
+    conversations: function(){
+      return gmFetch('/api/conversations');
+    },
+
+    createConversation: function(userId){
+      return gmFetch('/api/conversations',{
+        method:'POST',
+        body:JSON.stringify({userId:Number(userId)})
+      });
+    },
+
+    messages: function(id){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/messages?limit=50'
+      );
+    },
+
+    sendMessage: function(id,text){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/messages',
+        {
+          method:'POST',
+          body:JSON.stringify({text})
+        }
+      );
+    },
+
+    markRead: function(id){
+      return gmFetch(
+        '/api/conversations/' +
+        encodeURIComponent(id) +
+        '/read',
+        {method:'POST'}
+      );
+    },
+
+    plans: function(){
+      return gmFetch('/api/plans');
+    },
+
+    dataSettings: function(){
+      return gmFetch('/api/data-settings');
+    },
+
+    saveDataSettings: function(settings){
+      return gmFetch('/api/data-settings',{
+        method:'POST',
+        body:JSON.stringify(settings)
+      });
+    }
+  };
+
+  window.gmCurrentConversationId = null;
+
+  /*
+    Search real registered users and let the user choose one.
+    No fake/example accounts are generated.
+  */
+  window.gmStartRealChat = async function(){
+
+    const query = prompt(
+      'Search for a real G Messenger user by name, username or phone:'
+    );
+
+    if(!query || query.trim().length < 2)return;
+
+    try{
+      const result =
+        await window.GMessengerAPI.searchUsers(query);
+
+      if(!result.users.length){
+        alert('No registered G Messenger user was found.');
+        return;
+      }
+
+      const choices = result.users
+        .map((u,i) =>
+          (i + 1) + '. ' +
+          (u.name || 'Unnamed user') +
+          (u.username ? ' @' + u.username : '') +
+          (u.phone ? ' — ' + u.phone : '')
+        )
+        .join('\n');
+
+      const selected = prompt(
+        choices +
+        '\n\nEnter the number of the person you want to message:'
+      );
+
+      const index = Number(selected) - 1;
+
+      if(!Number.isInteger(index) ||
+         !result.users[index]){
+        return;
+      }
+
+      const user = result.users[index];
+
+      const conversation =
+        await window.GMessengerAPI.createConversation(user.id);
+
+      window.gmCurrentConversationId =
+        conversation.conversation.id;
+
+      if(typeof window.openChat === 'function'){
+        window.openChat(
+          user.name || user.username || 'G Messenger user',
+          (user.name || user.username || 'G').charAt(0).toUpperCase(),
+          'G Messenger'
+        );
+      }
+
+      await window.gmLoadRealMessages(
+        window.gmCurrentConversationId
+      );
+
+    }catch(error){
+      alert(error.message);
+    }
+  };
+
+  /*
+    Load only the most recent 50 messages.
+    This keeps data usage low.
+  */
+  window.gmLoadRealMessages = async function(id){
+
+    try{
+      const result =
+        await window.GMessengerAPI.messages(id);
+
+      const container =
+        document.getElementById('chatMessages');
+
+      if(!container)return;
+
+      container.innerHTML = '';
+
+      for(const message of result.messages){
+
+        const wrapper =
+          document.createElement('div');
+
+        wrapper.className =
+          'gm-message ' +
+          (
+            Number(message.sender_id) ===
+            Number(window.gmMyUserId)
+              ? 'outgoing'
+              : 'incoming'
+          );
+
+        const bubble =
+          document.createElement('div');
+
+        bubble.className = 'gm-bubble';
+
+        const text =
+          document.createElement('span');
+
+        text.className =
+          'gm-message-text';
+
+        text.textContent =
+          message.text;
+
+        const meta =
+          document.createElement('span');
+
+        meta.className =
+          'gm-message-meta';
+
+        meta.textContent =
+          new Date(message.created_at)
+            .toLocaleTimeString([],{
+              hour:'2-digit',
+              minute:'2-digit'
+            });
+
+        bubble.appendChild(text);
+        bubble.appendChild(meta);
+        wrapper.appendChild(bubble);
+        container.appendChild(wrapper);
+      }
+
+      container.scrollTop =
+        container.scrollHeight;
+
+      await window.GMessengerAPI.markRead(id);
+
+    }catch(error){
+      console.error(
+        'G Messenger message loading error:',
+        error
+      );
+    }
+  };
+
+  /*
+    Replace the old local-only send behavior with
+    server-backed messaging.
+  */
+  window.gmSendRealMessage = async function(){
+
+    const input =
+      document.getElementById('chatInput');
+
+    if(!input)return;
+
+    const text =
+      input.value.trim();
+
+    if(!text)return;
+
+    if(!window.gmCurrentConversationId){
+      alert('Start a real conversation first.');
+      return;
+    }
+
+    try{
+
+      await window.GMessengerAPI.sendMessage(
+        window.gmCurrentConversationId,
+        text
+      );
+
+      input.value = '';
+      input.style.height = 'auto';
+
+      await window.gmLoadRealMessages(
+        window.gmCurrentConversationId
+      );
+
+    }catch(error){
+      alert(error.message);
+    }
+  };
+
+  /*
+    Lightweight conversation refresh.
+    No aggressive polling is used.
+  */
+  window.gmLoadRealConversations = async function(){
+
+    try{
+      const result =
+        await window.GMessengerAPI.conversations();
+
+      window.__gmRealConversations =
+        result.conversations;
+
+      return result.conversations;
+
+    }catch(error){
+      console.error(
+        'Conversation loading error:',
+        error
+      );
+
+      return [];
+    }
+  };
+
+  /*
+    Data-saving defaults.
+  */
+  window.gmApplyDataSaver = async function(){
+
+    try{
+      const settings =
+        await window.GMessengerAPI.dataSettings();
+
+      localStorage.setItem(
+        'gmessengerDataSaver',
+        settings.dataSaver ? 'on' : 'off'
+      );
+
+      localStorage.setItem(
+        'gmessengerMediaAutoDownload',
+        settings.mediaAutoDownload
+      );
+
+    }catch(error){
+      console.warn(
+        'Data settings unavailable:',
+        error.message
+      );
+    }
+  };
+
+  document.addEventListener(
+    'DOMContentLoaded',
+    function(){
+
+      if(!gmToken())return;
+
+      window.gmLoadRealConversations();
+      window.gmApplyDataSaver();
+
+      /*
+        Do not continuously poll.
+        A long interval is used only as a lightweight fallback.
+      */
+      setInterval(function(){
+        if(document.visibilityState === 'visible'){
+          window.gmLoadRealConversations();
+        }
+      }, 60000);
+
+    }
+  );
+
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   GM_REAL_HOME_CHAT_BRIDGE
+   Connects the EXISTING G Messenger Home/Chats UI to the
+   real backend without creating demo/test conversations.
+   ============================================================ */
+(function () {
+  "use strict";
+
+  function api() {
+    return window.GMessengerAPI || null;
+  }
+
+  function currentUserId() {
+    return Number(
+      window.gmMyUserId ||
+      localStorage.getItem("gmMyUserId") ||
+      localStorage.getItem("userId") ||
+      0
+    );
+  }
+
+  function findElement(ids) {
+    for (const id of ids) {
+      const el = document.getElementById(id);
+      if (el) return el;
+    }
+    return null;
+  }
+
+  function escapeText(value) {
+    return String(value == null ? "" : value);
+  }
+
+  function renderRealConversations(conversations) {
+    const possible = [
+      "chatList",
+      "chatsList",
+      "conversationList",
+      "gmChatList",
+      "homeChatList"
+    ];
+
+    const container = possible
+      .map(id => document.getElementById(id))
+      .find(Boolean);
+
+    if (!container) return false;
+
+    container.innerHTML = "";
+
+    if (!conversations.length) {
+      const empty = document.createElement("div");
+      empty.className = "gm-real-empty";
+      empty.textContent = "No conversations yet. Start a new chat.";
+      container.appendChild(empty);
+      return true;
+    }
+
+    for (const conversation of conversations) {
+      if (!conversation.user) continue;
+
+      const row = document.createElement("div");
+      row.className = "gm-real-conversation";
+      row.dataset.conversationId = conversation.id;
+
+      const avatar = document.createElement("div");
+      avatar.className = "gm-chat-avatar";
+      avatar.textContent =
+        (conversation.user.name ||
+         conversation.user.username ||
+         "G").charAt(0).toUpperCase();
+
+      const info = document.createElement("div");
+      info.className = "gm-real-conversation-info";
+
+      const name = document.createElement("div");
+      name.className = "gm-real-conversation-name";
+      name.textContent =
+        conversation.user.name ||
+        conversation.user.username ||
+        "G Messenger user";
+
+      const preview = document.createElement("div");
+      preview.className = "gm-real-conversation-preview";
+      preview.textContent =
+        conversation.lastMessage?.text || "No messages yet";
+
+      info.appendChild(name);
+      info.appendChild(preview);
+
+      row.appendChild(avatar);
+      row.appendChild(info);
+
+      row.addEventListener("click", async function () {
+        window.gmCurrentConversationId =
+          Number(conversation.id);
+
+        if (typeof window.openChat === "function") {
+          window.openChat(
+            conversation.user.name ||
+              conversation.user.username ||
+              "G Messenger user",
+            (
+              conversation.user.name ||
+              conversation.user.username ||
+              "G"
+            ).charAt(0).toUpperCase(),
+            "G Messenger"
+          );
+        }
+
+        if (typeof window.gmLoadRealMessages === "function") {
+          await window.gmLoadRealMessages(
+            Number(conversation.id)
+          );
+        }
+      });
+
+      container.appendChild(row);
+    }
+
+    return true;
+  }
+
+  async function loadHomeChats() {
+    const G = api();
+    if (!G) return;
+
+    if (!localStorage.getItem("gmessengerToken") &&
+        !localStorage.getItem("authToken")) {
+      return;
+    }
+
+    try {
+      const result = await G.conversations();
+
+      window.__gmRealConversations =
+        result.conversations || [];
+
+      renderRealConversations(
+        window.__gmRealConversations
+      );
+    } catch (error) {
+      console.warn(
+        "G Messenger real conversations:",
+        error.message
+      );
+    }
+  }
+
+  function connectExistingSendButton() {
+    const input = findElement([
+      "chatInput",
+      "messageInput",
+      "gmChatInput"
+    ]);
+
+    if (!input) return;
+
+    if (input.dataset.gmRealSendConnected === "1") {
+      return;
+    }
+
+    input.dataset.gmRealSendConnected = "1";
+
+    input.addEventListener("keydown", function (event) {
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
+
+        if (
+          typeof window.gmSendRealMessage ===
+          "function"
+        ) {
+          window.gmSendRealMessage();
+        }
+      }
+    });
+  }
+
+  function connectExistingNewChatButtons() {
+    const selectors = [
+      '[data-action="new-chat"]',
+      '.new-chat',
+      '#newChat',
+      '#newChatButton',
+      '#gmNewChat'
+    ];
+
+    for (const selector of selectors) {
+      document
+        .querySelectorAll(selector)
+        .forEach(function (button) {
+          if (button.dataset.gmRealNewChat === "1") {
+            return;
+          }
+
+          button.dataset.gmRealNewChat = "1";
+
+          button.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            if (
+              typeof window.gmStartRealChat ===
+              "function"
+            ) {
+              window.gmStartRealChat();
+            }
+          });
+        });
+    }
+  }
+
+  window.gmHandleNavigation =
+    function (name, button) {
+      /*
+       * Preserve the existing navigation UI.
+       * Navigation does not create fake content.
+       */
+      if (button) {
+        document
+          .querySelectorAll(".gm-nav-item")
+          .forEach(function (item) {
+            item.classList.remove("active");
+          });
+
+        button.classList.add("active");
+      }
+
+      const normalized =
+        String(name || "").toLowerCase();
+
+      if (
+        normalized.includes("chat") ||
+        normalized.includes("home")
+      ) {
+        loadHomeChats();
+      }
+    };
+
+  window.gmRefreshRealHome =
+    loadHomeChats;
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+      connectExistingSendButton();
+      connectExistingNewChatButtons();
+      loadHomeChats();
+    }
+  );
+
+  /*
+   * Very light refresh: once every 60 seconds and only
+   * while the app is visible. This preserves the
+   * extraordinarily-low mobile-data goal.
+   */
+  setInterval(function () {
+    if (
+      document.visibilityState === "visible"
+    ) {
+      loadHomeChats();
+    }
+  }, 60000);
+
+})();
+</script>
+
+</body>
+</html>
