@@ -2723,22 +2723,20 @@ button{
 
 <body>
 <script>
-window.show = function(id) {
-  document.querySelectorAll('.screen').forEach(function(screen) {
-    screen.classList.remove('active');
+function show(id){
+  document.querySelectorAll('.screen').forEach(function(x){
+    x.classList.remove('active');
   });
 
-  var target = document.getElementById(id);
+  const el=document.getElementById(id);
 
-  if (!target) {
-    console.error('[G MESSENGER] Screen not found:', id);
-    return;
+  if(el){
+    el.classList.add('active');
+    currentScreen=id;
+  }else{
+    console.error('[G MESSENGER] Screen not found:',id);
   }
-
-  target.classList.add('active');
-  window.gmCurrentScreen = id;
-  console.log('[G MESSENGER] Showing:', id);
-};
+}
 </script>
 
 
@@ -3165,15 +3163,7 @@ const GM_API_BASE='https://gmessanger-mn0b.onrender.com';
   }
 }
 
-  /* ================================
-     G MESSENGER REGISTRATION BRIDGE
-     ================================ */
-  window.register = register;
-  window.verify = verify;
-  window.saveProfile = saveProfile;
-  window.finishSetup = finishSetup;
-
-async function gmRegister(){
+  async function gmRegister(){
 currentPhone=document.getElementById('phone').value.trim();
 
 if(currentPhone.length<7){
@@ -4142,6 +4132,22 @@ document.addEventListener("click", function(e) {
     });
   }
 });
+</script>
+
+
+<script>
+/* G MESSENGER GLOBAL HANDLERS — placed AFTER function declarations */
+window.register = register;
+window.verify = verify;
+window.saveProfile = saveProfile;
+window.finishSetup = finishSetup;
+window.show = show;
+window.goChats = goChats;
+window.goUpdates = goUpdates;
+window.goCommunities = goCommunities;
+window.goCalls = goCalls;
+window.openGemma = openGemma;
+window.openContacts = openContacts;
 </script>
 
 </body>
