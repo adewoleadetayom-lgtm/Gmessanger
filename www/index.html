@@ -2754,7 +2754,7 @@ window.show = function(id) {
 <input id="phone" type="tel" placeholder="+234 800 000 0000">
 </div>
 
-<button type="button" class="primary" onclick="gmRegister()">Continue</button>
+<button type="button" class="primary" id="gmContinue">Continue</button>
 </div>
 </section>
 
@@ -4110,6 +4110,38 @@ loadConversations();
 },5000);
 
 startup();
+</script>
+
+
+<script>
+/* GM_DIRECT_CONTINUE */
+document.addEventListener("click", function(e) {
+  if (!e.target || e.target.id !== "gmContinue") return;
+
+  var phone = document.getElementById("phone");
+
+  if (!phone || phone.value.trim().length < 7) {
+    alert("Enter a valid phone number.");
+    return;
+  }
+
+  var login = document.getElementById("loginScreen");
+  var verify = document.getElementById("verificationScreen");
+
+  if (login) login.classList.remove("active");
+  if (verify) verify.classList.add("active");
+
+  window.currentPhone = phone.value.trim();
+
+  console.log("GM Messenger: Continue button works");
+
+  /* Try the API separately; navigation must not depend on it. */
+  if (typeof window.register === "function") {
+    window.register().catch(function(err) {
+      console.error("Registration API:", err);
+    });
+  }
+});
 </script>
 
 </body>
