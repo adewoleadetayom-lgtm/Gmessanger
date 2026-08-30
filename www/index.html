@@ -2332,17 +2332,32 @@ let currentPhone='';
 let currentConversation=null;
 let currentUser=null;
 
+/* =========================
+   G MESSENGER API CONNECTION
+   ========================= */
+
+const GM_API_BASE='https://gmessanger-mn0b.onrender.com';
+
 async function api(url,options={}){
-options.headers=Object.assign({
-'Content-Type':'application/json',
-'Authorization':'Bearer '+token
-},options.headers||{});
+  options.headers=Object.assign({
+    'Content-Type':'application/json',
+    'Authorization':'Bearer '+token
+  },options.headers||{});
 
-const r=await fetch(url,options);
-const data=await r.json().catch(()=>({}));
+  /*
+   * Android/Capacitor uses the deployed Express server.
+   * Normal web development keeps using the current origin.
+   */
+  const apiUrl =
+    (window.Capacitor || window.GMApp || location.protocol === 'capacitor:')
+      ? GM_API_BASE + url
+      : url;
 
-if(!r.ok)throw new Error(data.error||'Request failed');
-return data;
+  const r=await fetch(apiUrl,options);
+  const data=await r.json().catch(()=>({}));
+
+  if(!r.ok)throw new Error(data.error||'Request failed');
+  return data;
 }
 
 /* =========================
