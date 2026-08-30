@@ -1941,6 +1941,783 @@ button {
   }
 }
 
+
+/* =========================================================
+   G MESSENGER — FINAL MODERN MESSAGING UI
+   WhatsApp-inspired structure, G Messenger branding
+   Visual-only layer: do not remove existing functionality.
+   ========================================================= */
+
+:root{
+  --gm-green:#075e54;
+  --gm-green-dark:#054c44;
+  --gm-blue:#087cff;
+  --gm-blue-dark:#0067d9;
+  --gm-bg:#f0f2f5;
+  --gm-card:#ffffff;
+  --gm-text:#111b21;
+  --gm-muted:#667781;
+  --gm-line:#e9edef;
+  --gm-soft:#f7f9fa;
+  --gm-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+/* ---------- GLOBAL ---------- */
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  width:100%;
+  min-height:100%;
+  margin:0;
+  background:var(--gm-bg);
+  color:var(--gm-text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
+button,
+input,
+textarea{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.screen{
+  width:100%;
+  min-height:100dvh;
+}
+
+/* ---------- REGISTRATION / ONBOARDING ---------- */
+
+#loginScreen,
+#verificationScreen,
+#profileScreen,
+#securityScreen{
+  min-height:100dvh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px 18px;
+  background:
+    radial-gradient(circle at top left,rgba(8,124,255,.10),transparent 35%),
+    linear-gradient(180deg,#f7fbff 0%,#eef3f7 100%);
+}
+
+#loginScreen .card,
+#verificationScreen .card,
+#profileScreen .card,
+#securityScreen .card{
+  width:min(100%,430px);
+  padding:34px 24px 28px;
+  border-radius:24px;
+  background:#fff;
+  box-shadow:0 10px 35px rgba(0,0,0,.09);
+  border:1px solid rgba(0,0,0,.04);
+}
+
+#loginScreen .logo,
+#verificationScreen .logo,
+#profileScreen .logo,
+#securityScreen .logo{
+  width:76px;
+  height:76px;
+  margin:0 auto 20px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:24px;
+  color:#fff;
+  font-size:40px;
+  font-weight:800;
+  background:linear-gradient(135deg,#0a84ff,#005bea);
+  box-shadow:0 8px 22px rgba(8,124,255,.28);
+}
+
+#loginScreen h1,
+#verificationScreen h1,
+#profileScreen h1,
+#securityScreen h1{
+  margin:0;
+  text-align:center;
+  font-size:27px;
+  line-height:1.2;
+  letter-spacing:-.4px;
+}
+
+#loginScreen .sub,
+#verificationScreen .sub,
+#profileScreen .sub,
+#securityScreen .sub{
+  margin:10px auto 28px;
+  max-width:340px;
+  text-align:center;
+  color:var(--gm-muted);
+  line-height:1.55;
+  font-size:14px;
+}
+
+#loginScreen .field,
+#verificationScreen .field,
+#profileScreen .field,
+#securityScreen .field{
+  margin:0 0 16px;
+}
+
+#loginScreen .field label,
+#verificationScreen .field label,
+#profileScreen .field label,
+#securityScreen .field label{
+  display:block;
+  margin:0 0 7px 4px;
+  color:#52616b;
+  font-size:13px;
+  font-weight:600;
+}
+
+#loginScreen .field input,
+#verificationScreen .field input,
+#profileScreen .field input,
+#securityScreen .field input{
+  width:100%;
+  min-height:52px;
+  padding:0 16px;
+  border:1px solid #d8e0e5;
+  border-radius:14px;
+  outline:none;
+  background:#fbfcfd;
+  color:var(--gm-text);
+  transition:.18s ease;
+}
+
+#loginScreen .field input:focus,
+#verificationScreen .field input:focus,
+#profileScreen .field input:focus,
+#securityScreen .field input:focus{
+  border-color:var(--gm-blue);
+  box-shadow:0 0 0 3px rgba(8,124,255,.10);
+  background:#fff;
+}
+
+#loginScreen .primary,
+#verificationScreen .primary,
+#profileScreen .primary,
+#securityScreen .primary{
+  width:100%;
+  min-height:52px;
+  border:0;
+  border-radius:15px;
+  color:#fff;
+  font-weight:700;
+  background:linear-gradient(135deg,#0a84ff,#005bea);
+  box-shadow:0 7px 18px rgba(8,124,255,.22);
+}
+
+#loginScreen .secondary,
+#verificationScreen .secondary,
+#profileScreen .secondary,
+#securityScreen .secondary{
+  width:100%;
+  min-height:48px;
+  margin-top:10px;
+  border:0;
+  border-radius:14px;
+  background:#edf3f7;
+  color:#40515b;
+  font-weight:600;
+}
+
+/* ---------- MAIN CHATS ---------- */
+
+#appScreen{
+  background:var(--gm-bg);
+}
+
+#appScreen > .header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  padding:calc(13px + env(safe-area-inset-top)) 16px 13px;
+  background:#fff;
+  border-bottom:1px solid var(--gm-line);
+}
+
+#appScreen .header-row{
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+#appScreen .title{
+  color:var(--gm-text);
+  font-size:26px;
+  font-weight:750;
+  letter-spacing:-.5px;
+}
+
+#appScreen .header-row .icon{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#54656f;
+  font-size:25px;
+}
+
+#appScreen .search{
+  width:100%;
+  height:44px;
+  margin-top:12px;
+  padding:0 17px;
+  border:0;
+  border-radius:14px;
+  outline:none;
+  background:#f0f2f5;
+  color:var(--gm-text);
+  font-size:14px;
+}
+
+#appScreen .search:focus{
+  background:#e8edf0;
+}
+
+#appScreen .filters{
+  display:flex;
+  gap:8px;
+  padding:11px 14px;
+  overflow-x:auto;
+  background:#fff;
+  border-bottom:1px solid var(--gm-line);
+  scrollbar-width:none;
+}
+
+#appScreen .filters::-webkit-scrollbar{
+  display:none;
+}
+
+#appScreen .filter{
+  flex:0 0 auto;
+  padding:8px 15px;
+  border:1px solid #dfe5e8;
+  border-radius:20px;
+  background:#fff;
+  color:#52616b;
+  font-size:13px;
+  font-weight:600;
+}
+
+#appScreen .filter.active{
+  border-color:rgba(8,124,255,.2);
+  background:#e8f2ff;
+  color:var(--gm-blue);
+}
+
+/* ---------- CHAT LIST ---------- */
+
+#chatList{
+  padding:0 0 calc(84px + env(safe-area-inset-bottom));
+  background:#fff;
+}
+
+#chatList .chat{
+  min-height:76px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  padding:10px 16px;
+  background:#fff;
+  border-bottom:1px solid var(--gm-line);
+}
+
+#chatList .chat:active{
+  background:#f3f6f8;
+}
+
+#chatList .avatar{
+  flex:0 0 52px;
+  width:52px !important;
+  height:52px !important;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:700;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+#chatList .chat-info{
+  min-width:0;
+  flex:1;
+}
+
+#chatList .chat-name{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:var(--gm-text);
+  font-size:16px;
+  font-weight:650;
+}
+
+#chatList .chat-name small{
+  padding:2px 6px;
+  border-radius:8px;
+  background:#e8f2ff;
+  color:var(--gm-blue);
+  font-size:10px;
+  font-weight:700;
+}
+
+#chatList .chat-preview{
+  margin-top:5px;
+  color:var(--gm-muted);
+  font-size:13px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+#chatList .chat-right{
+  align-self:flex-start;
+  margin-top:5px;
+  color:#8696a0;
+  font-size:11px;
+}
+
+#chatList .chat.gemma{
+  background:linear-gradient(90deg,#f4f9ff,#fff);
+}
+
+#chatList .chat.gemma .avatar{
+  background:linear-gradient(135deg,#0a84ff,#005bea) !important;
+  color:#fff !important;
+}
+
+#emptyChats{
+  padding:55px 25px;
+  text-align:center;
+  color:var(--gm-muted);
+  background:#fff;
+  line-height:1.6;
+}
+
+/* ---------- BOTTOM NAVIGATION ---------- */
+
+#appScreen .bottom{
+  position:fixed;
+  z-index:30;
+  left:0;
+  right:0;
+  bottom:0;
+  height:68px;
+  padding:5px 5px calc(5px + env(safe-area-inset-bottom));
+  display:flex;
+  background:rgba(255,255,255,.97);
+  border-top:1px solid var(--gm-line);
+  box-shadow:0 -3px 14px rgba(0,0,0,.06);
+}
+
+#appScreen .bottom button{
+  flex:1;
+  min-width:0;
+  border:0;
+  background:transparent;
+  color:#667781;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  font-size:11px;
+  font-weight:600;
+}
+
+#appScreen .bottom button span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:36px;
+  height:25px;
+  border-radius:14px;
+  font-size:18px;
+}
+
+#appScreen .bottom button.active{
+  color:var(--gm-blue);
+}
+
+#appScreen .bottom button.active span{
+  background:#e8f2ff;
+}
+
+/* ---------- NEW CHAT FLOATING BUTTON ---------- */
+
+#newChatButton{
+  position:fixed;
+  z-index:35;
+  right:18px;
+  bottom:calc(82px + env(safe-area-inset-bottom));
+  width:58px;
+  height:58px;
+  border:0;
+  border-radius:18px;
+  background:linear-gradient(135deg,#0a84ff,#005bea);
+  color:#fff;
+  font-size:31px;
+  line-height:1;
+  box-shadow:0 7px 20px rgba(0,92,210,.28);
+}
+
+#newChatButton:active{
+  transform:scale(.95);
+}
+
+/* ---------- CONTACTS / NEW CHAT ---------- */
+
+#contactsScreen{
+  background:#fff;
+}
+
+#contactsScreen .contacts-header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  padding:calc(9px + env(safe-area-inset-top)) 14px 12px;
+  background:#fff;
+  border-bottom:1px solid var(--gm-line);
+}
+
+#contactsScreen .contacts-header-row{
+  min-height:46px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+#contactsScreen .contacts-back{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#34444e;
+  font-size:31px;
+  line-height:1;
+}
+
+#contactsScreen .contacts-title{
+  color:var(--gm-text);
+  font-size:21px;
+  font-weight:700;
+}
+
+#contactsScreen .contacts-search{
+  width:100%;
+  height:44px;
+  margin-top:10px;
+  padding:0 16px;
+  border:0;
+  outline:none;
+  border-radius:14px;
+  background:#f0f2f5;
+  color:var(--gm-text);
+}
+
+#contactsScreen .contacts-body{
+  background:#fff;
+  padding-bottom:25px;
+}
+
+#contactsScreen .contacts-empty{
+  margin:25px 18px;
+  padding:30px 20px;
+  border-radius:16px;
+  background:#f5f8fa;
+  color:var(--gm-muted);
+  text-align:center;
+  line-height:1.55;
+}
+
+#contactsScreen .contacts-body .contact,
+#contactsScreen .contacts-body .contact-row{
+  min-height:70px;
+  padding:9px 16px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border-bottom:1px solid var(--gm-line);
+}
+
+/* ---------- CHAT SCREEN ---------- */
+
+#chatScreen{
+  background:#e5ddd5;
+}
+
+#chatScreen .chat-header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  min-height:64px;
+  padding:7px 10px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  background:#fff;
+  color:var(--gm-text);
+  border-bottom:1px solid var(--gm-line);
+}
+
+#chatScreen .chat-header .back{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#34444e;
+  font-size:31px;
+}
+
+#chatScreen .chat-header .avatar{
+  width:43px !important;
+  height:43px !important;
+  flex:0 0 43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0a84ff,#005bea) !important;
+  color:#fff !important;
+  font-weight:700;
+}
+
+#chatScreen .chat-contact{
+  min-width:0;
+}
+
+#chatScreen .chat-contact-name{
+  color:var(--gm-text);
+  font-size:16px;
+  font-weight:700;
+}
+
+#chatScreen .chat-contact-status{
+  margin-top:2px;
+  color:var(--gm-muted);
+  font-size:12px;
+}
+
+#chatScreen #messages{
+  min-height:0;
+  padding:14px 10px 80px;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(255,255,255,.28),transparent 20%),
+    radial-gradient(circle at 80% 70%,rgba(255,255,255,.18),transparent 20%),
+    #e5ddd5;
+}
+
+#chatScreen .msg{
+  max-width:82%;
+  margin:5px 0;
+  padding:8px 10px;
+  border-radius:9px;
+  box-shadow:0 1px 1px rgba(0,0,0,.08);
+  line-height:1.4;
+  font-size:14px;
+}
+
+#chatScreen .msg.mine{
+  margin-left:auto;
+  background:#d9fdd3;
+}
+
+#chatScreen .msg.theirs{
+  margin-right:auto;
+  background:#fff;
+}
+
+#chatScreen .composer{
+  position:fixed;
+  z-index:25;
+  left:0;
+  right:0;
+  bottom:0;
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  background:#f0f2f5;
+  border-top:1px solid #dfe4e7;
+}
+
+#chatScreen .composer textarea{
+  flex:1;
+  min-height:44px;
+  max-height:120px;
+  resize:none;
+  padding:12px 15px;
+  border:0;
+  outline:none;
+  border-radius:22px;
+  background:#fff;
+  color:var(--gm-text);
+}
+
+#chatScreen .send{
+  flex:0 0 44px;
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0a84ff,#005bea);
+  color:#fff;
+  font-size:19px;
+}
+
+/* ---------- GEMMA ---------- */
+
+#gemmaScreen{
+  background:#f5f8fb;
+}
+
+#gemmaScreen .gemma-header{
+  min-height:64px;
+  padding:8px 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:#fff;
+  color:var(--gm-text);
+  border-bottom:1px solid var(--gm-line);
+}
+
+#gemmaScreen .gemma-header .back{
+  width:40px;
+  height:40px;
+  border:0;
+  border-radius:50%;
+  background:transparent;
+  color:#34444e;
+  font-size:31px;
+}
+
+#gemmaScreen .gemma-header .avatar{
+  width:43px !important;
+  height:43px !important;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0a84ff,#005bea) !important;
+  color:#fff !important;
+  font-weight:700;
+}
+
+#gemmaScreen .gemma-body{
+  padding:25px 16px 90px;
+}
+
+#gemmaScreen .gemma-welcome{
+  max-width:430px;
+  margin:35px auto;
+  padding:25px 20px;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:var(--gm-shadow);
+  text-align:center;
+}
+
+#gemmaScreen .gemma-welcome h2{
+  margin:0 0 8px;
+}
+
+#gemmaScreen .gemma-welcome p{
+  color:var(--gm-muted);
+  line-height:1.55;
+}
+
+#gemmaScreen .gemma-composer{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:20;
+  display:flex;
+  gap:8px;
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+  background:#f0f2f5;
+}
+
+#gemmaScreen .gemma-composer textarea{
+  flex:1;
+  min-height:44px;
+  resize:none;
+  border:0;
+  outline:none;
+  border-radius:22px;
+  padding:12px 15px;
+  background:#fff;
+}
+
+#gemmaScreen .gemma-composer .send{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0a84ff,#005bea);
+  color:#fff;
+}
+
+/* ---------- SMALL PHONES ---------- */
+
+@media(max-width:380px){
+  #appScreen .title{
+    font-size:23px;
+  }
+
+  #chatList .chat{
+    padding-left:12px;
+    padding-right:12px;
+  }
+
+  #chatList .avatar{
+    width:48px !important;
+    height:48px !important;
+    flex-basis:48px;
+  }
+
+  #newChatButton{
+    right:14px;
+  }
+}
+
+/* ---------- LARGER SCREENS ---------- */
+
+@media(min-width:700px){
+  #appScreen,
+  #contactsScreen,
+  #chatScreen,
+  #gemmaScreen{
+    max-width:520px;
+    margin:0 auto;
+    box-shadow:0 0 30px rgba(0,0,0,.08);
+  }
+
+  #appScreen .bottom,
+  #newChatButton{
+    max-width:520px;
+  }
+}
+
 </style>
 </head>
 
@@ -2654,110 +3431,93 @@ function goCalls(){
 
 
 async function openContacts(){
+  if(!token || localStorage.getItem('gmessengerSetup')!=='complete'){
+    show('loginScreen');
+    return;
+  }
 
-    if(!token || localStorage.getItem('gmessengerSetup')!=='complete'){
-      show('loginScreen');
-      return;
-    }
-
-    show('contactsScreen');
+  show('contactsScreen');
 
   const input=document.getElementById('contactSearch');
   const list=document.getElementById('contactsList');
 
-  input.value='';
-  list.innerHTML=
-    '<div class="contacts-empty">Loading your contacts...</div>';
+  if(input) input.value='';
+  if(list){
+    list.innerHTML='<div class="contacts-empty">Loading your contacts...</div>';
+  }
 
   try{
-    // Browser fallback: use G Messenger registered users.
-    // The native Contacts plugin is only available inside the Android app.
     if(!window.GMContacts){
-      list.innerHTML =
-        '<div class="contacts-empty">Loading G Messenger contacts...</div>';
-
-      try{
-        const data=await api('/api/users/search?q=a');
-        const users=(data.users || []).filter(u =>
-          Number(u.id)!==Number(currentUser?.id)
-        );
-
-        if(!users.length){
-          list.innerHTML =
-            '<div class="contacts-empty">'+
-            'No registered G Messenger contacts found.<br><br>'+
-            'Use the search box to find someone by name, username, or phone.'+
-            '</div>';
-          return;
-        }
-
-        window.gmDeviceContacts=users.map(u=>({
-          id:u.id,
-          name:u.name || u.username || u.phone || 'G Messenger User',
-          username:u.username || '',
-          phones:u.phone ? [u.phone] : [],
-          registeredUser:u
-        }));
-
-        await renderDeviceContacts();
-        return;
-      }catch(e){
-        throw e;
-      }
+      throw new Error('The Android Contacts plugin is not available. Please rebuild the G Messenger Android app.');
     }
 
-    const permission =
-      await window.GMContacts.requestPermissions();
+    // Check the current Android permission first.
+    let permission=await window.GMContacts.checkPermissions();
 
-    if(permission.contacts !== 'granted'){
+    // Ask Android only when permission has not already been granted.
+    if(permission.contacts!=='granted'){
+      permission=await window.GMContacts.requestPermissions();
+    }
+
+    if(permission.contacts!=='granted'){
       list.innerHTML=
         '<div class="contacts-empty">'+
-        'G Messenger needs Contacts permission to show your phone contacts.'+
+        '<strong>Contacts permission is required</strong><br><br>'+
+        'Allow G Messenger to access your phone contacts in Android Settings, then try again.'+
         '<br><br>'+
-        '<button onclick="openContacts()" class="primary">Allow Contacts</button>'+
+        '<button onclick="openContacts()" class="primary">Try Again</button>'+
         '</div>';
       return;
     }
 
-    const result =
-      await window.GMContacts.getContacts({
-        projection:{
-          name:true,
-          phones:true,
-          organizationName:true
-        }
-      });
+    // Read only the fields G Messenger actually needs.
+    const result=await window.GMContacts.getContacts({
+      projection:{
+        name:true,
+        phones:true
+      }
+    });
 
-    window.gmDeviceContacts =
-      (result.contacts || []).map(c=>{
-        const name =
-          c.name?.display ||
-          [c.name?.given,c.name?.middle,c.name?.family]
-            .filter(Boolean).join(' ') ||
-          'Unknown contact';
+    const rawContacts=Array.isArray(result?.contacts)
+      ? result.contacts
+      : [];
 
-        const phones =
-          (c.phones || [])
-            .map(p=>p.number)
-            .filter(Boolean);
+    window.gmDeviceContacts=rawContacts.map(c=>{
+      const name=(
+        c?.name?.display ||
+        [
+          c?.name?.given,
+          c?.name?.middle,
+          c?.name?.family
+        ].filter(Boolean).join(' ')
+      ).trim();
 
-        return {
-          id:c.contactId || '',
-          name:name.trim(),
-          phones:phones
-        };
-      }).filter(c=>c.name && c.name !== 'Unknown contact');
+      const phones=(Array.isArray(c?.phones) ? c.phones : [])
+        .map(p=>p?.number)
+        .filter(Boolean)
+        .map(String);
+
+      return {
+        id:c?.contactId || '',
+        name:name || 'Unknown contact',
+        phones
+      };
+    }).filter(c=>c.name!=='Unknown contact');
 
     await renderDeviceContacts();
 
   }catch(e){
-    console.error('Device contacts:',e);
+    console.error('G Messenger Contacts error:',e);
 
-    list.innerHTML=
-      '<div class="contacts-empty">'+
-      'Could not load phone contacts.<br><br>'+
-      escapeHtml(e.message || 'Unknown error')+
-      '</div>';
+    if(list){
+      list.innerHTML=
+        '<div class="contacts-empty">'+
+        '<strong>Could not load phone contacts</strong><br><br>'+
+        escapeHtml(e?.message || 'Unknown Contacts error')+
+        '<br><br>'+
+        '<button onclick="openContacts()" class="primary">Try Again</button>'+
+        '</div>';
+    }
   }
 }
 
