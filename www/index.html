@@ -2722,6 +2722,25 @@ button{
 </head>
 
 <body>
+<script>
+window.show = function(id) {
+  document.querySelectorAll('.screen').forEach(function(screen) {
+    screen.classList.remove('active');
+  });
+
+  var target = document.getElementById(id);
+
+  if (!target) {
+    console.error('[G MESSENGER] Screen not found:', id);
+    return;
+  }
+
+  target.classList.add('active');
+  window.gmCurrentScreen = id;
+  console.log('[G MESSENGER] Showing:', id);
+};
+</script>
+
 
 <!-- LOGIN -->
 <section id="loginScreen" class="screen login">
@@ -2735,7 +2754,7 @@ button{
 <input id="phone" type="tel" placeholder="+234 800 000 0000">
 </div>
 
-<button class="primary" onclick="register()">Continue</button>
+<button type="button" class="primary" onclick="gmRegister()">Continue</button>
 </div>
 </section>
 
@@ -2751,8 +2770,8 @@ button{
 <input id="verificationCode" inputmode="numeric" maxlength="6" placeholder="123456">
 </div>
 
-<button class="primary" onclick="verify()">Verify</button>
-<button class="secondary" onclick="show('loginScreen')">Change number</button>
+<button type="button" class="primary" onclick="gmVerify()">Verify</button>
+<button class="secondary" onclick="window.show('loginScreen')">Change number</button>
 </div>
 </section>
 
@@ -2773,7 +2792,7 @@ button{
 <input id="username" placeholder="@username">
 </div>
 
-<button class="primary" onclick="saveProfile()">Continue</button>
+<button type="button" class="primary" onclick="gmSaveProfile()">Continue</button>
 </div>
 </section>
 
@@ -2794,7 +2813,7 @@ button{
 <input id="recoveryEmail" type="email" placeholder="you@example.com">
 </div>
 
-<button class="primary" onclick="finishSetup()">Finish setup</button>
+<button type="button" class="primary" onclick="gmFinishSetup()">Finish setup</button>
 </div>
 </section>
 
@@ -3115,121 +3134,46 @@ let currentUser=null;
 
 const GM_API_BASE='https://gmessanger-mn0b.onrender.com';
 
-async function api(url,options={}){
-  options.headers=Object.assign({
-    'Content-Type':'application/json',
-    'Authorization':'Bearer '+token
-  },options.headers||{});
+  async function api(url,options={}){
+  const headers = Object.assign({
+    'Content-Type':'application/json'
+  }, options.headers || {});
 
-  /*
-   * Android/Capacitor uses the deployed Express server.
-   * Normal web development keeps using the current origin.
-   */
-  const apiUrl =
-    (window.Capacitor || window.GMApp || location.protocol === 'capacitor:')
-      ? GM_API_BASE + url
-      : url;
-
-  const r=await fetch(apiUrl,options);
-  const data=await r.json().catch(()=>({}));
-
-  if(!r.ok)throw new Error(data.error||'Request failed');
-  return data;
-}
-
-/* =========================
-   G MESSENGER NAVIGATION
-   ========================= */
-
-let currentScreen='';
-
-function show(id){
-document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
-const el=document.getElementById(id);
-if(el){
-el.classList.add('active');
-currentScreen=id;
-}
-}
-
-function goBack(){
-
-  if(currentScreen==='loginScreen'){
-    show('loginScreen');
-    return;
+  if(token){
+    headers.Authorization = 'Bearer ' + token;
   }
 
-  if(currentScreen==='verificationScreen'){
-    show('loginScreen');
-    return;
-  }
+  const apiUrl = 'https://gmessanger-mn0b.onrender.com' + url;
 
-  if(currentScreen==='profileScreen'){
-    show('verificationScreen');
-    return;
-  }
+  try{
+    const r = await fetch(apiUrl, Object.assign({}, options, {
+      headers: headers
+    }));
 
-  if(currentScreen==='securityScreen'){
-    show('profileScreen');
-    return;
-  }
-
-  if(currentScreen==='contactsScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='chatScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='gemmaScreen'){
-    goChats();
-    return;
-  }
-
-  if(currentScreen==='appScreen'){
-    setBottomNav('navChats');
-    show('appScreen');
-    return;
-  }
-
-  show('loginScreen');
-}
-
-function startup(){
-  const setupComplete =
-    localStorage.getItem('gmessengerSetup') === 'complete';
-
-  if(token && setupComplete){
-    connectRealtime();
-    setBottomNav('navChats');
-    show('appScreen');
-    loadConversations();
-  }else{
-    if(token && !setupComplete){
-      show('profileScreen');
-    }else{
-      show('loginScreen');
-    }
-  }
-}
-
-window.addEventListener('popstate',function(){
-  goBack();
-});
-
-/* Android physical Back button */
-window.addEventListener('load',function(){
-  if(window.GMApp){
-    window.GMApp.addListener('backButton',function(){
-      goBack();
+    const data = await r.json().catch(function(){
+      return {};
     });
-  }
-});
 
-async function register(){
+    if(!r.ok){
+      throw new Error(data.error || ('Request failed (' + r.status + ')'));
+    }
+
+    return data;
+  }catch(e){
+    console.error('G Messenger API error:', e);
+    throw e;
+  }
+}
+
+  /* ================================
+     G MESSENGER REGISTRATION BRIDGE
+     ================================ */
+  window.register = register;
+  window.verify = verify;
+  window.saveProfile = saveProfile;
+  window.finishSetup = finishSetup;
+
+async function gmRegister(){
 currentPhone=document.getElementById('phone').value.trim();
 
 if(currentPhone.length<7){
@@ -3249,7 +3193,7 @@ alert(e.message);
 }
 }
 
-async function verify(){
+async function gmVerify(){
 const code=document.getElementById('verificationCode').value.trim();
 
 if(!/^[0-9]{6}$/.test(code)){
@@ -3289,7 +3233,7 @@ alert(e.message);
 }
 }
 
-async function saveProfile(){
+async function gmSaveProfile(){
 const name=document.getElementById('profileName').value.trim();
 const username=document.getElementById('username').value.trim();
 
@@ -3315,7 +3259,7 @@ alert(e.message);
 }
 }
 
-async function finishSetup(){
+async function gmFinishSetup(){
 const pin=document.getElementById('securityPin').value.trim();
 const recoveryEmail=document.getElementById('recoveryEmail').value.trim();
 
@@ -3389,6 +3333,27 @@ console.warn('Conversation refresh:',e.message);
 }
 }
 
+
+
+  
+  /* ================================
+     G MESSENGER REGISTRATION HANDLERS
+     ================================ */
+  window.gmRegister = function(){
+    return gmRegister();
+  };
+
+  window.gmVerify = function(){
+    return gmVerify();
+  };
+
+  window.gmSaveProfile = function(){
+    return gmSaveProfile();
+  };
+
+  window.gmFinishSetup = function(){
+    return gmFinishSetup();
+  };
 
 
 function setBottomNav(active){
